@@ -68,23 +68,18 @@ onMounted(async () => {
 const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5 Mo
 
 const schema = z.object({
-  title: z.string({ message: 'Le prénom est requis' }),
-  description: z.string({ message: 'Veuillez renseigner une description' }),
+  title: z
+    .string({ message: 'Le prénom est requis' }),
+  description: z
+    .string({ message: 'Veuillez renseigner une description' }),
   images: z
     .array(z.instanceof(File))
     .optional()
-    .refine(
-      (files) => {
+    .refine((files) => {
         if (!files) return true
-        return files.every(
-          (file) =>
-            file.size <= MAX_FILE_SIZE &&
-            ['image/jpeg', 'image/png', 'image/webp'].includes(file.type),
-        )
-      },
-      {
+        return files.every((file) => file.size <= MAX_FILE_SIZE && ['image/jpeg', 'image/png', 'image/webp'].includes(file.type))}, {
         message: 'Chaque fichier doit faire moins de 5Mo et être au format JPEG, PNG ou WEBP',
-      },
+      }
     ),
   productOption: z
     .array(
@@ -249,16 +244,13 @@ const field = [
               :placeholder="fiel.placeholder"
             ></textarea>
           </div>
-          <!-- Champs Erreurs -->
-          <span v-if="fiel.errorMessage" class="error-field">
-            {{ fiel.errorMessage.value }}
-          </span>
         </div>
+
         <!-- Options séparées -->
         <div class="form-group">
           <div v-for="(f, index) in fields" :key="f.key" class="option">
-            <Field :name="`productOption[${index}].name`" placeholder="Taille" class="name" />
-            <Field :name="`productOption[${index}].price`" type="number" placeholder="Prix" />
+            <Field :name="`productOption[${index}].name`" placeholder="taille" class="name" />
+            <Field :name="`productOption[${index}].price`" type="number" placeholder="prix" />
           </div>
         </div>
 

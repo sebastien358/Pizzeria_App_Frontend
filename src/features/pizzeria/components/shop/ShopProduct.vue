@@ -12,7 +12,7 @@ const props = defineProps<{
 // Affichage du prix en fçnction de la taille de la pizza
 
 const selectedOption = ref(
-  props.product.productOption.find((option) => option.name.includes('Grande')) || null,
+  props.product.productOption.find((option) => option.name.includes('Grande') || null),
 )
 
 const addProductToCart = async (id: number) => {
@@ -38,7 +38,7 @@ const addProductToCart = async (id: number) => {
         <h3>{{ props.product.title }}</h3>
         <p>{{ props.product.description }}</p>
         <div class="d-flex align-items-center space-between">
-          <p>Prix : {{ selectedOption.price }}€</p>
+          <p>Prix : €</p>
 
           <div class="shop-product__price">
             <select name="productOption" class="productOption" v-model="selectedOption">
@@ -50,6 +50,7 @@ const addProductToCart = async (id: number) => {
                 {{ option.name }}
               </option>
             </select>
+
             <button @click="addProductToCart(product.id)" class="btn btn-primary">
               Ajouter au panier
             </button>

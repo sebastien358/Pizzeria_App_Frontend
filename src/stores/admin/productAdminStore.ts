@@ -43,7 +43,6 @@ export const useProductAdminStore = defineStore('productAdmin', {
         const formData = new FormData()
 
         formData.append('title', dataProduct.title)
-        formData.append('price', String(dataProduct.price)) // assure le type string
         formData.append('description', dataProduct.description)
 
         dataProduct.productOption.forEach((o, index) => {
@@ -78,11 +77,17 @@ export const useProductAdminStore = defineStore('productAdmin', {
     async editProduct(dataProduct, id: number) {
       try {
         const formData = new FormData()
+
         formData.append('title', dataProduct.title)
-        formData.append('price', String(dataProduct.price))
         formData.append('description', dataProduct.description)
-        formData.append('category', dataProduct.category)
+
+        dataProduct.productOption.forEach((o, index) => {
+          formData.append(`productOption[${index}][name]`, o.name)
+          formData.append(`productOption[${index}][price]`, o.price)
+        })
+
         dataProduct.images?.map((image) => formData.append('images[]', image))
+
         const product = await axiosEditProductAdmin(formData, id)
         // Met à jour le produit dans le store
         const index = this.product.findIndex((p) => p.id === id)
