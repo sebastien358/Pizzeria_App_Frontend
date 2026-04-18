@@ -38,8 +38,7 @@ const addProductToCart = async (id: number) => {
         <h3>{{ props.product.title }}</h3>
         <p>{{ props.product.description }}</p>
         <div class="d-flex align-items-center space-between">
-          <p>Prix : €</p>
-
+          <p>Prix : {{ selectedOption.price }} €</p>
           <div class="shop-product__price">
             <select name="productOption" class="productOption" v-model="selectedOption">
               <option
@@ -50,7 +49,6 @@ const addProductToCart = async (id: number) => {
                 {{ option.name }}
               </option>
             </select>
-
             <button @click="addProductToCart(product.id)" class="btn btn-primary">
               Ajouter au panier
             </button>

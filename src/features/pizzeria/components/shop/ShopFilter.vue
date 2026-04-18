@@ -19,8 +19,8 @@ const inputSearchTerm = async () => {
 const displayPriceRange = (priceRange: number[]) => {
   return priceRange[0] === 0
     ? 'Tous les produits'
-    : priceRange[0] === 2000
-      ? 'Plus de 2000'
+    : priceRange[0] === 30
+      ? 'Plus de 30'
       : `${priceRange[0]} et ${priceRange[1]}`
 }
 

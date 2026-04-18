@@ -21,7 +21,7 @@ import Footer from '@/templates/footer/Footer.vue'
 .app-content {
   display: grid;
   grid-template-areas: 'header' 'views' 'footer';
-  grid-template-rows: 48px 1fr 48px;
+  grid-template-rows: auto 1fr auto;
   min-height: 100dvh;
   .header {
     grid-area: header;

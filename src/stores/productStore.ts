@@ -24,13 +24,13 @@ export const useProductStore = defineStore('product', {
     isLoading: true,
     searchTerm: '',
     priceRange: [
-      [0, 4000],
-      [500, 1000],
-      [1000, 1500],
-      [1500, 2000],
-      [2000, 4000],
+      [0, 40],
+      [5, 10],
+      [10, 15],
+      [15, 20],
+      [20, 40],
     ],
-    initPriceRange: [0, 4000],
+    initPriceRange: [0, 30],
     category: ['all', 'desktop', 'gamer', 'streaming'],
     initCategory: ['all'],
     offset: 0,
@@ -45,8 +45,8 @@ export const useProductStore = defineStore('product', {
         this.isLoading = true
 
         if (!append) {
-          this.offset = 0 // ← reset offset à chaque nouvelle page
-          this.product = [] // ← vide la liste
+          this.offset = 0
+          this.product = []
         }
 
         const response = await axiosGetProducts(this.offset, this.limit)
