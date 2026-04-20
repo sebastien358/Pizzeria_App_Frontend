@@ -5,7 +5,11 @@
     <section class="footer-main">
       <div class="footer-main__logo">
         <div class="footer-brand">
-          <img src="@/assets/images/hero-pizza.png" alt="Logo Pizzeria" class="footer-brand__icon" />
+          <img
+            src="@/assets/images/hero-pizza.png"
+            alt="Logo Pizzeria"
+            class="footer-brand__icon"
+          />
           <h3>Pizzeria</h3>
           <p>COMMANDE EN LIGNE</p>
         </div>
@@ -51,6 +55,7 @@
 <style scoped lang="scss">
 .footer {
   width: 100%;
+  border-top: 1px solid #e5dfd6;
 }
 
 /* MAIN FOOTER */

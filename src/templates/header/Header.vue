@@ -78,14 +78,20 @@ const removeItemToCart = async (id: number) => {
   }
 }
 
-// Redirection paiement
+// Redirection Payment
 
-const redirectPayment = () => {
+const redirectCommand = () => {
   if (!authStore.isLoggedIn) {
     router.push({ path: '/login' })
     return
   }
-  router.push({ path: '/payment' })
+  router.push({ path: '/command-address' })
+}
+
+// Redirection Cart
+
+const redirectCart = () => {
+  router.push({ path: '/cart' })
 }
 </script>
 
@@ -112,10 +118,43 @@ const redirectPayment = () => {
           <router-link to="/menu" class="nav__link">La carte</router-link>
           <router-link to="/contact" class="nav__link">Contact</router-link>
           <router-link v-if="!isLoggedIn()" to="/login" class="nav__link">Connexion</router-link>
-          <router-link v-else @click="logout()" to="/logout" class="nav__link">Déconnexion</router-link>
+          <router-link v-if="!isLoggedIn()" to="/register" class="nav__link"
+            >Inscription</router-link
+          >
+
           <!-- Profil User ou Admin -->
-          <router-link v-if="isUser()" to="/profile" class="nav__link">Espace client</router-link>
-          <router-link v-if="isAdmin()" to="/admin" class="nav__link">Espace pro</router-link>
+          <router-link
+            v-if="isUser()"
+            to="/profile"
+            class="nav__link"
+            :class="{ 'no-admin': isAdmin() }"
+            >Espace client</router-link
+          >
+
+          <div
+            v-if="isAdmin()"
+            class="dropdown"
+            @mouseenter="openDropdown('pro')"
+            @mouseleave="closeDropdown()"
+          >
+            <a href="#" class="nav__link">Espace pro</a>
+            <div class="dropdown__menu" :class="{ 'active-pro': state.activeDropdown === 'pro' }">
+              <router-link to="/product-list" class="dropdown--link">Liste des pizzas</router-link>
+              <router-link to="/command/list" class="dropdown--link"
+                >Liste des commandes</router-link
+              >
+              <router-link to="/product-form" class="dropdown--link"
+                >Ajouter un produit</router-link
+              >
+              <router-link
+                v-if="isLoggedIn()"
+                @click="logout()"
+                to="/logout"
+                class="dropdown--link logout"
+                >Déconnexion</router-link
+              >
+            </div>
+          </div>
         </nav>
 
         <!-- PANIER -->
@@ -134,6 +173,10 @@ const redirectPayment = () => {
 
           <!-- MENU PANIER -->
           <div class="header__menu" :class="{ show: state.activeDropdown === 'menu' }">
+            <div v-if="!cartStore.cart.length" class="empty-cart">
+              <p>Le panier est vide</p>
+            </div>
+
             <div v-for="cart in cartStore.cart" :key="cart.id" class="header__menu__list">
               <div class="header__menu__content">
                 <img :src="cart.image || notFound" class="img-cart" />
@@ -160,8 +203,8 @@ const redirectPayment = () => {
               </p>
             </div>
             <div class="header__menu__buttons">
-              <button class="btn btn-cart">Voir le panier</button>
-              <button @click="redirectPayment()" class="btn btn-paiment">Paiement</button>
+              <button @click="redirectCart()" class="btn btn-cart">Voir le panier</button>
+              <button @click="redirectCommand()" class="btn btn-payment">Paiement</button>
             </div>
           </div>
         </div>
@@ -172,11 +215,50 @@ const redirectPayment = () => {
 </template>
 
 <style scoped lang="scss">
-.header {
+/*====================
+  HEADER
+====================*/
 
+.dropdown {
+  z-index: 10;
+  position: relative;
+  &__menu {
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    top: 60px;
+    right: 50%;
+    transform: translate(50%);
+    padding: 30px;
+    transition: all 200ms ease;
+    border-radius: 10px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: auto;
+  }
+  &__menu.active-pro {
+    pointer-events: auto;
+    opacity: 1;
+  }
+  &__menu .dropdown--link {
+    text-transform: lowercase;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+  &__menu .logout:hover {
+    color: #e63946;
+  }
+}
+
+.no-admin {
+  display: none;
+}
+
+.header {
   position: fixed;
   z-index: 2;
-
   width: 100%;
   padding: 20px 100px;
   background: #fff;
@@ -242,6 +324,8 @@ const redirectPayment = () => {
   .nav__link:hover,
   .nav__link.router-link-active {
     color: #e63946;
+    padding: 3px 0;
+    border-bottom: 2px solid #e63946;
   }
 }
 
@@ -288,82 +372,151 @@ const redirectPayment = () => {
   }
 }
 
+/*====================
+  PANIER
+====================*/
+
 .header__menu {
-  z-index: 1;
-  background: white;
-  pointer-events: none; /* 🔥 bloque les events */
   position: absolute;
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
-  padding: 20px;
-  width: 400px;
-  top: 50px;
-  right: -23px;
+  top: 42px;
+  right: 0;
+  width: 320px;
+  padding: 16px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
   opacity: 0;
-  transition: all 200ms ease;
+  pointer-events: none;
   &.show {
-    pointer-events: auto; /* 🔥 réactive quand visible */
+    pointer-events: auto;
     opacity: 1;
   }
-  &__list {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
+}
+
+.empty-cart {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #777;
+  padding: 10px 0;
+}
+
+/* LISTE DES PRODUITS */
+.header__menu__list {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+/* CONTENU GAUCHE */
+.header__menu__content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* IMAGE */
+.img-cart {
+  width: 45px;
+  height: 45px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+/* TEXTE */
+.header__menu__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* PRIX */
+.product-price {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #2c2c2c;
+}
+
+/* QUANTITÉ */
+.product-quantity {
+  color: #888;
+  font-weight: 400;
+  margin-left: 4px;
+}
+
+/* TITRE */
+.product-title {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+/* DELETE */
+.header__menu__delete {
+  cursor: pointer;
+  color: #e63946;
+  transition: transform 0.2s ease;
+}
+
+.header__menu__delete:hover {
+  transform: scale(1.1);
+}
+
+/* SÉPARATEUR */
+.separator {
+  height: 1px;
+  background: #eee;
+}
+
+/* TOTAL */
+.header__menu__total {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.95rem;
+}
+
+/* BOUTONS */
+.header__menu__buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.btn-cart {
+  border: 1px solid #ddd;
+  background: #fff;
+  color: #2c2c2c;
+
+  padding: 8px;
+  cursor: pointer;
+  border-radius: 6px;
+
+  transition: all 200ms ease;
+
+  &:hover {
+    background: #f5f5f5;
+    border-color: #ccc;
   }
-  &__content {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  &__delete .fa-delete-left {
-    cursor: pointer;
-    font-size: 18px;
-    color: red;
-  }
-  &__content .img-cart {
-    height: 60px;
-    width: 60px;
-  }
-  &__text {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-  }
-  &__text .product-title {
-    font-size: 13px;
-  }
-  &__text .product-price {
-    font-size: 15px;
-    font-weight: 600;
-  }
-  &__text .product-quantity {
-    margin-left: 5px;
-  }
-  .separator {
-    border-top: 1px solid #cacaca;
-    margin: 25px 0;
-  }
-  &__total {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 20px;
-  }
-  &__buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    .btn {
-      cursor: pointer;
-      padding: 15px 0;
-      outline: none;
-      border: 1px solid black;
-      background: none;
-      color: black;
-      font-weight: 600;
-      text-transform: uppercase;
-      font-size: 12px;
-    }
+}
+
+.btn-payment {
+  background: #e63946;
+  color: #fff;
+  border: none;
+
+  padding: 8px;
+  cursor: pointer;
+  border-radius: 6px;
+
+  transition: all 200ms ease;
+
+  &:hover {
+    background: #d62839; /* 🔥 rouge plus profond */
   }
 }
 </style>

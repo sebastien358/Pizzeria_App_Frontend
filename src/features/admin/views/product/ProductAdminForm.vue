@@ -68,18 +68,23 @@ onMounted(async () => {
 const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5 Mo
 
 const schema = z.object({
-  title: z
-    .string({ message: 'Le prénom est requis' }),
-  description: z
-    .string({ message: 'Veuillez renseigner une description' }),
+  title: z.string({ message: 'Le prénom est requis' }),
+  description: z.string({ message: 'Veuillez renseigner une description' }),
   images: z
     .array(z.instanceof(File))
     .optional()
-    .refine((files) => {
+    .refine(
+      (files) => {
         if (!files) return true
-        return files.every((file) => file.size <= MAX_FILE_SIZE && ['image/jpeg', 'image/png', 'image/webp'].includes(file.type))}, {
+        return files.every(
+          (file) =>
+            file.size <= MAX_FILE_SIZE &&
+            ['image/jpeg', 'image/png', 'image/webp'].includes(file.type),
+        )
+      },
+      {
         message: 'Chaque fichier doit faire moins de 5Mo et être au format JPEG, PNG ou WEBP',
-      }
+      },
     ),
   productOption: z
     .array(
@@ -275,4 +280,114 @@ const field = [
 </template>
 
 <style scoped lang="scss">
+.container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+  //height: calc(100vh - 80px);
+  @media (max-width: 768.98px) {
+    padding: 10px;
+  }
+  .container-form {
+    max-width: 1000px;
+    padding: 30px 20px 15px 20px;
+    h3 {
+      font-size: 20px;
+      margin-bottom: 5px;
+      @media (max-width: 768.98px) {
+        text-align: center;
+      }
+    }
+    .alert-message {
+      margin-top: 10px;
+      text-align: center;
+    }
+  }
+}
+
+.input-column {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: 18px;
+  @media (max-width: 768.98px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+.form-group {
+  margin-top: 20px;
+  label {
+    font-size: 9px;
+    border: 1px solid black;
+    border-bottom: none;
+    height: 23px;
+    width: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  input,
+  select,
+  textarea {
+    border: 1px solid black;
+    padding: 12px;
+    outline: none;
+    background-color: var(--text-primary-color);
+    &:focus {
+      border: 3px solid black;
+      padding: 11px;
+    }
+  }
+  .label-image {
+    width: 90px;
+    white-space: nowrap;
+  }
+  .label-select {
+    width: 65px;
+    white-space: nowrap;
+  }
+  .label-description {
+    width: 65px;
+    white-space: nowrap;
+  }
+  &:focus-within label {
+    background-color: black;
+    color: var(--text-primary-color);
+  }
+  .message-field {
+    color: var(--success-2);
+  }
+}
+
+.product-form__button {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  @media (max-width: 768.98px) {
+    justify-content: center;
+  }
+  .btn-black {
+    font-size: 14px;
+    @media (max-width: 768.98px) {
+      font-size: 12px;
+    }
+  }
+}
+
+// Product image
+
+.product-image {
+  .img-product {
+    height: 200px;
+  }
+  &__button {
+    margin-top: 5px;
+    display: flex;
+    justify-content: center;
+  }
+}
 </style>

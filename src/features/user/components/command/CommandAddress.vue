@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import CommandProgress from '@/templates/commandProgress/CommandProgress.vue'
 import { useForm, useField } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import AlertMessage from '@/templates/alertMessage/AlertMessage.vue'
@@ -37,14 +36,15 @@ const schema = z.object({
 })
 
 const { handleSubmit, isSubmitting } = useForm({
-  validationSchema: toTypedSchema(schema)
+  validationSchema: toTypedSchema(schema),
 })
 
 const { value: firstName, errorMessage: errorFirstName } = useField('firstName')
 const { value: lastName, errorMessage: errorLastName } = useField('lastName')
 const { value: address, errorMessage: errorAddress } = useField('address')
 const { value: zipCode, errorMessage: errorZipCode } = useField('zipCode')
-const { value: addressComplement, errorMessage: errorAddressComplement } = useField('addressComplement')
+const { value: addressComplement, errorMessage: errorAddressComplement } =
+  useField('addressComplement')
 const { value: city, errorMessage: errorCity } = useField('city')
 const { value: phoneNumber, errorMessage: errorPhoneNumber } = useField('phoneNumber')
 const { value: deliveryType, errorMessage: errorDeliveryType } = useField('deliveryType')
@@ -165,7 +165,7 @@ const fields = [
     errorMessage: errorPhoneNumber,
   },
   {
-    label: 'Pays',
+    label: 'Mode de commande',
     css: 'label-delivery',
     type: 'select',
     name: 'delivery',
@@ -176,8 +176,6 @@ const fields = [
 </script>
 
 <template>
-  <!-- Command progress -->
-  <CommandProgress :currentStep="currentStep" />
   <!-- Form address command -->
   <section class="address">
     <div class="container-form">
@@ -195,7 +193,7 @@ const fields = [
               />
               <select v-else v-model="field.value.value">
                 <option value="">-- Veuillez sélectionner un pays --</option>
-                <option value="À emporter">À empoter</option>
+                <option value="À emporter">À emporter</option>
                 <option value="Livraison">Livraison</option>
               </select>
             </div>
@@ -225,7 +223,7 @@ const fields = [
           />
         </div>
         <!-- Button valdation form -->
-        <div class="d-flex align-items-center flex-end">
+        <div class="#">
           <button class="btn btn-black" :disabled="isSubmitting">
             <span v-if="isSubmitting">Chargement...</span>
             <span v-else>Enregister la commande</span>
@@ -237,4 +235,146 @@ const fields = [
 </template>
 
 <style scoped lang="scss">
+.address {
+  min-height: calc(100vh - 80px);
+  background: #f7f7f7;
+  padding: 130px 20px 80px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.container-form {
+  width: 100%;
+  max-width: 720px;
+  background: #fff;
+  border-radius: 18px;
+  padding: 38px 32px;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.07);
+}
+
+.container-form h2 {
+  margin: 0 0 28px;
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2c2c2c;
+}
+
+.form-column {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px 20px;
+}
+
+.form-group {
+  gap: 8px;
+}
+
+.form-group label {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #2c2c2c;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 14px;
+  border: 1px solid #e5ddd3;
+  border-radius: 10px;
+  background: #faf8f4;
+  color: #2c2c2c;
+  font-size: 0.95rem;
+  outline: none;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #df2f2f;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(223, 47, 47, 0.08);
+}
+
+.form-group select {
+  cursor: pointer;
+}
+
+.error-field {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.82rem;
+  color: #d62828;
+}
+
+.text-center {
+  margin-top: 24px;
+}
+
+.alert {
+  margin-top: 10px;
+}
+
+.flex-end {
+  justify-content: flex-end;
+}
+
+.btn.btn-black {
+  min-width: 220px;
+  padding: 13px 22px;
+  border: none;
+  border-radius: 999px;
+  background: #2c2c2c;
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  box-shadow: 0 10px 20px rgba(44, 44, 44, 0.12);
+}
+
+.btn.btn-black:hover {
+  background: #1f1f1f;
+  transform: translateY(-2px);
+}
+
+.btn.btn-black:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+@media (max-width: 768px) {
+  .address {
+    padding: 110px 16px 60px;
+  }
+  .container-form {
+    padding: 28px 20px;
+    border-radius: 14px;
+  }
+  .container-form h2 {
+    font-size: 1.65rem;
+    margin-bottom: 22px;
+  }
+  .form-column {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .btn.btn-black {
+    width: 100%;
+    min-width: 100%;
+  }
+  .flex-end {
+    justify-content: stretch;
+  }
+}
 </style>

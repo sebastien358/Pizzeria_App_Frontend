@@ -11,6 +11,7 @@ import CommandAddress from '@/features/user/components/command/CommandAddress.vu
 import Payment from '@/features/user/components/command/CommandPayment.vue'
 import Finish from '@/features/user/components/command/CommandFinish.vue'
 import CommandUserList from '@/features/user/components/profile/CommandUserList.vue'
+import CartProduct from '@/features/pizzeria/components/cart/CartProduct.vue'
 const AccountUserEdit = () => import('@/features/user/components/profile/AccountUserEdit.vue')
 
 const routes = [
@@ -18,6 +19,7 @@ const routes = [
   { path: '/register', name: 'register', component: Register },
   { path: '/login', name: 'login', component: Login },
   { path: '/request-password', component: RequestPassword },
+  { path: '/cart', component: CartProduct },
   { path: '/reset-password/:token', component: ResetPassword },
   {
     path: '/command-address',
@@ -28,7 +30,7 @@ const routes = [
     component: Payment,
     meta: {
       requiresUser: true,
-    }
+    },
   },
   {
     path: '/payment/:id?',

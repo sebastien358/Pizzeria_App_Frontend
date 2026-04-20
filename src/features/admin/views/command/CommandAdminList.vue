@@ -128,10 +128,10 @@ onMounted(async () => {
   </section>
 
   <!-- commandes client -->
-  <section v-else-if="commandAdminStore.commands.length > 0" class="command-user">
-    <div v-for="command in commands" :key="command.id" class="command-user__card">
+  <section v-else-if="commandAdminStore.commands.length > 0" class="command-admin">
+    <div v-for="command in commands" :key="command.id" class="command-admin__card">
       <!-- Items de la commande -->
-      <div v-for="item in command.commandItems" :key="item.id" class="command-user__item">
+      <div v-for="item in command.commandItems" :key="item.id" class="command-admin__item">
         <div class="item-image">
           <img
             v-if="item.product.pictures.length"
@@ -156,7 +156,7 @@ onMounted(async () => {
       </div>
 
       <!-- Statut commande -->
-      <div class="command-user__status">
+      <div class="command-admin__status">
         <p>
           Paiment :
           <span :class="paymentStatus(command)">
@@ -211,11 +211,14 @@ onMounted(async () => {
   </section>
 
   <!-- aucun produit -->
-  <section v-else class="no-product">
-    <p>Aucun produit pour le moment.</p>
+  <section v-else class="no-command">
+    <p>Aucune commande pour le moment.</p>
   </section>
 </template>
 
 <style scoped lang="scss">
-
+.no-command {
+  text-align: center;
+  margin-top: 60px;
+}
 </style>

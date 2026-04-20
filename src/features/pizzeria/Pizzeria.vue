@@ -86,9 +86,6 @@ const cart = computed(() => cartStore.cart)
 
     <Shop :products="products" :isLoading="productStore.isLoading" />
 
-    <!-- CART -->
-    <!--<Cart :cart="cart" :total="cartStore.total" :itemToCart="cartStore.itemsToCartExisting" />-->
-
     <!-- INGREDIENTS SECTION -->
 
     <section class="ingredients-section">
@@ -135,22 +132,19 @@ const cart = computed(() => cartStore.cart)
     <section class="benefits-section">
       <article class="benefit-item">
         <div class="benefit-item__icon">
-          <div class="benefit-item__icon">
-            <svg viewBox="0 0 64 64" aria-hidden="true">
-              <path
-                d="M12 10C27 8 41 11 54 18L35 54C30 49 24 46 18 44L12 10Z"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="3"
-                stroke-linejoin="round"
-              />
-              <circle cx="28" cy="24" r="2.5" fill="currentColor" />
-              <circle cx="36" cy="30" r="2.5" fill="currentColor" />
-              <circle cx="24" cy="35" r="2.5" fill="currentColor" />
-            </svg>
-          </div>
+          <svg viewBox="0 0 64 64" aria-hidden="true">
+            <path
+              d="M12 10C27 8 41 11 54 18L35 54C30 49 24 46 18 44L12 10Z"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="3"
+              stroke-linejoin="round"
+            />
+            <circle cx="28" cy="24" r="2.5" fill="currentColor" />
+            <circle cx="36" cy="30" r="2.5" fill="currentColor" />
+            <circle cx="24" cy="35" r="2.5" fill="currentColor" />
+          </svg>
         </div>
-
         <h3>Recettes généreuses</h3>
         <p>Des compositions gourmandes pensées pour le plaisir et la simplicité.</p>
       </article>
@@ -228,7 +222,6 @@ const cart = computed(() => cartStore.cart)
   align-items: center;
   justify-content: space-between;
   padding: 0 8%;
-
   /* TON IMAGE BOIS */
   background-image: url('@/assets/images/1000034631.jpg');
   background-size: cover;
@@ -527,72 +520,99 @@ const cart = computed(() => cartStore.cart)
 =====================*/
 
 .benefits-section {
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.06);
+
+  max-width: 1100px;
+  margin: 70px auto 80px;
+  padding: 42px 36px;
+
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 30px;
-  max-width: 1100px;
-  margin: 60px auto 20px;
-  padding: 50px 20px 70px;
-  border-top: 1px solid #e7e2db;
+  gap: 28px;
+
+  background: linear-gradient(180deg, #f7f3ed 0%, #f3eee7 100%);
+  border: 1px solid #ece3d8;
+  border-radius: 18px;
+
+  position: relative;
+  overflow: hidden;
+}
+
+.benefits-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #df2f2f 0%, #f06b6b 100%);
+  opacity: 0.9;
 }
 
 .benefit-item {
   text-align: center;
-  padding: 0 10px;
-  opacity: 0.9;
+  padding: 14px 12px 10px;
+  border-radius: 14px;
   transition:
-    opacity 0.25s ease,
-    transform 0.25s ease;
+    transform 0.25s ease,
+    background 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .benefit-item:hover {
-  opacity: 1;
   transform: translateY(-3px);
+  transition: all 0.25s ease;
+  background: rgba(255, 255, 255, 0.45);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.05);
 }
 
 .benefit-item__icon {
-  width: 34px;
-  height: 34px;
-  margin: 0 auto 12px;
-  color: #df2f2f;
-
+  width: 54px;
+  height: 54px;
+  margin: 0 auto 18px;
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #df2f2f;
 }
 
 .benefit-item__icon svg {
   width: 100%;
   height: 100%;
   display: block;
+
+  stroke-width: 1.8;
+  filter: drop-shadow(0 3px 8px rgba(223, 47, 47, 0.08));
 }
 
 .benefit-item h3 {
-  text-align: center;
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin-bottom: 20px;
+  margin: 0 0 12px;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.3;
   color: #2c2c2c;
 }
 
 .benefit-item p {
   margin: 0;
-  font-size: 0.8rem;
-  line-height: 1.6;
-  color: #777;
+  font-size: 15px;
+  line-height: 1.75;
+  color: #6f6a63;
 }
 
 /* TABLETTE */
 @media (max-width: 992px) {
   .benefits-section {
     grid-template-columns: repeat(2, 1fr);
-    gap: 28px 22px;
-    margin: 40px auto 20px;
-    padding-top: 24px;
+    gap: 24px;
+    padding: 36px 24px;
+    margin: 55px auto 65px;
   }
 
   .benefit-item {
-    padding: 0 6px;
+    padding: 10px 8px;
   }
 }
 
@@ -600,23 +620,26 @@ const cart = computed(() => cartStore.cart)
 @media (max-width: 640px) {
   .benefits-section {
     grid-template-columns: 1fr;
-    gap: 22px;
-    margin: 35px auto 10px;
-    padding: 22px 16px 0;
+    gap: 20px;
+    padding: 28px 18px;
+    margin: 40px 16px 50px;
+    border-radius: 16px;
   }
 
   .benefit-item__icon {
-    width: 30px;
-    height: 30px;
-    margin-bottom: 10px;
+    width: 46px;
+    height: 46px;
+    margin-bottom: 14px;
   }
 
   .benefit-item h3 {
-    font-size: 0.92rem;
+    font-size: 1rem;
+    margin-bottom: 8px;
   }
 
   .benefit-item p {
-    font-size: 0.78rem;
+    font-size: 0.88rem;
+    line-height: 1.65;
   }
 }
 </style>

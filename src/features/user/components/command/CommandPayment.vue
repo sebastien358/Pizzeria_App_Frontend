@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import CommandProgress from '@/templates/commandProgress/CommandProgress.vue'
 import AlertMessage from '@/templates/alertMessage/AlertMessage.vue'
 import { useCartStore } from '@/stores/cartStore.ts'
 import { useCommandUserStore } from '@/stores/user/commandUserStore'
@@ -162,11 +161,10 @@ const handleResetForm = () => {
 </script>
 
 <template>
-  <CommandProgress :currentStep="currentStep" />
-  <div class="d-flex align-items-center justify-content-center payment">
+  <div class="payment">
     <div class="container-form">
-      <h2 class="text-center mb-15">Paiement sécurisé</h2>
-      <p class="text-center mb-15">
+      <h2 class="payment__title">Paiement sécurisé</h2>
+      <p class="payment__subtitle">
         Entrez vos informations de carte de crédit pour effectuer le paiement
       </p>
       <form @submit.prevent="handleSubmit">
@@ -174,7 +172,7 @@ const handleResetForm = () => {
           <label for="card-element"></label>
           <div id="card-element" ref="cardElement"></div>
         </div>
-        <div class="text-center alert-message">
+        <div class="alert-message">
           <AlertMessage
             v-if="successMessage"
             :message="successMessage"
@@ -201,5 +199,151 @@ const handleResetForm = () => {
 </template>
 
 <style scoped lang="scss">
+.payment {
+  min-height: calc(100vh - 80px);
+  background: #f7f7f7;
+  padding: 120px 16px 40px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
 
+.container-form {
+  width: 100%;
+  max-width: 480px;
+  background: #fff;
+  border-radius: 14px;
+  padding: 28px 24px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.06);
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.container-form:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.08);
+}
+
+.payment__title {
+  margin: 0 0 10px;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #2c2c2c;
+  text-align: center;
+  line-height: 1.1;
+}
+
+.payment__subtitle {
+  margin: 0 0 22px;
+  color: #727272;
+  line-height: 1.6;
+  font-size: 0.92rem;
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+#card-element {
+  background: #faf8f4;
+  border: 1px solid #e7e1d8;
+  border-radius: 10px;
+  padding: 14px 12px;
+  min-height: 48px;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+#card-element:focus-within {
+  border-color: #df2f2f;
+  box-shadow: 0 0 0 3px rgba(223, 47, 47, 0.08);
+  background: #fff;
+}
+
+.alert-message {
+  margin-bottom: 14px;
+}
+
+.btn.btn-primary {
+  width: 100%;
+  border: none;
+  border-radius: 999px;
+  background: #df2f2f;
+  color: #fff;
+  padding: 13px 16px;
+  font-size: 0.94rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  box-shadow: 0 8px 16px rgba(223, 47, 47, 0.16);
+}
+
+.btn.btn-primary:hover {
+  background: #c62828;
+  transform: translateY(-1px);
+}
+
+.btn.btn-primary:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+  .payment {
+    padding: 100px 14px 50px;
+  }
+
+  .container-form {
+    max-width: 100%;
+    padding: 24px 18px;
+    border-radius: 12px;
+  }
+
+  .payment__title {
+    font-size: 1.45rem;
+  }
+
+  .payment__subtitle {
+    font-size: 0.88rem;
+    margin-bottom: 18px;
+  }
+
+  #card-element {
+    padding: 12px 10px;
+    min-height: 46px;
+  }
+
+  .btn.btn-primary {
+    padding: 12px 14px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .payment {
+    padding: 90px 12px 40px;
+  }
+
+  .container-form {
+    padding: 20px 14px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  }
+
+  .payment__title {
+    font-size: 1.3rem;
+  }
+
+  .payment__subtitle {
+    font-size: 0.84rem;
+    line-height: 1.5;
+  }
+}
 </style>
