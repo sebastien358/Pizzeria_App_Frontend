@@ -4,6 +4,7 @@ import Cart from '@/features/pizzeria/components/cart/Cart.vue'
 import { computed, onMounted } from 'vue'
 import { useProductStore } from '@/stores/productStore.ts'
 import { useCartStore } from '@/stores/cartStore.ts'
+import Newsletter from '@/templates/Newsletter.vue'
 
 const productStore = useProductStore()
 
@@ -25,7 +26,9 @@ const cart = computed(() => cartStore.cart)
 </script>
 
 <template>
-  <div class="boutique">
+  <main class="boutique">
+    <!-- HERO -->
+
     <section class="hero">
       <div class="hero__content">
         <h1>Des pizzas artisanales, livrées chez vous 🍕</h1>
@@ -36,6 +39,8 @@ const cart = computed(() => cartStore.cart)
 
       <img src="@/assets/images/hero-pizza.png" alt="Pizza" class="hero-pizza" />
     </section>
+
+    <!-- ABOUT -->
 
     <section class="about-section">
       <div class="about-container">
@@ -77,9 +82,138 @@ const cart = computed(() => cartStore.cart)
       </div>
     </section>
 
+    <!-- PIZZAS -->
+
     <Shop :products="products" :isLoading="productStore.isLoading" />
+
+    <!-- CART -->
     <!--<Cart :cart="cart" :total="cartStore.total" :itemToCart="cartStore.itemsToCartExisting" />-->
-  </div>
+
+    <!-- INGREDIENTS SECTION -->
+
+    <section class="ingredients-section">
+      <div class="ingredients-section__container">
+        <div class="ingredients-section__heading">
+          <span class="ingredients-section__subtitle">NOS SAVEURS</span>
+          <h2>Nos ingrédients</h2>
+          <div class="ingredients-section__line"></div>
+        </div>
+
+        <div class="ingredients-section__awning">
+          <img src="@/assets/images/casquette.png" alt="Auvent décoratif" class="awning-img" />
+        </div>
+
+        <div class="ingredients-section__content">
+          <div class="ingredients-section__visual">
+            <img
+              src="@/assets/images/ingredients.png"
+              alt="Illustration d'ingrédients"
+              class="ingredients-img"
+            />
+          </div>
+
+          <div class="ingredients-section__text">
+            <p>
+              Nous sélectionnons avec soin des ingrédients de qualité pour proposer des pizzas
+              généreuses, savoureuses et préparées avec attention à chaque commande.
+            </p>
+
+            <p>
+              Poivrons, tomates, olives, huile d’olive, herbes aromatiques, fromage et charcuterie
+              s’associent pour créer des recettes gourmandes et équilibrées, inspirées d’un vrai
+              savoir-faire.
+            </p>
+
+            <a href="#carte" class="ingredients-section__button">Découvrir la carte</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BENEFITS SECTION -->
+
+    <section class="benefits-section">
+      <article class="benefit-item">
+        <div class="benefit-item__icon">
+          <div class="benefit-item__icon">
+            <svg viewBox="0 0 64 64" aria-hidden="true">
+              <path
+                d="M12 10C27 8 41 11 54 18L35 54C30 49 24 46 18 44L12 10Z"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="3"
+                stroke-linejoin="round"
+              />
+              <circle cx="28" cy="24" r="2.5" fill="currentColor" />
+              <circle cx="36" cy="30" r="2.5" fill="currentColor" />
+              <circle cx="24" cy="35" r="2.5" fill="currentColor" />
+            </svg>
+          </div>
+        </div>
+
+        <h3>Recettes généreuses</h3>
+        <p>Des compositions gourmandes pensées pour le plaisir et la simplicité.</p>
+      </article>
+
+      <article class="benefit-item">
+        <div class="benefit-item__icon">
+          <svg viewBox="0 0 64 64" aria-hidden="true">
+            <path
+              d="M10 42L28 20H54V48H10V42Z"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="3"
+              stroke-linejoin="round"
+            />
+            <circle cx="40" cy="30" r="3" fill="currentColor" />
+            <circle cx="28" cy="37" r="2.5" fill="currentColor" />
+            <circle cx="47" cy="40" r="2" fill="currentColor" />
+          </svg>
+        </div>
+        <h3>Produits sélectionnés</h3>
+        <p>Des ingrédients choisis avec soin pour garantir goût et qualité.</p>
+      </article>
+
+      <article class="benefit-item">
+        <div class="benefit-item__icon">
+          <svg viewBox="0 0 64 64" aria-hidden="true">
+            <path
+              d="M50 14C31 14 16 26 16 42C16 50 22 54 30 54C46 54 50 39 50 14Z"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="3"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M24 46C30 38 38 30 48 22"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="3"
+              stroke-linecap="round"
+            />
+          </svg>
+        </div>
+        <h3>Saveurs fraîches</h3>
+        <p>Des associations équilibrées avec une vraie attention portée aux saveurs.</p>
+      </article>
+      <article class="benefit-item">
+        <div class="benefit-item__icon">
+          <svg viewBox="0 0 64 64" aria-hidden="true">
+            <path
+              d="M34 10C36 18 46 21 46 34C46 45 40 54 30 54C21 54 16 47 16 39C16 29 23 24 28 18C29 24 32 27 36 30C37 24 35 18 34 10Z"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="3"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </div>
+        <h3>Cuisson maîtrisée</h3>
+        <p>Une cuisson soignée pour une pâte savoureuse et une texture réussie.</p>
+      </article>
+    </section>
+    <Newsletter />
+  </main>
 </template>
 
 <style scoped lang="scss">
@@ -268,6 +402,221 @@ const cart = computed(() => cartStore.cart)
   .signature-text {
     font-size: 1.5rem;
     padding: 12px 22px;
+  }
+}
+
+/*=====================
+  INGRÉDIENTS
+=====================*/
+
+.ingredients-section {
+  background: #f5f3ef;
+  overflow: hidden;
+  padding: 45px 20px 0 20px;
+  .ingredients-section__content {
+    margin-top: -10px;
+    margin-bottom: 10px;
+  }
+  .ingredients-section__features {
+    margin-top: -10px;
+  }
+}
+
+.ingredients-section__container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.ingredients-section__heading {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.ingredients-section__subtitle {
+  display: inline-block;
+  margin-bottom: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #df2f2f;
+}
+
+.ingredients-section__heading h2 {
+  margin: 0;
+  font-size: clamp(2.1rem, 5vw, 3.4rem);
+  line-height: 1;
+  text-transform: uppercase;
+  color: #2c2c2c;
+}
+
+.ingredients-section__line {
+  width: 52px;
+  height: 3px;
+  margin: 10px auto 0;
+  border-radius: 999px;
+  background: #df2f2f;
+}
+
+.ingredients-section__awning {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 0;
+}
+
+.awning-img {
+  display: block;
+  width: auto;
+  max-width: 500px;
+  height: auto;
+  filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.12));
+}
+
+.ingredients-section__content {
+  margin-top: -20px;
+
+  display: grid;
+  grid-template-columns: 0.95fr 1.05fr;
+  align-items: center;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.ingredients-section__visual {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ingredients-img {
+  display: block;
+  width: auto;
+  max-width: 500px;
+  height: auto;
+  filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.08));
+}
+
+.ingredients-section__text {
+  max-width: 420px;
+}
+
+.ingredients-section__text p {
+  margin: 0 0 14px;
+  color: #5e5e5e;
+  line-height: 1.8;
+  font-size: 0.92rem;
+}
+
+.ingredients-section__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 4px;
+  padding: 12px 24px;
+  border-radius: 999px;
+  background: #df2f2f;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+/*=====================
+  BENEFITS
+=====================*/
+
+.benefits-section {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  max-width: 1100px;
+  margin: 60px auto 20px;
+  padding: 50px 20px 70px;
+  border-top: 1px solid #e7e2db;
+}
+
+.benefit-item {
+  text-align: center;
+  padding: 0 10px;
+  opacity: 0.9;
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
+}
+
+.benefit-item:hover {
+  opacity: 1;
+  transform: translateY(-3px);
+}
+
+.benefit-item__icon {
+  width: 34px;
+  height: 34px;
+  margin: 0 auto 12px;
+  color: #df2f2f;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.benefit-item__icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.benefit-item h3 {
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #2c2c2c;
+}
+
+.benefit-item p {
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.6;
+  color: #777;
+}
+
+/* TABLETTE */
+@media (max-width: 992px) {
+  .benefits-section {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px 22px;
+    margin: 40px auto 20px;
+    padding-top: 24px;
+  }
+
+  .benefit-item {
+    padding: 0 6px;
+  }
+}
+
+/* MOBILE */
+@media (max-width: 640px) {
+  .benefits-section {
+    grid-template-columns: 1fr;
+    gap: 22px;
+    margin: 35px auto 10px;
+    padding: 22px 16px 0;
+  }
+
+  .benefit-item__icon {
+    width: 30px;
+    height: 30px;
+    margin-bottom: 10px;
+  }
+
+  .benefit-item h3 {
+    font-size: 0.92rem;
+  }
+
+  .benefit-item p {
+    font-size: 0.78rem;
   }
 }
 </style>
