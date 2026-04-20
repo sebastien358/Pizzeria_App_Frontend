@@ -17,4 +17,7 @@ defineProps<{
 </template>
 
 <style scoped lang="scss">
+.shop {
+  //margin-top: 100px
+}
 </style>

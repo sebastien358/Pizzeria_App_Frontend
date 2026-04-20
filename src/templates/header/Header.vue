@@ -173,6 +173,10 @@ const redirectPayment = () => {
 
 <style scoped lang="scss">
 .header {
+
+  position: fixed;
+  z-index: 2;
+
   width: 100%;
   padding: 20px 100px;
   background: #fff;

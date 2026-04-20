@@ -26,14 +26,11 @@ const loadProducts = async () => {
   </section>
   <!-- products -->
   <div v-else-if="products.length > 0" class="d-flex flex-column">
-    <div class="shop-list">
-      <ShopProduct
-        v-for="product in products"
-        :product="product"
-        :isLoading="isLoading"
-        :key="product.id"
-      />
-    </div>
+    <section class="products-section">
+      <div class="products-grid">
+        <ShopProduct v-for="product in products.slice(0, 4)" :key="product.id" :product="product" />
+      </div>
+    </section>
     <div v-if="products.length > 0" class="d-flex align-items-center justify-content-center mt-10">
       <button @click="loadProducts()" class="btn btn-primary">Charger plus...</button>
     </div>
@@ -44,5 +41,38 @@ const loadProducts = async () => {
   </section>
 </template>
 
-<style>
+<style scoped lang="scss">
+.products-section {
+  background: #ffffff;
+  height: auto;
+
+  padding: 90px 40px;
+}
+
+.products-grid {
+  max-width: 1600px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 60px;
+  align-items: stretch;
+}
+
+@media (max-width: 1400px) {
+  .products-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 1000px) {
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 680px) {
+  .products-grid {
+    grid-template-columns: 1fr;
+  }
+}
 </style>
