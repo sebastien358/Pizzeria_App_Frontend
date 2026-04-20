@@ -30,7 +30,6 @@ const steps = [
 </template>
 
 <style scoped lang="scss">
-@use '@/assets/scss/mixins' as m;
 
 .command-progress {
   margin: 40px 5px 0 5px;

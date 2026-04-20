@@ -264,7 +264,6 @@ const field = [
     <section class="product-image" v-if="stateProduct">
       <div v-for="picture in stateProduct.pictures" :key="picture.id">
         <img v-if="picture.filename" :src="picture.filename" class="img-product" />
-        <img v-else src="@/assets/images/not-found.webp" class="img-product" />
         <div class="product-image__button">
           <button @click="deleteImage(stateProduct.id, picture.id)" class="btn btn-danger">
             delete
@@ -276,92 +275,4 @@ const field = [
 </template>
 
 <style scoped lang="scss">
-.container {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
-  gap: 20px;
-  padding: 20px;
-  height: calc(100vh - 96px);
-  @media (max-width: 768.98px) {
-    padding: 10px;
-  }
-  .container-form {
-    width: 100%;
-    max-width: 600px;
-    padding: 30px 20px 15px 20px;
-    h3 {
-      text-align: center;
-      font-size: 22px;
-      margin-bottom: 5px;
-    }
-    .alert-message {
-      margin-top: 10px;
-      text-align: center;
-    }
-  }
-}
-
-.form-group {
-  margin-top: 20px;
-  width: 100%;
-  .option {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    margin-bottom: 10px;
-    gap: 10px;
-  }
-  textarea {
-    height: 100px;
-  }
-  input,
-  select,
-  textarea {
-    border: 1px solid black;
-    padding: 12px;
-    outline: none;
-    background-color: var(--text-primary-color);
-    &:focus {
-      border: 2px solid black;
-      padding: 11px;
-    }
-  }
-  &:focus-within label {
-    background-color: black;
-    color: var(--text-primary-color);
-  }
-  .message-field {
-    color: var(--success-2);
-  }
-}
-
-.product-form__button {
-  margin-top: 10px;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  @media (max-width: 768.98px) {
-    justify-content: center;
-  }
-  .btn-black {
-    font-size: 14px;
-    @media (max-width: 768.98px) {
-      font-size: 12px;
-    }
-  }
-}
-
-// Product image
-
-.product-image {
-  .img-product {
-    height: 200px;
-  }
-  &__button {
-    margin-top: 5px;
-    display: flex;
-    justify-content: center;
-  }
-}
 </style>

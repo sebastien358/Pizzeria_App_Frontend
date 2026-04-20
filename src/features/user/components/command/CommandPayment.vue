@@ -201,44 +201,5 @@ const handleResetForm = () => {
 </template>
 
 <style scoped lang="scss">
-@use '@/assets/scss/mixins' as m;
 
-.payment {
-  height: calc(100vh - 210px);
-  padding: 10px;
-  @media (max-width: 768.98px) {
-    height: auto;
-  }
-}
-
-.container-form {
-  background-color: var(--text-primary-color);
-  border-radius: var(--border-radius);
-  border: var(--border);
-  padding: 20px;
-  width: 100%;
-  max-width: 520px;
-  @media (max-width: 768.98px) {
-    margin-top: 80px;
-  }
-  h2 {
-    font-size: 21px;
-  }
-  p {
-    font-size: 13px;
-  }
-  .form-group {
-    #card-element {
-      border: var(--border);
-      border-radius: var(--border-radius);
-      padding: 12px;
-    }
-  }
-  .btn-primary {
-    padding: 11px;
-  }
-  .alert-message {
-    margin: 10px 0;
-  }
-}
 </style>

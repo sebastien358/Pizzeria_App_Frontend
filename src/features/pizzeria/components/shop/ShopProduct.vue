@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useCartStore } from '@/stores/cartStore.ts'
 import type { ProductInterface } from '@/shared/interfaces'
-import notFound from '@/assets/images/not-found.webp'
 import { ref } from 'vue'
 
 const cartStore = useCartStore()
@@ -33,7 +32,7 @@ const addProductToCart = async (id: number) => {
 <template>
   <section class="shop-product">
     <div class="shop-product__image">
-      <img :src="product.pictures[0]?.filename || notFound" class="img-product" />
+      <img :src="product.pictures[0]?.filename" class="img-product" />
       <div class="shop-product__content">
         <h3>{{ props.product.title }}</h3>
         <p>{{ props.product.description }}</p>
@@ -60,53 +59,5 @@ const addProductToCart = async (id: number) => {
 </template>
 
 <style scoped lang="scss">
-.shop-product {
-  display: flex;
-  flex-direction: column;
-  border: var(--border);
-  border-radius: var(--border-radius);
-  background-color: var(--text-primary-color);
-  &__image .img-product {
-    border-bottom: var(--border);
-    border-top-right-radius: var(--border-radius);
-    border-top-left-radius: var(--border-radius);
-    height: 350px;
-    object-fit: cover;
-    @media (max-width: 1600px) {
-      height: 350px;
-      width: 100%;
-    }
-    @media (max-width: 768.98px) {
-      height: 250px;
-      width: 100%;
-    }
-  }
-  &__price {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 6px;
-  }
-  &__price select {
-    width: 80px;
-    font-size: 11px;
-    padding: 8px 5px;
-    background: green;
-    border: none;
-    color: white;
-    border-radius: 3px;
-    cursor: pointer;
-  }
-  &__content {
-    padding: 10px;
-    h3 {
-      font-size: 15px;
-      margin-bottom: 10px;
-    }
-    p {
-      font-size: 14px;
-      margin-bottom: 10px;
-    }
-  }
-}
+
 </style>

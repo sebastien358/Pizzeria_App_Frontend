@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useCartStore } from '@/stores/cartStore.ts'
 import type { CartProductInterface } from '@/shared/interfaces'
-import notFound from '@/assets/images/not-found.webp'
 
 defineProps<{
   item: CartProductInterface
@@ -33,7 +32,7 @@ async function deleteItemToCart(id: number) {
 <template>
   <div class="d-flex align-items-center space-between cart-product">
     <div class="cart-product__image">
-      <img :src="item.image || notFound" class="img-cart" />
+      <img :src="item.image" class="img-cart" />
       <h4>{{ item.title }}</h4>
       <p class="option-name">({{ item.name }})</p>
     </div>

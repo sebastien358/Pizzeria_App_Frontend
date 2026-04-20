@@ -50,6 +50,13 @@ export const useCartStore = defineStore('cart', {
         console.error(e)
       }
     },
+    async removeItemToCart(id: number) {
+      try {
+        this.cart = this.cart.filter((p) => p.id !== id)
+      } catch(e) {
+        console.error(e)
+      }
+    },
     async deleteItemToCart(id: number): Promise<void> {
       try {
         const itemToCart = this.cart.find((p) => p.id === id)

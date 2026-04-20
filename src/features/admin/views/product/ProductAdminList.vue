@@ -75,9 +75,6 @@ onMounted(async () => {
             :src="product.pictures[0].filename"
             class="img-product"
           />
-
-          <img v-else src="@/assets/images/not-found.webp" class="img-no-product" />
-
           <h4>{{ product.title }}</h4>
         </div>
         <div class="product__buttons">
@@ -99,66 +96,5 @@ onMounted(async () => {
   </div>
 </template>
 
-<style scoped lang="scss">
-.product {
-  padding: 20px 20px 10px 20px;
-  overflow-y: auto;
-  height: calc(100vh - 96px);
-  display: flex;
-  flex-direction: column;
-  row-gap: 10px;
-  @media (max-width: 768.98px) {
-    padding: 10px;
-    row-gap: 6px;
-  }
-  &__list {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border: var(--border);
-    padding: 10px;
-    background-color: var(--text-primary-color);
-    .img-product {
-      height: 55px;
-      width: 65px;
-      margin-right: 10px;
-      @media (max-width: 768.98px) {
-        margin-right: 10px;
-      }
-    }
-    .img-no-product {
-      height: 55px;
-      width: 65px;
-      margin-right: 15px;
-      @media (max-width: 768.98px) {
-        margin-right: 10px;
-      }
-    }
-    h4 {
-      font-size: 15px;
-      @media (max-width: 768.98px) {
-        font-size: 13px;
-      }
-    }
-  }
-}
-
-.product__buttons {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  .btn-danger,
-  .btn-success {
-    border: 0;
-    width: 75px;
-    text-align: center;
-    font-size: 11px;
-    padding: 12px 0;
-    @media (max-width: 768.98px) {
-      padding: 11px 0;
-      font-size: 10px;
-      width: 65px;
-    }
-  }
-}
+<style>
 </style>
