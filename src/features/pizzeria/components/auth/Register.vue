@@ -7,11 +7,14 @@ const authStore = useAuthStore()
 import { ref } from 'vue'
 import * as z from 'zod'
 
-const schema = z.object({
+const schema = z
+  .object({
     email: z.string({ message: 'Email requis' }).email({ message: "L'email n'est pas valide" }),
     password: z.string({ message: 'Mot de passe requis' }),
     passwordConfirm: z.string({ message: 'Confirmation de mot de passe requise' }),
-  }).refine((value) => value.password === value.passwordConfirm, { message: 'Les mots de passe ne correspondent pas',
+  })
+  .refine((value) => value.password === value.passwordConfirm, {
+    message: 'Les mots de passe ne correspondent pas',
     path: ['passwordConfirm'],
   })
 
@@ -87,13 +90,13 @@ const fields = [
 </script>
 
 <template>
-  <div class="d-flex align-items-center justify-content-center register">
+  <div class="register">
     <!-- Formulaire de crétion d'un utlisateur -->
-    <div class="container-form">
+    <div class="register__container">
       <h3>S'inscrire</h3>
       <form @submit.prevent="onSubmit">
         <div v-for="(field, index) in fields" :key="index">
-          <div class="d-flex flex-column form-group">
+          <div class="form-group">
             <label>{{ field.label }}</label>
             <input v-model="field.value.value" :type="field.type" />
           </div>
@@ -102,7 +105,7 @@ const fields = [
           </span>
         </div>
         <!-- Gestion messages de validations -->
-        <div class="text-center">
+        <div class="register__alert">
           <AlertMessage
             v-if="successMessage"
             :message="successMessage"
@@ -120,12 +123,11 @@ const fields = [
             class="alert-message"
           />
         </div>
-        <div class="d-flex align-items-center space-between container-button">
+        <div class="register__buttons">
           <button class="btn btn-primary" :disabled="isSubmitting">
             <span v-if="isSubmitting">Chargement...</span>
             <span v-else>Soumettre</span>
           </button>
-          <router-link to="/login" class="router-login">Vous avez un compte?</router-link>
         </div>
       </form>
     </div>
@@ -134,46 +136,167 @@ const fields = [
 
 <style scoped lang="scss">
 .register {
-  height: calc(100vh - 96px);
-  padding: 10px;
-  .container-form {
-    max-width: 440px;
-    padding: 22px 15px 10px 15px;
-    h3 {
-      text-align: center;
-    }
-    .alert-message {
-      margin: 10px 0 4px 0;
-    }
-    .form-group {
-      margin-top: 15px;
-    }
-    label {
-      margin-bottom: 3px;
-      font-size: 12px;
-    }
-    input {
-      padding: 9px;
-      border: var(--border);
-      border-radius: var(--border-radius);
-    }
-    button {
-      margin-top: 6px;
-    }
+  display: flex;
+  justify-content: center;
+  align-items: center; /* 🔥 centre vertical */
+  min-height: calc(100vh - 80px); /* adapte à ton header */
+  padding: 40px 20px;
+}
+
+.register__container {
+  z-index: 1;
+
+  background: #fff;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.12);
+  border: 1px solid #eee;
+  width: 100%;
+  max-width: 400px;
+  padding: 32px;
+  border-radius: 12px;
+
+  h3 {
+    text-align: center;
   }
-  .container-button {
-    margin-top: 6px;
-    .router-login {
-      font-size: 11px;
-      text-decoration: underline;
-      color: var(--gray-3);
-      transition: all 150ms ease;
-    }
-    .router-login {
-      &:hover {
-        color: var(--success-2);
-      }
-    }
+}
+
+.regiter__form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  transition: 0.2s;
+  font-size: 14px;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #e63946;
+  box-shadow: 0 0 0 4px rgba(230, 57, 70, 0.12);
+}
+
+.error-field {
+  font-size: 12px;
+  color: #e63946;
+}
+
+.register__alert {
+  //min-height: 20px;
+}
+
+.register__buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.btn {
+  margin-top: 15px;
+  padding: 10px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: #e63946;
+  color: white;
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+  background: #d62839;
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-primary:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.router-request-password {
+  font-size: 13px;
+  color: #555;
+  text-align: center;
+  text-decoration: none;
+}
+
+.router-request-password:hover {
+  text-decoration: underline;
+}
+
+/* ===== RESPONSIVE ===== */
+
+@media (max-width: 768px) {
+  .register {
+    padding: 40px 16px;
+  }
+
+  .register__container {
+    max-width: 100%;
+    padding: 24px 20px;
+    border-radius: 8px;
+  }
+
+  .register__form {
+    gap: 16px;
+  }
+
+  .form-group input {
+    padding: 12px;
+    font-size: 15px; /* meilleure lisibilité mobile */
+  }
+
+  .btn {
+    padding: 12px;
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .register {
+    padding: 30px 12px;
+  }
+
+  .register__container {
+    padding: 20px 16px;
+    box-shadow: none; /* plus clean sur petit écran */
+  }
+
+  h3 {
+    font-size: 18px;
+  }
+
+  .form-group label {
+    font-size: 13px;
+  }
+
+  .error-field {
+    font-size: 11px;
+  }
+
+  .router-request-password {
+    font-size: 12px;
   }
 }
 </style>

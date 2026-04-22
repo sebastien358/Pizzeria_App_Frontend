@@ -9,8 +9,7 @@ import { ref } from 'vue'
 const authStore = useAuthStore()
 
 const schema = z.object({
-  email: z
-    .string({ message: 'Email requis' }).email({message: 'L\'email n\'est pas valide'}),
+  email: z.string({ message: 'Email requis' }).email({ message: "L'email n'est pas valide" }),
   password: z.string({ message: 'Mot de passe requis' }),
 })
 
@@ -24,7 +23,7 @@ const { value: password, errorMessage: errorPassword } = useField('password')
 const MESSAGES = {
   SUCCESS_LOGIN: 'Vos êtes connecté',
   INVALID_CREDENTIALS: 'Identifiant ou mot de passe invalid',
-  EMAIL_NOT_FOUND: "Aucun compte n'existe avec cet email"
+  EMAIL_NOT_FOUND: "Aucun compte n'existe avec cet email",
 }
 
 const onSubmit = handleSubmit(async (dataLogin, { resetForm }) => {
@@ -75,34 +74,64 @@ function handleResetForm() {
 // Fields form
 
 const fields = [
-  { label: 'Email', for:'email', type: 'text', name: 'email', value: email, errorMessage: errorEmail },
-  { label: 'Mot de passe', for: 'password', type: 'password',name: 'password', value: password, errorMessage: errorPassword },
+  {
+    label: 'Email',
+    for: 'email',
+    type: 'text',
+    name: 'email',
+    value: email,
+    errorMessage: errorEmail,
+  },
+  {
+    label: 'Mot de passe',
+    for: 'password',
+    type: 'password',
+    name: 'password',
+    value: password,
+    errorMessage: errorPassword,
+  },
 ]
 </script>
 
 <template>
-  <div class="d-flex align-items-center justify-content-center login">
+  <div class="login container">
     <!-- Formulaire de connexion d'un utlisateur -->
-    <div class="container-form">
+    <div class="login__container">
       <h3>Se Connecter</h3>
-      <form @submit.prevent="onSubmit">
+      <form @submit.prevent="onSubmit" class="login__form">
         <div v-for="(field, index) in fields" :key="index">
-          <div class="d-flex flex-column form-group">
+          <div class="form-group">
             <label :for="field.for">{{ field.label }}</label>
-            <input v-model="field.value.value" :type="fields.type" :name="field.name" />
+            <input v-model="field.value.value" :type="field.type" :name="field.name" />
           </div>
           <span v-if="field.errorMessage" class="error-field">
             {{ field.errorMessage }}
           </span>
         </div>
         <!-- Gestion messages de la validations -->
-        <div class="text-center">
-          <AlertMessage v-if="successMessage" :message="successMessage" type="success" redirectTo="/" @close="handleResetForm()" class="alert-message" />
-          <AlertMessage v-if="errorMessage" :message="errorMessage" type="error" redirectTo="" @close="closeAlert()" class="alert-message" />
+        <div class="login__alert">
+          <AlertMessage
+            v-if="successMessage"
+            :message="successMessage"
+            type="success"
+            redirectTo="/"
+            @close="handleResetForm()"
+            class="alert-message"
+          />
+          <AlertMessage
+            v-if="errorMessage"
+            :message="errorMessage"
+            type="error"
+            redirectTo=""
+            @close="closeAlert()"
+            class="alert-message"
+          />
         </div>
-        <div class="d-flex align-items-center space-between container-button">
+        <div class="login__buttons">
           <button class="btn btn-primary" :disabled="isSubmitting">Soumettre</button>
-          <router-link to="/request-password" class="router-request-password">Mot de passe oublié?</router-link>
+          <router-link to="/request-password" class="router-request-password"
+            >Mot de passe oublié?</router-link
+          >
         </div>
       </form>
     </div>
@@ -111,43 +140,167 @@ const fields = [
 
 <style scoped lang="scss">
 .login {
-  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center; /* 🔥 centre vertical */
+  min-height: calc(100vh - 80px); /* adapte à ton header */
+  padding: 40px 20px;
+}
+
+.login__container {
+  z-index: 1;
+
+  background: #fff;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.12);
+  border: 1px solid #eee;
+  width: 100%;
+  max-width: 400px;
+  padding: 32px;
+  border-radius: 12px;
+
+  h3 {
+    text-align: center;
+  }
+}
+
+.login__form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  transition: 0.2s;
+  font-size: 14px;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #e63946;
+  box-shadow: 0 0 0 4px rgba(230, 57, 70, 0.12);
+}
+
+.error-field {
+  font-size: 12px;
+  color: #e63946;
+}
+
+.login__alert {
+  //min-height: 20px;
+}
+
+.login__buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.btn {
+  margin-top: 15px;
   padding: 10px;
-  .container-form {
-    max-width: 440px;
-    padding: 22px 15px 10px 15px;
-    h3 {
-      text-align: center
-    }
-    .form-group {
-      margin-top: 15px;
-    }
-    label {
-      margin-bottom: 3px;
-      font-size: 12px;
-    }
-    input {
-      padding: 9px;
-      border: var(--border);
-      border-radius: var(--border-radius);
-    }
-    .alert-message {
-      margin: 10px 0 4px 0;
-    }
-    .container-button {
-      margin-top: 6px;
-      .router-request-password {
-        font-size: 11px;
-        text-decoration: underline;
-        color: var(--gray-3);
-        transition: all 150ms ease;
-      }
-      .router-request-password {
-        &:hover {
-          color: var(--success-2);
-        }
-      }
-    }
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: #e63946;
+  color: white;
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+  background: #d62839;
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-primary:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.router-request-password {
+  font-size: 13px;
+  color: #555;
+  text-align: center;
+  text-decoration: none;
+}
+
+.router-request-password:hover {
+  text-decoration: underline;
+}
+
+/* ===== RESPONSIVE ===== */
+
+@media (max-width: 768px) {
+  .login {
+    padding: 40px 16px;
+  }
+
+  .login__container {
+    max-width: 100%;
+    padding: 24px 20px;
+    border-radius: 8px;
+  }
+
+  .login__form {
+    gap: 16px;
+  }
+
+  .form-group input {
+    padding: 12px;
+    font-size: 15px; /* meilleure lisibilité mobile */
+  }
+
+  .btn {
+    padding: 12px;
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login {
+    padding: 30px 12px;
+  }
+
+  .login__container {
+    padding: 20px 16px;
+    box-shadow: none; /* plus clean sur petit écran */
+  }
+
+  h3 {
+    font-size: 18px;
+  }
+
+  .form-group label {
+    font-size: 13px;
+  }
+
+  .error-field {
+    font-size: 11px;
+  }
+
+  .router-request-password {
+    font-size: 12px;
   }
 }
 </style>

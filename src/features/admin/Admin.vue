@@ -10,6 +10,6 @@
 
 <style scoped lang="scss">
 .admin {
-  height: 100px;
+  height: 100%;
 }
 </style>

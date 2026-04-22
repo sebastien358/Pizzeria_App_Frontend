@@ -10,16 +10,20 @@ import ResetPassword from '@/features/pizzeria/components/auth/reset-password/Re
 import CommandAddress from '@/features/user/components/command/CommandAddress.vue'
 import Payment from '@/features/user/components/command/CommandPayment.vue'
 import Finish from '@/features/user/components/command/CommandFinish.vue'
-import CommandUserList from '@/features/user/components/profile/CommandUserList.vue'
-import CartProduct from '@/features/pizzeria/components/cart/CartProduct.vue'
+const CommandUserList = () =>  import('@/features/user/components/profile/CommandUserList.vue')
+const CartProduct = () => import('@/features/pizzeria/components/cart/CartProduct.vue')
 const AccountUserEdit = () => import('@/features/user/components/profile/AccountUserEdit.vue')
+const PizzaCard = () => import('@/features/pizzeria/components/shop/PizzaCard.vue')
+const Contact = () => import('@/features/pizzeria/components/contact/Contact.vue')
 
 const routes = [
   { path: '/', component: Pizzeria },
-  { path: '/register', name: 'register', component: Register },
   { path: '/login', name: 'login', component: Login },
-  { path: '/request-password', component: RequestPassword },
+  { path: '/register', name: 'register', component: Register },
   { path: '/cart', component: CartProduct },
+  { path: '/pizza-card', component: PizzaCard },
+  { path: '/contact', component: Contact },
+  { path: '/request-password', component: RequestPassword },
   { path: '/reset-password/:token', component: ResetPassword },
   {
     path: '/command-address',
@@ -76,7 +80,22 @@ const routes = [
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes: routes
+  routes: routes,
+  scrollBehavior(to, from, savedPosition) {
+    // 🔹 Cas 1 : navigation avec bouton retour / avant
+    if (savedPosition) {
+      return savedPosition
+    }
+    // 🔹 Cas 2 : navigation avec ancre (#services, #about, etc.)
+    if (to.hash) {
+      return {
+        el: to.hash,
+        behavior: 'smooth',
+      }
+    }
+    // 🔹 Cas 3 : navigation classique
+    return { top: 0 }
+  },
 })
 
 router.beforeEach((to, from, next) => {

@@ -218,15 +218,28 @@ const cart = computed(() => cartStore.cart)
 .hero {
   position: relative;
   min-height: calc(100vh - 80px);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 8%;
-  /* TON IMAGE BOIS */
+  padding-left: 10%;
   background-image: url('@/assets/images/1000034631.jpg');
   background-size: cover;
   background-position: center;
   overflow: hidden;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50%;
+  height: 100%;
+
+  background: radial-gradient(circle at center, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.35) 100%);
+
+  pointer-events: none;
 }
 
 /* Petit filtre pour lisibilité */
@@ -234,15 +247,17 @@ const cart = computed(() => cartStore.cart)
   content: '';
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.55);
 }
 
 /* TEXTE */
 .hero__content {
   position: relative;
   z-index: 2;
-  max-width: 500px;
   color: #fff;
+
+  justify-self: start;
+  max-width: 520px;
 }
 
 .hero__content h1 {
@@ -261,18 +276,20 @@ const cart = computed(() => cartStore.cart)
   background: #d62828;
   color: white;
   text-decoration: none;
-  border-radius: 999px;
+  border-radius: 25px;
   font-weight: bold;
 }
 
 /* PIZZA */
 .hero-pizza {
   position: absolute;
-  right: 2%;
-  top: 55%;
-  width: 650px;
-  transform: translateY(-50%) rotate(-8deg) scale(1.05);
-  filter: drop-shadow(0 25px 40px rgba(0, 0, 0, 0.3));
+  top: 54%;
+  right: 9%;
+  width: 680px;
+  filter: drop-shadow(0 30px 50px rgba(0, 0, 0, 0.35));
+  pointer-events: none;
+  justify-self: center;
+  transform: translateY(-50%) rotate(-6deg) scale(1.1);
 }
 
 /* RESPONSIVE */

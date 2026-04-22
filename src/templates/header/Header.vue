@@ -96,7 +96,7 @@ const redirectCart = () => {
 </script>
 
 <template>
-  <header class="header">
+  <header class="header scrolled">
     <div class="header__container">
       <!-- LOGO -->
       <router-link to="/" class="header__logo">
@@ -115,7 +115,7 @@ const redirectCart = () => {
       <section class="header__right">
         <nav class="header__nav">
           <router-link to="/" class="nav__link">Accueil</router-link>
-          <router-link to="/menu" class="nav__link">La carte</router-link>
+          <router-link to="/pizza-card" class="nav__link">La carte</router-link>
           <router-link to="/contact" class="nav__link">Contact</router-link>
           <router-link v-if="!isLoggedIn()" to="/login" class="nav__link">Connexion</router-link>
           <router-link v-if="!isLoggedIn()" to="/register" class="nav__link"
@@ -220,35 +220,52 @@ const redirectCart = () => {
 ====================*/
 
 .dropdown {
-  z-index: 10;
+  z-index: 2;
   position: relative;
+
   &__menu {
     opacity: 0;
     pointer-events: none;
     position: absolute;
-    top: 60px;
+    top: 35px;
     right: 50%;
     transform: translate(50%);
-    padding: 30px;
+    padding: 20px;
     transition: all 200ms ease;
     border-radius: 10px;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+    box-shadow:
+      0 4px 12px rgba(0, 0, 0, 0.08),
+      0 12px 28px rgba(0, 0, 0, 0.12);
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    width: auto;
+    gap: 8px;
+    min-width: 180px;
+    background: white;
   }
+
   &__menu.active-pro {
     pointer-events: auto;
     opacity: 1;
   }
+
   &__menu .dropdown--link {
-    text-transform: lowercase;
     font-size: 14px;
+    color: #2b2b2b;
+    padding: 6px 10px;
+    border-radius: 6px;
+    transition: all 150ms ease;
+
     white-space: nowrap;
   }
+
+  &__menu .dropdown--link:hover {
+    background: rgba(0, 0, 0, 0.04);
+    transform: translateX(2px);
+  }
+
   &__menu .logout:hover {
     color: #e63946;
+    background: rgba(230, 57, 70, 0.08);
   }
 }
 
@@ -257,11 +274,16 @@ const redirectCart = () => {
 }
 
 .header {
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   position: fixed;
+  top: 0;
   z-index: 2;
   width: 100%;
   padding: 20px 100px;
-  background: #fff;
+  transition:
+    box-shadow 0.2s ease,
+    background 0.2s ease;
   &__container {
     display: flex;
     align-items: center;
@@ -380,7 +402,7 @@ const redirectCart = () => {
   position: absolute;
   top: 42px;
   right: 0;
-  width: 320px;
+  width: 340px;
   padding: 16px;
   background: #fff;
   border-radius: 10px;

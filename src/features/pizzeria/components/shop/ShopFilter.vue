@@ -13,103 +13,88 @@ const inputSearchTerm = async () => {
     console.error(e)
   }
 }
-
-/* AFFICHER LES PRIX */
-
-const displayPriceRange = (priceRange: number[]) => {
-  return priceRange[0] === 0
-    ? 'Tous les produits'
-    : priceRange[0] === 30
-      ? 'Plus de 30'
-      : `${priceRange[0]} et ${priceRange[1]}`
-}
-
-/* SÉLÉCTIONNER LE PRIX */
-
-const selectedPriceRange = async (priceRange: number[]) => {
-  try {
-    await productStore.filteredPrice(priceRange)
-  } catch (e) {
-    console.error(e)
-  }
-}
-
-/* SÉLÉCTIONNER LA CATÉGORIE */
-
-const selectedCategory = async (category: string) => {
-  try {
-    productStore.initCategory = category
-    await productStore.filteredCategory(category)
-  } catch (e) {
-    console.error(e)
-  }
-}
-
-/* RÉINITIALISATION */
-
-const selectedReinitialisation = () => {
-  productStore.initFilteredProducts()
-}
 </script>
 
 <template>
-  <div class="d-flex flex-column space-between shop-filter">
-    <div class="d-flex flex-column flex-fill">
-      <!-- Filtration search -->
-      <div class="d-flex flex-column shop-filter_search">
-        <h4>Rechercher</h4>
-        <input
-          @input="inputSearchTerm()"
-          v-model="productStore.searchTerm"
-          type="text"
-          placeholder="Rechercher"
-        />
-      </div>
-      <!-- Filtrer par prix -->
-      <div class="d-flex flex-column shop-filter_price">
-        <h4>Filtrer par prix</h4>
-        <div
-          v-for="(priceRange, index) in productStore.priceRange"
-          @click="selectedPriceRange(priceRange)"
-          class="price-range"
-          :key="index"
-        >
-          <input
-            v-model="productStore.initPriceRange"
-            :value="priceRange"
-            type="radio"
-            name="priceRange"
-          />
-          <span>{{ displayPriceRange(priceRange) }}</span>
-        </div>
-      </div>
-      <!-- Filtrer par catégories -->
-      <div class="d-flex flex-column shop-filter_category">
-        <h4>Filtrer par catégories</h4>
-        <p
-          v-for="(category, index) in productStore.category"
-          @click="selectedCategory(category)"
-          :key="index"
-        >
-          <span
-            class="category"
-            :class="{ active: productStore.initCategory.includes(category) }"
-          >
-            {{ category }}
-          </span>
-        </p>
-      </div>
+  <section class="shop-filter">
+    <!-- Filtration search -->
+    <div class="shop-filter__search">
+      <input
+        @input="inputSearchTerm()"
+        v-model="productStore.searchTerm"
+        type="text"
+        placeholder="Rechercher une pizza..."
+      />
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="19"
+        height="19"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
     </div>
-    <!-- Réinitialisation -->
-    <div class="d-flex flex-column shop-filter_reinitialisation">
-      <p class="nbr-products">
-        Nombre de produits: <span>{{ productStore.nbrProducts }}</span>
-      </p>
-      <button @click="selectedReinitialisation()" class="btn btn-danger">Réinitialser</button>
-    </div>
-  </div>
+  </section>
 </template>
 
 <style scoped lang="scss">
+.shop-filter {
+  /* CONTAINER */
+  &__search {
+    position: relative;
+    width: auto;
+  }
 
+  /* INPUT */
+  &__search input {
+    width: 100%;
+    height: 42px;
+    padding: 0 40px 0 16px;
+    border-radius: 10px;
+    border: 1px solid #e5e5e5;
+    background: #fff;
+    font-size: 14px;
+    color: #333;
+    transition: 0.2s;
+    outline: none;
+  }
+
+  /* PLACEHOLDER */
+  &__search input::placeholder {
+    color: #aaa;
+  }
+
+  /* FOCUS */
+  &__search input:focus {
+    border-color: #e63946;
+    box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.1);
+  }
+
+  /* ICON */
+  &__search svg {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    width: 18px;
+    height: 18px;
+
+    color: #aaa;
+    pointer-events: none;
+
+    transition: 0.2s;
+  }
+
+  /* ICON FOCUS */
+  &__search input:focus + svg {
+    color: #e63946;
+  }
+}
 </style>

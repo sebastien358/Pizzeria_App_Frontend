@@ -1,15 +1,17 @@
 <script setup lang="ts">
 import { computed, onMounted } from 'vue'
 import { useProductAdminStore } from '@/stores/admin/productAdminStore.ts'
-import Pagination from '../../../../templates/pagination/Pagination.vue'
+
+import notFound from '@/assets/images/not-found.webp'
 import { ref } from 'vue'
+import Pagination from '@/templates/pagination/Pagination.vue'
 
 const productAdminStore = useProductAdminStore()
 
 const products = computed(() => productAdminStore.product)
 
 const currentPage = ref<number>(1)
-const itemPerPage = ref<number>(20)
+const itemPerPage = ref<number>(15)
 
 const loadAdminProduct = async () => {
   try {
@@ -69,11 +71,7 @@ onMounted(async () => {
   <section v-if="products.length > 0" class="product">
     <div v-for="product in products" :key="product.id" class="product__list">
       <div class="product__content">
-        <img
-          v-if="product.pictures && product.pictures.length > 0"
-          :src="product.pictures[0].filename"
-          class="img-product"
-        />
+        <img :src="product.pictures[0]?.filename || notFound" class="img-product" />
         <h4>{{ product.title }}</h4>
       </div>
 
@@ -89,6 +87,7 @@ onMounted(async () => {
     </div>
 
     <Pagination
+      v-if="products.length > 15"
       :currentPage="currentPage"
       :pages="productAdminStore.pages"
       @previous-page="previousPage()"
@@ -100,8 +99,7 @@ onMounted(async () => {
 <style scoped lang="scss">
 .product {
   width: 100%;
-  padding: 100px 20px 60px;
-
+  padding: 30px 20px;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -203,14 +201,14 @@ onMounted(async () => {
   transform: translateY(-1px);
 }
 
-/* pagination */
+
 .product :deep(.pagination) {
   margin-top: 20px;
   display: flex;
   justify-content: center;
 }
 
-/* tablette */
+
 @media (max-width: 768.98px) {
   .product {
     padding: 90px 10px 40px;
@@ -244,7 +242,7 @@ onMounted(async () => {
   }
 }
 
-/* mobile étroit */
+
 @media (max-width: 560px) {
   .product__list {
     flex-direction: column;
