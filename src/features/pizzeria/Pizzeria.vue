@@ -17,12 +17,6 @@ onMounted(async () => {
     console.error(e)
   }
 })
-
-// Récupératiopn du panier
-
-const cartStore = useCartStore()
-
-const cart = computed(() => cartStore.cart)
 </script>
 
 <template>
@@ -34,7 +28,7 @@ const cart = computed(() => cartStore.cart)
         <h1>Des pizzas artisanales, livrées chez vous 🍕</h1>
         <p>Commandez en quelques clics et savourez une vraie pizza italienne.</p>
 
-        <a href="#menu" class="btn">Commander maintenant</a>
+        <router-link to="/pizza-cart" class="btn">Commander maintenant</router-link>
       </div>
 
       <img src="@/assets/images/hero-pizza.png" alt="Pizza" class="hero-pizza" />
@@ -96,9 +90,9 @@ const cart = computed(() => cartStore.cart)
           <div class="ingredients-section__line"></div>
         </div>
 
-        <div class="ingredients-section__awning">
+        <!--<div class="ingredients-section__awning">
           <img src="@/assets/images/casquette.png" alt="Auvent décoratif" class="awning-img" />
-        </div>
+        </div>-->
 
         <div class="ingredients-section__content">
           <div class="ingredients-section__visual">
@@ -422,7 +416,7 @@ const cart = computed(() => cartStore.cart)
 .ingredients-section {
   background: #f5f3ef;
   overflow: hidden;
-  padding: 45px 20px 0 20px;
+  padding: 60px 20px 10px 20px;
   .ingredients-section__content {
     margin-top: -10px;
     margin-bottom: 10px;

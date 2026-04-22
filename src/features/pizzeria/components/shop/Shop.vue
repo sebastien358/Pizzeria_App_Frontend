@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ShopProductList from '@/features/pizzeria/components/shop/ShopProductList.vue'
+import ShopPizzaList from '@/features/pizzeria/components/shop/ShopPizzaList.vue'
 import type { ProductInterface } from '@/shared/interfaces'
 
 defineProps<{
@@ -11,13 +11,10 @@ defineProps<{
 <template>
   <div class="shop">
     <div class="d-flex flex-column shop-content">
-      <ShopProductList :products="products" :isLoading="isLoading" class="shop-product-list" />
+      <ShopPizzaList :products="products" :isLoading="isLoading" class="shop-product-list" />
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-.shop {
-  //margin-top: 100px
-}
 </style>

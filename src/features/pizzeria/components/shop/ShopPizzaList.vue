@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ShopProduct from '@/features/pizzeria/components/shop/ShopProduct.vue'
+import ShopPizza from '@/features/pizzeria/components/shop/ShopPizza.vue'
 import type { ProductInterface } from '@/shared/interfaces'
 
 const props = defineProps<{
@@ -17,7 +17,7 @@ const props = defineProps<{
   <div v-else-if="products.length > 0" class="d-flex flex-column">
     <section class="products-section">
       <div class="products-grid">
-        <ShopProduct v-for="product in products.slice(0, 4)" :key="product.id" :product="product" />
+        <ShopPizza v-for="product in products.slice(0, 4)" :key="product.id" :product="product" />
       </div>
     </section>
   </div>
@@ -29,10 +29,10 @@ const props = defineProps<{
 
 <style scoped lang="scss">
 .products-section {
-  background: #ffffff;
-  height: auto;
+  background: white;
+  height: 600px;
 
-  padding: 90px 40px;
+  //padding: 90px 40px;
 }
 
 .products-grid {

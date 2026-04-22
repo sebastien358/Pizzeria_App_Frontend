@@ -21,7 +21,7 @@ const routes = [
   { path: '/login', name: 'login', component: Login },
   { path: '/register', name: 'register', component: Register },
   { path: '/cart', component: CartProduct },
-  { path: '/pizza-card', component: PizzaCard },
+  { path: '/pizza-cart', component: PizzaCard },
   { path: '/contact', component: Contact },
   { path: '/request-password', component: RequestPassword },
   { path: '/reset-password/:token', component: ResetPassword },

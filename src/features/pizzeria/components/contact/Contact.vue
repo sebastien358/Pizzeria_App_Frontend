@@ -181,7 +181,6 @@ const contactInfoRef = ref<HTMLElement | null>(null)
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(180deg, #faf7fd 0%, #ffffff 60%);
   overflow: hidden;
   height: calc(100vh - 80px);
 }

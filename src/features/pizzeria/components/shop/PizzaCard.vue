@@ -3,7 +3,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { useProductStore } from '@/stores/productStore.ts'
 import notFound from '@/assets/images/not-found.webp'
 import { useCartStore } from '@/stores/cartStore.ts'
-import ShopFilter from '@/features/pizzeria/components/shop/ShopFilter.vue'
+import PizzaFilter from '@/features/pizzeria/components/shop/PizzaFilter.vue'
 
 const productStore = useProductStore()
 const cartStore = useCartStore()
@@ -46,7 +46,7 @@ const addPizzaToCart = (id: number) => {
   <!-- Pizzas Filter -->
   <section class="pizza-filter">
     <div class="pizza-filter__sidebar">
-      <ShopFilter />
+      <PizzaFilter />
     </div>
     <!-- Pizzas -->
     <div class="cards-grid">

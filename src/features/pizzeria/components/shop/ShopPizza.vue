@@ -63,7 +63,24 @@ const addProductToCart = async (id: number) => {
           </div>
         </div>
 
-        <button @click="addProductToCart(product.id)" class="btn-cart">Ajouter au panier</button>
+        <button @click="addProductToCart(product.id)" class="btn-cart">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="9" cy="21" r="1"></circle>
+            <circle cx="20" cy="21" r="1"></circle>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+          </svg>
+          <span> Ajouter au panier</span>
+        </button>
       </div>
     </div>
   </section>
@@ -77,25 +94,24 @@ const addProductToCart = async (id: number) => {
 
 .shop-product__card {
   transition: transform 0.3s ease;
-
+  height: 600px;
   text-align: center;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   width: 100%;
-
-  padding: 50px 30px 60px; /* + généreux */
+  padding: 50px 60px 55px 60px;
   border-radius: 12px;
-
+  background: white;
   &:hover {
-    background: #f6f4f1;
-    transform: scale(1.03);
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
   }
 }
 
 .shop-product__image {
-  width: 170px;
-  height: 170px;
+  width: 190px;
+  height: 190px;
   margin: 0 auto 28px;
   display: flex;
   align-items: center;
@@ -107,6 +123,16 @@ const addProductToCart = async (id: number) => {
   height: 100%;
   object-fit: cover;
   border-radius: 50%;
+
+  filter: grayscale(100%);
+  transition:
+    filter 0.4s ease,
+    transform 0.3s ease;
+}
+
+.shop-product__image:hover .img-product {
+  filter: grayscale(0%);
+  transform: scale(1.05);
 }
 
 .shop-product__content h3 {
@@ -182,10 +208,21 @@ const addProductToCart = async (id: number) => {
   color: #2a2a2a;
   padding: 14px 34px;
   border-radius: 999px;
-  font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
   transition: 0.25s ease;
+
+  font-size: 11px;
+  text-transform: uppercase;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  span {
+    margin: 0;
+    padding: 0;
+  }
 }
 
 .btn-cart:hover {
