@@ -70,18 +70,24 @@ export const useProductStore = defineStore('product', {
       }
     },
     async searchProducts(term: string): Promise<void> {
-      if (!term || term.trim().length === 0) {
-        this.offset = 0
+      const trimmed = term.trim()
+
+      // 🔹 Cas : input vide → on recharge tout
+      if (!trimmed) {
         this.searchTerm = ''
+        this.offset = 0
+        await this.getProduct()
+        return
       }
 
-      if (term.trim().length < 2) return
+      // 🔹 Cas : trop court → on fait rien
+      if (trimmed.length < 2) return
 
       try {
         this.isLoading = true
-        this.searchTerm = term
+        this.searchTerm = trimmed
 
-        const response = await axiosSearchProducts(term)
+        const response = await axiosSearchProducts(trimmed)
         this.product = Array.isArray(response) ? response : []
       } catch (e) {
         this.product = []

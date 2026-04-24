@@ -180,7 +180,7 @@ const fields = [
   <!-- Form address command -->
   <section class="address">
     <div class="container-form">
-      <h2>Entrer vos données</h2>
+      <h3>Entrer vos données</h3>
       <form @submit.prevent="onSubmit">
         <div class="form-column">
           <div v-for="(field, index) in fields" :key="index">
@@ -251,15 +251,15 @@ const fields = [
   background: #fff;
   border-radius: 18px;
   padding: 38px 32px;
-  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.07);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.08);
 }
 
-.container-form h2 {
-  margin: 0 0 28px;
+.container-form h3 {
   text-align: center;
-  font-size: 2rem;
+  font-size: 30px;
   font-weight: 700;
   color: #2c2c2c;
+  margin-bottom: 20px;
 }
 
 .form-column {
@@ -297,9 +297,9 @@ const fields = [
 
 .form-group input:focus,
 .form-group select:focus {
-  border-color: #df2f2f;
   background: #fff;
-  box-shadow: 0 0 0 3px rgba(223, 47, 47, 0.08);
+  border-color: #e63946;
+  box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.12);
 }
 
 .form-group select {
@@ -326,8 +326,8 @@ const fields = [
 }
 
 .btn.btn-black {
-  min-width: 220px;
-  padding: 13px 22px;
+  width: 100%;
+  padding: 14px 22px;
   border: none;
   border-radius: 999px;
   background: #2c2c2c;
@@ -335,16 +335,23 @@ const fields = [
   font-size: 0.95rem;
   font-weight: 700;
   cursor: pointer;
-  transition:
-    background 0.2s ease,
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
-  box-shadow: 0 10px 20px rgba(44, 44, 44, 0.12);
+  transition: all 0.2s ease;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
 }
 
 .btn.btn-black:hover {
   background: #1f1f1f;
   transform: translateY(-2px);
+}
+
+.btn.btn-black:active {
+  transform: translateY(0);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+}
+
+.btn.btn-black:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(44, 44, 44, 0.25);
 }
 
 .btn.btn-black:disabled {
@@ -353,6 +360,8 @@ const fields = [
   transform: none;
   box-shadow: none;
 }
+
+
 
 @media (max-width: 768px) {
   .address {
