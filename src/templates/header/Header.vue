@@ -122,15 +122,17 @@ const redirectCart = () => {
             >Inscription</router-link
           >
 
-          <!-- Profil User ou Admin -->
-          <router-link
-            v-if="isUser()"
-            to="/profile"
-            class="nav__link"
-            :class="{ 'no-admin': isAdmin() }"
-            >Espace client</router-link
-          >
+          <!-- Profil User -->
 
+          <div v-if="isUser()" class="dropdown" @mouseenter="openDropdown('user')" @mouseleave="closeDropdown()" :class="{ 'no-admin': isAdmin() }">
+            <a href="#" class="nav__link">Espace client</a>
+            <div class="dropdown__menu" :class="{ 'active-pro': state.activeDropdown === 'user' }">
+              <router-link to="/command/user/list" class="dropdown--link">Mes commandes</router-link>
+              <router-link v-if="isLoggedIn()" @click="logout()" to="/logout" class="dropdown--link logout">Déconnexion</router-link>
+            </div>
+          </div>
+
+          <!-- Espace Pro Admin -->
           <div
             v-if="isAdmin()"
             class="dropdown"
@@ -254,7 +256,6 @@ const redirectCart = () => {
     padding: 6px 10px;
     border-radius: 6px;
     transition: all 150ms ease;
-
     white-space: nowrap;
   }
 

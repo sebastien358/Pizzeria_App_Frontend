@@ -1,13 +1,10 @@
 <script setup lang="ts">
 import Shop from '@/features/pizzeria/components/shop/Shop.vue'
-import Cart from '@/features/pizzeria/components/cart/Cart.vue'
 import { computed, onMounted } from 'vue'
 import { useProductStore } from '@/stores/productStore.ts'
-import { useCartStore } from '@/stores/cartStore.ts'
 import Newsletter from '@/templates/Newsletter.vue'
 
 const productStore = useProductStore()
-
 const products = computed(() => productStore.product)
 
 onMounted(async () => {
@@ -28,7 +25,7 @@ onMounted(async () => {
         <h1>Des pizzas artisanales, livrées chez vous 🍕</h1>
         <p>Commandez en quelques clics et savourez une vraie pizza italienne.</p>
 
-        <router-link to="/pizza-cart" class="btn">Commander maintenant</router-link>
+        <router-link to="/pizza-cart" class="btn-hero">Commander maintenant</router-link>
       </div>
 
       <img src="@/assets/images/hero-pizza.png" alt="Pizza" class="hero-pizza" />
@@ -90,10 +87,6 @@ onMounted(async () => {
           <div class="ingredients-section__line"></div>
         </div>
 
-        <!--<div class="ingredients-section__awning">
-          <img src="@/assets/images/casquette.png" alt="Auvent décoratif" class="awning-img" />
-        </div>-->
-
         <div class="ingredients-section__content">
           <div class="ingredients-section__visual">
             <img
@@ -115,7 +108,9 @@ onMounted(async () => {
               savoir-faire.
             </p>
 
-            <a href="#carte" class="ingredients-section__button">Découvrir la carte</a>
+            <router-link to="/pizza-cart" class="ingredients-section__button"
+              >Découvrir la carte</router-link
+            >
           </div>
         </div>
       </div>
@@ -241,7 +236,7 @@ onMounted(async () => {
   content: '';
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.55);
+  background: rgba(0, 0, 0, 0.6);
 }
 
 /* TEXTE */
@@ -265,13 +260,34 @@ onMounted(async () => {
 }
 
 /* BOUTON */
-.btn {
-  padding: 1rem 1.5rem;
+.btn-hero {
+  padding: 1rem 1.6rem;
   background: #d62828;
-  color: white;
+  color: #fff;
   text-decoration: none;
-  border-radius: 25px;
-  font-weight: bold;
+  border-radius: 999px; // plus clean que 25px
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: 0.5px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  transition: all 0.25s ease;
+  transform: scale(1);
+  box-shadow: 0 6px 18px rgba(214, 40, 40, 0.25);
+
+  &:hover {
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 12px 28px rgba(214, 40, 40, 0.35);
+  }
+
+  &:active {
+    transform: scale(0.97);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
 }
 
 /* PIZZA */

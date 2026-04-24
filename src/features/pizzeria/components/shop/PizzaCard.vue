@@ -38,13 +38,16 @@ const addPizzaToCart = (id: number) => {
     return
   }
   cartStore.addProductToCart(id, selectedOptions.value[id].price, selectedOptions.value[id].name)
-  console.log(id, selectedOptions.value[id].price, selectedOptions.value[id].name)
 }
 </script>
 
 <template>
+  <section v-if="productStore.isLoading" class="loader">
+    <span class="loader__spinner"></span>
+  </section>
+
   <!-- Pizzas Filter -->
-  <section class="pizza-filter">
+  <section v-else-if="productStore.product.length > 0" class="pizza-filter">
     <div class="pizza-filter__sidebar">
       <PizzaFilter />
     </div>
@@ -102,14 +105,47 @@ const addPizzaToCart = (id: number) => {
       </div>
     </div>
   </section>
+
+  <section v-else class="empty-pizza">
+    <span class="empty-pizza__text">Aucune pizza.</span>
+  </section>
 </template>
 
 <style scoped lang="scss">
+
+// Loader
+
+.loader {
+  height: calc(100vh - 80px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &__spinner {
+    width: 42px;
+    height: 42px;
+    border: 5px solid black;
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+  }
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 // Pizzas
 
 .pizza-filter {
-  padding: 60px 20px;
-  max-width: 1200px;
+  padding: 40px 20px;
+  max-width: 1300px;
   margin: 0 auto 0 auto;
 }
 
@@ -127,14 +163,14 @@ const addPizzaToCart = (id: number) => {
 .cards-grid {
   flex: 1;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 24px;
   margin: 0 auto;
   @media (max-width: 991.98px) {
     grid-template-columns: repeat(2, 1fr);
   }
   @media (max-width: 767.98px) {
-     grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: repeat(1, 1fr);
   }
 }
 
@@ -251,5 +287,19 @@ const addPizzaToCart = (id: number) => {
 .pizza-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+
+// Empty pizza
+
+.empty-pizza {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 60px;
+  &__text {
+    font-size: 15px;
+    color: black;
+  }
 }
 </style>

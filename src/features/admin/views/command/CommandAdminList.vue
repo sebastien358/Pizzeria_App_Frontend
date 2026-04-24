@@ -177,11 +177,11 @@ onMounted(async () => {
 
       <!-- Bouton préparation de la commande -->
 
-      <div class="command-user__preparation__status">
+      <div class="command-admin__preparation__status">
         <select
           @click="selectedPreparation(command.id, $event)"
           name="preparation-status"
-          id="preparation-status"
+          class="select-status"
         >
           <option value="">
             {{ statusPreparation ? statusPreparation : ' - Status de la commande - ' }}
@@ -196,8 +196,9 @@ onMounted(async () => {
       <!-- Bouton supprimer commande -->
 
       <button
+        v-if="command.preparationStatus === 'Livré'"
         @click="removeCommand(command.id)"
-        :class="commandDelivered(command) ? 'active-button' : 'no-button'"
+        class="btn-delete"
       >
         Supprimer
       </button>
@@ -217,8 +218,258 @@ onMounted(async () => {
 </template>
 
 <style scoped lang="scss">
-.no-command {
-  text-align: center;
-  margin-top: 60px;
+/* SPINNER */
+
+.spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  .loader {
+    width: 35px;
+    height: 35px;
+    border: 5px solid black;
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+  }
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+// commande
+
+.command-admin {
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background: #f5f5f5;
+  height: calc(100vh - 80px);
+
+  &__card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    transition: transform 0.2s ease;
+
+    &:hover {
+      transform: translateY(-3px);
+    }
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  .item-image {
+    width: 70px;
+    height: 70px;
+    flex-shrink: 0;
+
+    .img-product {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+  }
+
+  .item-info {
+    h3 {
+      font-size: 16px;
+      margin: 0;
+      font-weight: 600;
+    }
+
+    p {
+      font-size: 13px;
+      color: #666;
+      margin: 2px 0;
+    }
+  }
+
+  &__status {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+
+    p {
+      font-size: 13px;
+    }
+
+    span {
+      margin-left: 5px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 12px;
+    }
+
+    .status-pending {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .status-paid {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .status-shipped {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+
+    .status-delivered {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .status-failed,
+    .status-cancelled {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+  }
+
+  &__preparation__status {
+    margin-top: 10px;
+
+    select {
+      width: 100%;
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      font-size: 13px;
+      cursor: pointer;
+      background: #fff;
+    }
+
+    .select-status {
+      width: 220px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      font-size: 13px;
+      font-weight: 500;
+      background: #fff;
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      &:hover {
+        border-color: #bbb;
+      }
+
+      &:focus {
+        outline: none;
+        border-color: #16a34a;
+        box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.15);
+      }
+    }
+  }
+
+  .btn-delete {
+    margin-top: 10px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    color: white;
+    background: #ef4444;
+    transition: 0.2s;
+
+    &:hover {
+      background: #dc2626;
+    }
+  }
+}
+
+// Responsive
+
+@media (max-width: 768px) {
+  .command-admin {
+    padding: 15px 10px;
+    height: auto;
+  }
+
+  .command-admin__card {
+    padding: 15px;
+  }
+
+  .command-admin__item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .item-image {
+    width: 100%;
+    height: 140px;
+
+    .img-product {
+      border-radius: 10px;
+    }
+  }
+
+  .item-info {
+    width: 100%;
+  }
+
+  .command-admin__status {
+    flex-direction: column;
+    gap: 8px;
+
+    p {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+
+  .command-admin__preparation__status {
+    select {
+      width: 100%;
+    }
+  }
+
+  .btn-delete {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* NO PRODUCT */
+
+.no-product {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 150px;
+  p {
+    font-size: 15px;
+  }
 }
 </style>

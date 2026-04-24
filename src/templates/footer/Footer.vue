@@ -16,9 +16,9 @@
       </div>
 
       <div class="footer-main__socials">
-        <a href="#">Facebook</a>
-        <a href="#">Instagram</a>
-        <a href="#">TikTok</a>
+        <a href="https://www.facebook.com">Facebook</a>
+        <a href="https://www.instagram.com">Instagram</a>
+        <a href="https://www.tiktok.com">TikTok</a>
       </div>
 
       <div class="footer-main__infos">
@@ -39,10 +39,10 @@
       </div>
 
       <nav class="footer-main__nav">
-        <a href="#">Accueil</a>
-        <a href="#">La carte</a>
-        <a href="#">Contact</a>
-        <a href="#">Connexion</a>
+        <router-link to="/">Accueil</router-link>
+        <router-link to="/pizza-cart">La carte</router-link>
+        <router-link to="/contact">Contact</router-link>
+        <router-link to="/login">Connexion</router-link>
       </nav>
 
       <div class="footer-main__bottom">

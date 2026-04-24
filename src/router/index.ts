@@ -88,14 +88,16 @@ const router = createRouter({
     }
     // 🔹 Cas 2 : navigation avec ancre (#services, #about, etc.)
     if (to.hash) {
-      return {
-        el: to.hash,
-        behavior: 'smooth',
-      }
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            el: to.hash,
+            behavior: 'smooth',
+          })
+        }, 100)
+      })
     }
-    // 🔹 Cas 3 : navigation classique
-    return { top: 0 }
-  },
+  }
 })
 
 router.beforeEach((to, from, next) => {
