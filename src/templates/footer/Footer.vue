@@ -16,9 +16,9 @@
       </div>
 
       <div class="footer-main__socials">
-        <a href="https://www.facebook.com">Facebook</a>
-        <a href="https://www.instagram.com">Instagram</a>
-        <a href="https://www.tiktok.com">TikTok</a>
+        <a target="_blank" href="https://www.facebook.com">Facebook</a>
+        <a target="_blank" href="https://www.instagram.com">Instagram</a>
+        <a target="_blank" href="https://www.tiktok.com">TikTok</a>
       </div>
 
       <div class="footer-main__infos">

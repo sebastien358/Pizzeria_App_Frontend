@@ -129,12 +129,12 @@ const fields = [
     <span class="loader"></span>
   </section>
   <!-- Formulaire de crétion d'un utlisateur -->
-  <section v-else class="d-flex align-items-center justify-content-center register">
-    <div class="container-form">
+  <section v-else class="account-user">
+    <div class="account-user__form">
       <h3>Modifier mes données</h3>
       <form @submit.prevent="onSubmit">
         <div v-for="(field, index) in fields" :key="index">
-          <div class="d-flex flex-column form-group">
+          <div class="form-group">
             <label>{{ field.label }}</label>
             <input v-model="field.value.value" :type="field.type" />
           </div>
@@ -172,4 +172,142 @@ const fields = [
 </template>
 
 <style scoped lang="scss">
+.account-user {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 80px);
+  padding: 40px 20px;
+}
+
+.account-user__form {
+  background: #fff;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.12);
+  border: 1px solid #eee;
+  width: 100%;
+  max-width: 450px;
+  padding: 32px;
+  border-radius: 12px;
+
+  h3 {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+}
+
+.account-user__form form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  transition: 0.2s;
+  font-size: 14px;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #e63946;
+  box-shadow: 0 0 0 4px rgba(230, 57, 70, 0.12);
+}
+
+.error-field {
+  font-size: 12px;
+  color: #e63946;
+}
+
+.text-center {
+  margin-top: 10px;
+}
+
+.btn {
+  margin-top: 20px;
+  padding: 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-primary {
+  background: #e63946;
+  color: white;
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+  background: #d62839;
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-primary:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+
+@media (max-width: 768px) {
+  .account-user {
+    padding: 40px 16px;
+  }
+
+  .account-user__form {
+    max-width: 100%;
+    padding: 24px 20px;
+    border-radius: 8px;
+  }
+
+  .form-group input {
+    padding: 12px;
+    font-size: 15px;
+  }
+
+  .btn {
+    padding: 12px;
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .account-user {
+    padding: 30px 12px;
+  }
+
+  .account-user__form {
+    padding: 20px 16px;
+    box-shadow: none;
+  }
+
+  h3 {
+    font-size: 18px;
+  }
+
+  .form-group label {
+    font-size: 13px;
+  }
+
+  .error-field {
+    font-size: 11px;
+  }
+}
 </style>

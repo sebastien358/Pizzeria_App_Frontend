@@ -463,7 +463,7 @@ onMounted(async () => {
 
 /* NO PRODUCT */
 
-.no-product {
+.no-command {
   display: flex;
   align-items: center;
   justify-content: center;

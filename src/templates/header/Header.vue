@@ -128,6 +128,7 @@ const redirectCart = () => {
             <a href="#" class="nav__link">Espace client</a>
             <div class="dropdown__menu" :class="{ 'active-pro': state.activeDropdown === 'user' }">
               <router-link to="/command/user/list" class="dropdown--link">Mes commandes</router-link>
+              <router-link :to="{ name: 'account-user-edit', params: { id: authStore.userId }}" class="dropdown--link">Mon compte</router-link>
               <router-link v-if="isLoggedIn()" @click="logout()" to="/logout" class="dropdown--link logout">Déconnexion</router-link>
             </div>
           </div>

@@ -74,6 +74,7 @@ const onSubmit = handleSubmit(async (dataClient, { resetForm }) => {
     currentStep.value = 3
   } catch (e) {
     console.error(e)
+    setErrorMessage(MESSAGES.INVALID_CREDENTIALS)
   }
 })
 

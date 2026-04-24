@@ -16,7 +16,7 @@ export const useCartStore = defineStore('cart', {
     },
     total: (state) => {
       return state.cart.reduce((acc, product) => acc + product.price * product.quantity, 0)
-    },
+    }
   },
   actions: {
     async addProductToCart(id: number, selectedOptionPrice: number, selectedOptionName: string): Promise<void> {

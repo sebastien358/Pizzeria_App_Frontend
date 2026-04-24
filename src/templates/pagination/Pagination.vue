@@ -11,7 +11,7 @@ const emit = defineEmits<{
 </script>
 
 <template>
-  <section class="pagination" :class="{ 'active-pagination': props.currentPage > 6 }">
+  <section class="pagination" :class="{ 'active-pagination': props.pages > 1 }">
     <button
       @click="emit('previousPage')"
       class="btn btn-pagination"
@@ -37,16 +37,13 @@ const emit = defineEmits<{
 <style scoped lang="scss">
 .pagination {
   display: none;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 24px;
-  margin-bottom: 10px;
-}
 
-.pagination.active-pagination {
-  display: flex;
-  align-items: center;
+  &.active-pagination {
+    display: flex; // 🔥 obligatoire
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
 }
 
 .pagination span {

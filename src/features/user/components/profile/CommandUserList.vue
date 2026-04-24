@@ -2,6 +2,7 @@
 import { computed, onMounted, ref } from 'vue'
 import Pagination from '@/templates/pagination/Pagination.vue'
 import { useCommandUserStore } from '@/stores/user/commandUserStore.ts'
+import notFound from '@/assets/images/not-found.webp'
 
 const commandUserStore = useCommandUserStore()
 
@@ -122,8 +123,7 @@ onMounted(async () => {
       <div v-for="item in command.commandItems" :key="item.id" class="command-user__item">
         <div class="command-user__image">
           <img
-            v-if="item.product.pictures.length"
-            :src="item.product.pictures[0].filename"
+            :src="item.product.pictures[0]?.filename || notFound"
             class="product-image"
             alt="Produit"
           />
@@ -156,7 +156,6 @@ onMounted(async () => {
       <!-- Bouton : passer une commande, supprimer une commade -->
       <div class="command-user__buttons">
         <router-link
-          v-if="statusCommandPaid(command)"
           :to="{ name: 'payment-command', params: { id: command.id } }"
           class="btn btn-command-paid"
           :class="statusCommandPaid(command)"
@@ -166,7 +165,6 @@ onMounted(async () => {
         >
         <button
           @click="removeCommand(command.id)"
-          v-if="statusCommandPaid(command)"
           class="btn btn-delete"
           :class="statusCommandPaid(command)"
         >
@@ -191,18 +189,6 @@ onMounted(async () => {
 >
 
 <style scoped lang="scss">
-// Variables globales
-
-$primary: #4f46e5;
-$success: #10b981;
-$error: #ef4444;
-$light-bg: #f9fafb;
-$card-bg: #ffffff;
-$text-dark: #111827;
-$text-muted: #6b7280;
-$radius: 12px;
-$shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-
 /* SPINNER */
 
 .spinner {
@@ -239,7 +225,7 @@ $shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   flex-direction: column;
   gap: 20px;
   background: #f5f5f5;
-  height: calc(100vh - 80px);
+  height: 100%;
   &__card {
     background: white;
     border-radius: 12px;

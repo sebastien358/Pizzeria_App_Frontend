@@ -43,11 +43,13 @@ export const useCommandUserStore = defineStore('commandUser', {
         const response = await axiosAddCommandUser(dataClient, cartItems)
 
         this.commandId = response.commandId
-
         this.command.push(response)
+        cartStore.resetCart()
+
         return response
       } catch (e) {
         console.error(e)
+        throw e
       }
     },
     async getCurrentCommand(id: number) {
