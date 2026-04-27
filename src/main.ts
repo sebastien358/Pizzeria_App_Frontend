@@ -41,7 +41,8 @@ library.add(
   faPlus,
   faTrash,
   faPen,
-  faDeleteLeft
+  faDeleteLeft,
+  faBars
 )
 
 const app = createApp(App)

@@ -93,6 +93,10 @@ const redirectCommand = () => {
 const redirectCart = () => {
   router.push({ path: '/cart' })
 }
+
+const toggleMenuTablet = () => {
+  state.open = !state.open
+}
 </script>
 
 <template>
@@ -123,13 +127,30 @@ const redirectCart = () => {
           >
 
           <!-- Profil User -->
-
-          <div v-if="isUser()" class="dropdown" @mouseenter="openDropdown('user')" @mouseleave="closeDropdown()" :class="{ 'no-admin': isAdmin() }">
+          <div
+            v-if="isUser()"
+            class="dropdown"
+            @mouseenter="openDropdown('user')"
+            @mouseleave="closeDropdown()"
+            :class="{ 'no-admin': isAdmin() }"
+          >
             <a href="#" class="nav__link">Espace client</a>
             <div class="dropdown__menu" :class="{ 'active-pro': state.activeDropdown === 'user' }">
-              <router-link to="/command/user/list" class="dropdown--link">Mes commandes</router-link>
-              <router-link :to="{ name: 'account-user-edit', params: { id: authStore.userId }}" class="dropdown--link">Mon compte</router-link>
-              <router-link v-if="isLoggedIn()" @click="logout()" to="/logout" class="dropdown--link logout">Déconnexion</router-link>
+              <router-link to="/command/user/list" class="dropdown--link"
+                >Mes commandes</router-link
+              >
+              <router-link
+                :to="{ name: 'account-user-edit', params: { id: authStore.userId } }"
+                class="dropdown--link"
+                >Mon compte</router-link
+              >
+              <router-link
+                v-if="isLoggedIn()"
+                @click="logout()"
+                to="/logout"
+                class="dropdown--link logout"
+                >Déconnexion</router-link
+              >
             </div>
           </div>
 
@@ -214,12 +235,170 @@ const redirectCart = () => {
       </section>
     </div>
   </header>
+
+  <!-- MENU TABLET -->
+
+  <header class="header-tablet">
+    <div class="header-tablet__container">
+      <!-- LOGO -->
+      <router-link to="/" class="header-tablet__logo">
+        <div class="header-tablet__icon">
+          <span class="icon-pizza">🍕</span>
+        </div>
+        <!-- TEXT -->
+        <div class="header-tablet__text">
+          <div class="logo-title">Pizzeria</div>
+          <div class="logo-subtitle">Commande en ligne</div>
+        </div>
+      </router-link>
+
+      <font-awesome-icon @click="toggleMenuTablet()" icon="fa-solid fa-bars" />
+
+      <Transition>
+        <div v-if="state.open" class="header-tablet__menu">
+          <router-link to="/" class="nav__link">Accueil</router-link>
+          <router-link to="/pizza-cart" class="nav__link">La carte</router-link>
+          <router-link to="/contact" class="nav__link">Contact</router-link>
+          <router-link v-if="!isLoggedIn()" to="/login" class="nav__link">Connexion</router-link>
+          <router-link v-if="!isLoggedIn()" to="/register" class="nav__link"
+            >Inscription</router-link
+          >
+
+          <div v-if="isUser()" :class="{ 'no-admin': isAdmin() }" class="header-tablet__menu__user">
+            <router-link to="/command/user/list" class="nav__link">Mes commandes</router-link>
+            <router-link
+              :to="{ name: 'account-user-edit', params: { id: authStore.userId } }"
+              class="nav__link"
+              >Mon compte</router-link
+            >
+          </div>
+
+          <div v-if="isAdmin()" class="header-tablet__menu__admin">
+            <router-link to="/product-list" class="nav__link">Liste des pizzas</router-link>
+            <router-link to="/command/list" class="nav__link">Liste des commandes</router-link>
+            <router-link to="/product-form" class="nav__link">Ajouter un produit</router-link>
+          </div>
+          <router-link v-if="isLoggedIn()" @click="logout()" to="/logout" class="nav__link logout"
+            >Déconnexion</router-link
+          >
+        </div>
+      </Transition>
+    </div>
+  </header>
+
   <Calc :open="state.open" @close="state.open = false" :transparent="true" />
 </template>
 
 <style scoped lang="scss">
 /*====================
-  HEADER
+  HEADER TABLET
+====================*/
+
+.header-tablet {
+  z-index: 13;
+  display: block;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  position: fixed;
+  top: 0;
+  width: 100%;
+  padding: 20px 10px;
+  transition:
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+  &__container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  &__container .fa-bars {
+    cursor: pointer;
+    height: 22px;
+    width: 22px;
+  }
+  &__logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: inherit;
+  }
+  &__icon .icon-pizza {
+    height: 60px;
+    width: 60px;
+  }
+  &__logo .logo-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  &__text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+  }
+  &__text .logo-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1f1f1f;
+  }
+  &__text .logo-subtitle {
+    font-size: 13px;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  &__menu {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 160px;
+    background: white;
+    position: absolute;
+    top: 85px;
+    right: 85px;
+    transform: translate(50%);
+    padding: 20px;
+    transition: all 200ms ease;
+    border-radius: 10px;
+    box-shadow:
+      0 4px 12px rgba(0, 0, 0, 0.08),
+      0 12px 28px rgba(0, 0, 0, 0.12);
+    .nav__link {
+      font-size: 13px;
+    }
+  }
+  &__menu__user {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &__menu__admin {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  @media (min-width: 991.98px) {
+    display: none;
+  }
+}
+
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.25s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
+
+/*====================
+  DROPDOWN
 ====================*/
 
 .dropdown {
@@ -274,6 +453,10 @@ const redirectCart = () => {
 .no-admin {
   display: none;
 }
+
+/*====================
+  HEADER
+====================*/
 
 .header {
   background: rgba(255, 255, 255, 0.95);
@@ -353,17 +536,18 @@ const redirectCart = () => {
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 991.98px) {
   .header {
     padding: 16px 20px;
-  }
-  .header__container {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .header__nav {
-    flex-wrap: wrap;
-    gap: 16px;
+    display: none;
+    &__container {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    &__nav {
+      flex-wrap: wrap;
+      gap: 16px;
+    }
   }
 }
 
