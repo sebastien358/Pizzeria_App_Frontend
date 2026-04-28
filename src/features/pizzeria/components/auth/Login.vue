@@ -94,7 +94,7 @@ const fields = [
 </script>
 
 <template>
-  <div class="login container">
+  <div class="login">
     <!-- Formulaire de connexion d'un utlisateur -->
     <div class="login__container">
       <h3>Se Connecter</h3>
@@ -142,165 +142,116 @@ const fields = [
 .login {
   display: flex;
   justify-content: center;
-  align-items: center; /* 🔥 centre vertical */
-  min-height: calc(100vh - 80px); /* adapte à ton header */
-  padding: 40px 20px;
-}
-
-.login__container {
-  z-index: 1;
-
-  background: #fff;
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.12);
-  border: 1px solid #eee;
-  width: 100%;
-  max-width: 400px;
-  padding: 32px;
-  border-radius: 12px;
-
-  h3 {
+  align-items: center;
+  height: calc(100vh - 80px); /* adapte à ton header */
+  &__container {
+    z-index: 1;
+    background: #fff;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.12);
+    border: 1px solid #eee;
+    width: 100%;
+    max-width: 400px;
+    padding: 32px;
+    border-radius: 12px;
+  }
+  &__container h3 {
     text-align: center;
   }
-}
-
-.login__form {
-  display: flex;
-  flex-direction: column;
-}
-
-.form-group {
-  margin-top: 20px;
-  display: flex;
-  flex-direction: column;
-}
-
-.form-group label {
-  font-size: 14px;
-  color: #333;
-  margin-bottom: 5px;
-}
-
-.form-group input {
-  width: 100%;
-  padding: 10px 12px;
-  border-radius: 6px;
-  border: 1px solid #ddd;
-  transition: 0.2s;
-  font-size: 14px;
-}
-
-.form-group input:focus {
-  outline: none;
-  border-color: #e63946;
-  box-shadow: 0 0 0 4px rgba(230, 57, 70, 0.12);
-}
-
-.error-field {
-  font-size: 12px;
-  color: #e63946;
-}
-
-.login__alert {
-  //min-height: 20px;
-}
-
-.login__buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.btn {
-  margin-top: 15px;
-  padding: 10px;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-}
-
-.btn-primary {
-  background: #e63946;
-  color: white;
-  transition: all 0.2s ease;
-}
-
-.btn-primary:hover {
-  background: #d62839;
-  transform: translateY(-1px);
-}
-
-.btn-primary:active {
-  transform: translateY(0);
-}
-
-.btn-primary:disabled {
-  background: #ccc;
-  cursor: not-allowed;
-}
-
-.router-request-password {
-  font-size: 13px;
-  color: #555;
-  text-align: center;
-  text-decoration: none;
-}
-
-.router-request-password:hover {
-  text-decoration: underline;
+  &__form {
+    display: flex;
+    flex-direction: column;
+  }
+  .form-group {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+  .form-group label {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 5px;
+  }
+  .form-group input {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    transition: 0.2s;
+    font-size: 14px;
+  }
+  .form-group input:focus {
+    outline: none;
+    border-color: #e63946;
+    box-shadow: 0 0 0 4px rgba(230, 57, 70, 0.12);
+  }
+  .error-field {
+    font-size: 12px;
+    color: #e63946;
+  }
+  &__alert {
+    //min-height: 20px;
+  }
+  &__buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .btn {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+  }
+  .btn-primary {
+    background: #e63946;
+    color: white;
+    transition: all 0.2s ease;
+  }
+  .btn-primary:hover {
+    background: #d62839;
+    transform: translateY(-1px);
+  }
+  .btn-primary:active {
+    transform: translateY(0);
+  }
+  .btn-primary:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+  }
+  .router-request-password {
+    font-size: 13px;
+    color: #555;
+    text-align: center;
+    text-decoration: none;
+  }
+  .router-request-password:hover {
+    text-decoration: underline;
+  }
 }
 
 /* ===== RESPONSIVE ===== */
 
-@media (max-width: 768px) {
+@media (max-width: 767.98px) {
   .login {
-    padding: 40px 16px;
-  }
-
-  .login__container {
-    max-width: 100%;
-    padding: 24px 20px;
-    border-radius: 8px;
-  }
-
-  .login__form {
-    gap: 16px;
-  }
-
-  .form-group input {
-    padding: 12px;
-    font-size: 15px; /* meilleure lisibilité mobile */
-  }
-
-  .btn {
-    padding: 12px;
-    font-size: 15px;
-  }
-}
-
-@media (max-width: 480px) {
-  .login {
-    padding: 30px 12px;
-  }
-
-  .login__container {
-    padding: 20px 16px;
-    box-shadow: none; /* plus clean sur petit écran */
-  }
-
-  h3 {
-    font-size: 18px;
-  }
-
-  .form-group label {
-    font-size: 13px;
-  }
-
-  .error-field {
-    font-size: 11px;
-  }
-
-  .router-request-password {
-    font-size: 12px;
+    height: 100%;
+    padding: 100px 20px 100px 20px;
+    &__container {
+      max-width: 100%;
+      padding: 24px 20px;
+      border-radius: 8px;
+    }
+    &__form {
+      gap: 16px;
+    }
+    .form-group input {
+      padding: 12px;
+      font-size: 15px; /* meilleure lisibilité mobile */
+    }
+    .btn {
+      padding: 12px;
+      font-size: 15px;
+    }
   }
 }
 </style>

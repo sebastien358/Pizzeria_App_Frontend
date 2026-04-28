@@ -14,51 +14,64 @@ const props = defineProps<{
     <span class="loader"></span>
   </section>
   <!-- products -->
-  <div v-else-if="products.length > 0" class="d-flex flex-column">
-    <section class="products-section">
-      <div class="products-grid">
+  <section v-else-if="products.length > 0">
+    <div class="pizza">
+      <div class="pizza__grid">
         <ShopPizza v-for="product in products.slice(0, 4)" :key="product.id" :product="product" />
       </div>
-    </section>
-  </div>
+    </div>
+  </section>
   <!-- no product -->
-  <section v-else class="no-product">
+  <section v-else class="empty-pizza">
     <p>Aucun produit pour le moment.</p>
   </section>
 </template>
 
 <style scoped lang="scss">
-.products-section {
+.pizza {
   background: white;
   height: 600px;
-
-  //padding: 90px 40px;
-}
-
-.products-grid {
-  max-width: 1600px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 60px;
-  align-items: stretch;
+  &__grid {
+    max-width: 1600px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    align-items: stretch;
+  }
 }
 
 @media (max-width: 1400px) {
-  .products-grid {
-    grid-template-columns: repeat(3, 1fr);
+  .pizza {
+    &__grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+    }
   }
 }
 
-@media (max-width: 1000px) {
-  .products-grid {
-    grid-template-columns: repeat(2, 1fr);
+@media (max-width: 991.98px) {
+  .pizza {
+    height: auto;
+    &__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
 }
 
-@media (max-width: 680px) {
-  .products-grid {
-    grid-template-columns: 1fr;
+@media (max-width: 767.98px) {
+  .pizza {
+    &__grid {
+      grid-template-columns: 1fr;
+    }
   }
+}
+
+// EMPTY PIZZA
+
+.empty-pizza {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 200px;
 }
 </style>

@@ -2,7 +2,7 @@
 import Shop from '@/features/pizzeria/components/shop/Shop.vue'
 import { computed, onMounted } from 'vue'
 import { useProductStore } from '@/stores/productStore.ts'
-import Newsletter from '@/templates/Newsletter.vue'
+import Newsletter from '@/templates/newsletter/Newsletter.vue'
 
 const productStore = useProductStore()
 const products = computed(() => productStore.product)
@@ -79,16 +79,16 @@ onMounted(async () => {
 
     <!-- INGREDIENTS SECTION -->
 
-    <section class="ingredients-section">
-      <div class="ingredients-section__container">
-        <div class="ingredients-section__heading">
-          <span class="ingredients-section__subtitle">NOS SAVEURS</span>
+    <section class="ingredients">
+      <div class="ingredients__container">
+        <div class="ingredients__heading">
+          <span class="ingredients__subtitle">NOS SAVEURS</span>
           <h2>Nos ingrédients</h2>
-          <div class="ingredients-section__line"></div>
+          <div class="ingredients__line"></div>
         </div>
 
-        <div class="ingredients-section__content">
-          <div class="ingredients-section__visual">
+        <div class="ingredients__content">
+          <div class="ingredients__visual">
             <img
               src="@/assets/images/ingredients.png"
               alt="Illustration d'ingrédients"
@@ -96,7 +96,7 @@ onMounted(async () => {
             />
           </div>
 
-          <div class="ingredients-section__text">
+          <div class="ingredients__text">
             <p>
               Nous sélectionnons avec soin des ingrédients de qualité pour proposer des pizzas
               généreuses, savoureuses et préparées avec attention à chaque commande.
@@ -108,9 +108,11 @@ onMounted(async () => {
               savoir-faire.
             </p>
 
-            <router-link to="/pizza-cart" class="ingredients-section__button"
+            <div class="ingredients__button">
+              <router-link to="/pizza-cart" class="ingredients-button"
               >Découvrir la carte</router-link
-            >
+              >
+            </div>
           </div>
         </div>
       </div>
@@ -195,7 +197,8 @@ onMounted(async () => {
         <p>Une cuisson soignée pour une pâte savoureuse et une texture réussie.</p>
       </article>
     </section>
-    <Newsletter />
+    <!-- NEWSLETTER -->
+     <Newsletter />
   </main>
 </template>
 
@@ -212,7 +215,6 @@ onMounted(async () => {
   background-size: cover;
   background-position: center;
   overflow: hidden;
-
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
@@ -225,9 +227,7 @@ onMounted(async () => {
   right: 0;
   width: 50%;
   height: 100%;
-
   background: radial-gradient(circle at center, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.35) 100%);
-
   pointer-events: none;
 }
 
@@ -244,9 +244,12 @@ onMounted(async () => {
   position: relative;
   z-index: 2;
   color: #fff;
-
   justify-self: start;
   max-width: 520px;
+
+  @media (max-width: 991.98px) {
+    padding: 0 40px;
+  };
 }
 
 .hero__content h1 {
@@ -269,21 +272,17 @@ onMounted(async () => {
   font-weight: 600;
   font-size: 16px;
   letter-spacing: 0.5px;
-
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-
   transition: all 0.25s ease;
   transform: scale(1);
   box-shadow: 0 6px 18px rgba(214, 40, 40, 0.25);
-
   &:hover {
     transform: translateY(-2px) scale(1.04);
     box-shadow: 0 12px 28px rgba(214, 40, 40, 0.35);
   }
-
   &:active {
     transform: scale(0.97);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
@@ -303,20 +302,36 @@ onMounted(async () => {
 }
 
 /* RESPONSIVE */
-@media (max-width: 768px) {
-  .hero {
-    flex-direction: column;
-    justify-content: center;
-    text-align: center;
-  }
 
+@media (max-width: 991.98px) {
+  .hero {
+    min-height: auto;
+    padding: 90px 20px 0 20px;
+    grid-template-columns: 1fr !important;
+    text-align: center;
+    justify-items: center;
+    row-gap: 2rem;
+  }
+  .hero::after {
+    display: none;
+  }
+  .hero__content {
+    max-width: 100%;
+    justify-self: center;
+  }
+  .hero__content h1 {
+    font-size: clamp(2rem, 10vw, 3rem);
+  }
+  .hero__content p {
+    font-size: 0.95rem;
+  }
   .hero-pizza {
     position: relative;
+    top: auto;
     right: auto;
-    bottom: auto;
-    margin-top: 2rem;
-    width: 300px;
-    transform: rotate(0);
+    width: min(320px, 85vw);
+    transform: rotate(0deg) scale(1);
+    margin-top: 1rem;
   }
 }
 
@@ -403,22 +418,20 @@ onMounted(async () => {
   letter-spacing: 1.5px;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 991.98px) {
   .about-stats {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768.98px) {
   .about-section {
-    padding: 80px 20px 70px;
+    padding: 60px 20px 50px 20px;
   }
-
   .about-stats {
     grid-template-columns: 1fr;
     gap: 20px;
   }
-
   .signature-text {
     font-size: 1.5rem;
     padding: 12px 22px;
@@ -429,117 +442,122 @@ onMounted(async () => {
   INGRÉDIENTS
 =====================*/
 
-.ingredients-section {
+.ingredients {
   background: #f5f3ef;
   overflow: hidden;
   padding: 60px 20px 10px 20px;
-  .ingredients-section__content {
+  &__content {
     margin-top: -10px;
     margin-bottom: 10px;
   }
-  .ingredients-section__features {
+  &__features {
     margin-top: -10px;
+  }
+  &__container {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  &__heading {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  &__subtitle {
+    display: inline-block;
+    margin-bottom: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #df2f2f;
+  }
+  &__heading h2 {
+    margin: 0;
+    font-size: clamp(2.1rem, 5vw, 3.4rem);
+    line-height: 1;
+    text-transform: uppercase;
+    color: #2c2c2c;
+  }
+  &__line {
+    width: 52px;
+    height: 3px;
+    margin: 10px auto 0;
+    border-radius: 999px;
+    background: #df2f2f;
+  }
+  &__awning {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 0;
+  }
+  .awning-img {
+    display: block;
+    width: auto;
+    max-width: 500px;
+    height: auto;
+    filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.12));
+  }
+  &__content {
+    margin-top: -20px;
+    display: grid;
+    grid-template-columns: 0.95fr 1.05fr;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 30px;
+  }
+  &__visual {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .ingredients-img {
+    display: block;
+    width: auto;
+    max-width: 500px;
+    height: auto;
+    filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.08));
+  }
+  &__text {
+    max-width: 420px;
+  }
+  &__text p {
+    margin: 0 0 14px;
+    color: #5e5e5e;
+    line-height: 1.8;
+    font-size: 0.92rem;
+  }
+  &__button {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+  &__button .ingredients-button {
+    margin-top: 4px;
+    padding: 12px 24px;
+    border-radius: 999px;
+    background: #df2f2f;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.9rem;
   }
 }
 
-.ingredients-section__container {
-  max-width: 1100px;
-  margin: 0 auto;
-}
-
-.ingredients-section__heading {
-  text-align: center;
-  margin-bottom: 10px;
-}
-
-.ingredients-section__subtitle {
-  display: inline-block;
-  margin-bottom: 6px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  color: #df2f2f;
-}
-
-.ingredients-section__heading h2 {
-  margin: 0;
-  font-size: clamp(2.1rem, 5vw, 3.4rem);
-  line-height: 1;
-  text-transform: uppercase;
-  color: #2c2c2c;
-}
-
-.ingredients-section__line {
-  width: 52px;
-  height: 3px;
-  margin: 10px auto 0;
-  border-radius: 999px;
-  background: #df2f2f;
-}
-
-.ingredients-section__awning {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 0;
-}
-
-.awning-img {
-  display: block;
-  width: auto;
-  max-width: 500px;
-  height: auto;
-  filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.12));
-}
-
-.ingredients-section__content {
-  margin-top: -20px;
-
-  display: grid;
-  grid-template-columns: 0.95fr 1.05fr;
-  align-items: center;
-  gap: 30px;
-  margin-bottom: 30px;
-}
-
-.ingredients-section__visual {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.ingredients-img {
-  display: block;
-  width: auto;
-  max-width: 500px;
-  height: auto;
-  filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.08));
-}
-
-.ingredients-section__text {
-  max-width: 420px;
-}
-
-.ingredients-section__text p {
-  margin: 0 0 14px;
-  color: #5e5e5e;
-  line-height: 1.8;
-  font-size: 0.92rem;
-}
-
-.ingredients-section__button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 4px;
-  padding: 12px 24px;
-  border-radius: 999px;
-  background: #df2f2f;
-  color: #fff;
-  text-decoration: none;
-  font-weight: 700;
-  font-size: 0.9rem;
+@media (max-width: 991.98px) {
+  .ingredients {
+    &__content {
+      grid-template-columns: 1fr;
+      margin-top: -20px;
+      gap: 0;
+    }
+    &__text {
+      text-align: center;
+      max-width: initial;
+    }
+    &__button {
+      justify-content: center;
+    }
+  }
 }
 
 /*=====================
@@ -548,15 +566,12 @@ onMounted(async () => {
 
 .benefits-section {
   box-shadow: 0 12px 35px rgba(0, 0, 0, 0.06);
-
   max-width: 1100px;
   margin: 70px auto 80px;
   padding: 42px 36px;
-
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 28px;
-
   background: linear-gradient(180deg, #f7f3ed 0%, #f3eee7 100%);
   border: 1px solid #ece3d8;
   border-radius: 18px;
@@ -609,7 +624,6 @@ onMounted(async () => {
   width: 100%;
   height: 100%;
   display: block;
-
   stroke-width: 1.8;
   filter: drop-shadow(0 3px 8px rgba(223, 47, 47, 0.08));
 }
@@ -637,7 +651,6 @@ onMounted(async () => {
     padding: 36px 24px;
     margin: 55px auto 65px;
   }
-
   .benefit-item {
     padding: 10px 8px;
   }
