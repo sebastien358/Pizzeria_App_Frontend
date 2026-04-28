@@ -123,7 +123,7 @@ const fields = [
             class="alert-message"
           />
         </div>
-        <div class="register__buttons">
+        <div class="register__button">
           <button class="btn btn-primary" :disabled="isSubmitting">
             <span v-if="isSubmitting">Chargement...</span>
             <span v-else>Soumettre</span>
@@ -143,7 +143,6 @@ const fields = [
   padding: 0 20px;
   &__container {
     z-index: 1;
-
     background: #fff;
     box-shadow: 0 25px 60px rgba(0, 0, 0, 0.12);
     border: 1px solid #eee;
@@ -151,29 +150,24 @@ const fields = [
     max-width: 400px;
     padding: 32px;
     border-radius: 12px;
-
     h3 {
       text-align: center;
     }
   }
-
   &__form {
     display: flex;
     flex-direction: column;
   }
-
   .form-group {
     margin-top: 20px;
     display: flex;
     flex-direction: column;
   }
-
   .form-group label {
     font-size: 14px;
     color: #333;
     margin-bottom: 5px;
   }
-
   .form-group input {
     width: 100%;
     padding: 10px 12px;
@@ -182,25 +176,23 @@ const fields = [
     transition: 0.2s;
     font-size: 14px;
   }
-
   .form-group input:focus {
     outline: none;
     border-color: #e63946;
     box-shadow: 0 0 0 4px rgba(230, 57, 70, 0.12);
   }
-
   .error-field {
     font-size: 12px;
     color: #e63946;
   }
-
   .register__alert {
     //min-height: 20px;
   }
-
-  &__buttons {
+  &__button {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
     gap: 10px;
   }
   .btn {
@@ -242,22 +234,25 @@ const fields = [
 @media (max-width: 767.98px) {
   .register {
     height: 100%;
+    padding: 140px 20px 140px 20px;
     &__container {
       max-width: 100%;
       padding: 24px 20px;
       border-radius: 8px;
-      margin: 100px 20px 100px 20px;
     }
     &__form {
-      gap: 16px;
+      gap: 0;
+    }
+    .form-group label {
+      font-size: 13px;
     }
     .form-group input {
       padding: 12px;
-      font-size: 15px; /* meilleure lisibilité mobile */
+      font-size: 12px;
     }
     .btn {
-      padding: 12px;
-      font-size: 15px;
+      padding: 12px 15px;
+      font-size: 12px;
     }
   }
 }

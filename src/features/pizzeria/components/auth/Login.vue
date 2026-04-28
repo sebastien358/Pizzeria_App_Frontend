@@ -127,7 +127,7 @@ const fields = [
             class="alert-message"
           />
         </div>
-        <div class="login__buttons">
+        <div class="login__button">
           <button class="btn btn-primary" :disabled="isSubmitting">Soumettre</button>
           <router-link to="/request-password" class="router-request-password"
             >Mot de passe oublié?</router-link
@@ -191,8 +191,10 @@ const fields = [
   &__alert {
     //min-height: 20px;
   }
-  &__buttons {
+  &__button {
     display: flex;
+    justify-content: center;
+    align-items: center;
     flex-direction: column;
     gap: 10px;
   }
@@ -235,22 +237,25 @@ const fields = [
 @media (max-width: 767.98px) {
   .login {
     height: 100%;
-    padding: 100px 20px 100px 20px;
+    padding: 140px 20px 140px 20px;
     &__container {
       max-width: 100%;
       padding: 24px 20px;
       border-radius: 8px;
     }
     &__form {
-      gap: 16px;
+      gap: 0;
+    }
+    .form-group label {
+      font-size: 13px;
     }
     .form-group input {
       padding: 12px;
-      font-size: 15px; /* meilleure lisibilité mobile */
+      font-size: 12px;
     }
     .btn {
-      padding: 12px;
-      font-size: 15px;
+      padding: 12px 15px;
+      font-size: 12px;
     }
   }
 }

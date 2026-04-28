@@ -85,22 +85,24 @@ const addPizzaToCart = (id: number) => {
             </div>
           </div>
 
-          <button @click="addPizzaToCart(pizza.id)" class="pizza-card__btn">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-              />
-            </svg>
-            Ajouter au panier
-          </button>
+          <div class="pizza-card__button">
+            <button @click="addPizzaToCart(pizza.id)" class="btn-command">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+                />
+              </svg>
+              Ajouter au panier
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -252,16 +254,21 @@ const addPizzaToCart = (id: number) => {
     font-weight: 600;
   }
 
-  &__btn {
+  &__button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  &__button .btn-command {
     display: flex;
     align-items: center;
     gap: 8px;
     background: transparent;
-    border: 2px solid #1a1a1a;
+    border: 1px solid #1a1a1a;
     color: #1a1a1a;
-    padding: 10px 20px;
+    padding: 10px 14px;
     border-radius: 6px;
-    font-size: 13px;
+    font-size: 10px;
     font-weight: 600;
     text-transform: uppercase;
     cursor: pointer;
@@ -271,24 +278,21 @@ const addPizzaToCart = (id: number) => {
       color 0.2s;
     width: 100%;
     justify-content: center;
+    max-width: 250px;
   }
-
-  &__btn:hover {
+  &__button .btn-command:hover {
     background: #1a1a1a;
     color: #fff;
   }
-
-  &__btn svg {
+  &__button .btn-command svg {
     width: 16px;
     height: 16px;
   }
 }
-
 .pizza-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
-
 
 // Empty pizza
 

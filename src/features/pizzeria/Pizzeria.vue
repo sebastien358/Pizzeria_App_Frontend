@@ -34,171 +34,171 @@ onMounted(async () => {
     <!-- ABOUT -->
 
     <section class="about-section">
-      <div class="about-container">
-        <div class="about-intro">
-          <span class="about-subtitle">PIZZERIA ARTISANALE</span>
-          <h2>Le goût de l’Italie,<br />à deux pas de chez vous</h2>
-          <p>
-            Nous préparons des pizzas généreuses avec des ingrédients soigneusement sélectionnés,
-            une pâte travaillée avec attention et une cuisson maîtrisée pour un résultat savoureux à
-            chaque commande.
-          </p>
-        </div>
+     <div class="about-container">
+       <div class="about-intro">
+         <span class="about-subtitle">PIZZERIA ARTISANALE</span>
+         <h2>Le goût de l’Italie,<br />à deux pas de chez vous</h2>
+         <p>
+           Nous préparons des pizzas généreuses avec des ingrédients soigneusement sélectionnés,
+           une pâte travaillée avec attention et une cuisson maîtrisée pour un résultat savoureux à
+           chaque commande.
+         </p>
+       </div>
 
-        <div class="about-signature">
-          <span class="signature-text">Fait avec passion</span>
-        </div>
+       <div class="about-signature">
+         <span class="signature-text">Fait avec passion</span>
+       </div>
 
-        <div class="about-stats">
-          <div class="stat-item">
-            <h3>100%</h3>
-            <p>Ingrédients sélectionnés</p>
-          </div>
+       <div class="about-stats">
+         <div class="stat-item">
+           <h3>100%</h3>
+           <p>Ingrédients sélectionnés</p>
+         </div>
 
-          <div class="stat-item">
-            <h3>30 min</h3>
-            <p>Livraison rapide</p>
-          </div>
+         <div class="stat-item">
+           <h3>30 min</h3>
+           <p>Livraison rapide</p>
+         </div>
 
-          <div class="stat-item">
-            <h3>7j/7</h3>
-            <p>Commande en ligne</p>
-          </div>
+         <div class="stat-item">
+           <h3>7j/7</h3>
+           <p>Commande en ligne</p>
+         </div>
 
-          <div class="stat-item">
-            <h3>4.8/5</h3>
-            <p>Avis clients</p>
-          </div>
-        </div>
-      </div>
-    </section>
+         <div class="stat-item">
+           <h3>4.8/5</h3>
+           <p>Avis clients</p>
+         </div>
+       </div>
+     </div>
+   </section>
 
-    <!-- PIZZAS -->
+   <!-- PIZZAS -->
 
     <Shop :products="products" :isLoading="productStore.isLoading" />
 
     <!-- INGREDIENTS SECTION -->
 
     <section class="ingredients">
-      <div class="ingredients__container">
-        <div class="ingredients__heading">
-          <span class="ingredients__subtitle">NOS SAVEURS</span>
-          <h2>Nos ingrédients</h2>
-          <div class="ingredients__line"></div>
-        </div>
+     <div class="ingredients__container">
+       <div class="ingredients__heading">
+         <span class="ingredients__subtitle">NOS SAVEURS</span>
+         <h2>Nos ingrédients</h2>
+         <div class="ingredients__line"></div>
+       </div>
 
-        <div class="ingredients__content">
-          <div class="ingredients__visual">
-            <img
-              src="@/assets/images/ingredients.png"
-              alt="Illustration d'ingrédients"
-              class="ingredients-img"
-            />
-          </div>
+       <div class="ingredients__content">
+         <div class="ingredients__visual">
+           <img
+             src="@/assets/images/ingredients.png"
+             alt="Illustration d'ingrédients"
+             class="ingredients-img"
+           />
+         </div>
 
-          <div class="ingredients__text">
-            <p>
-              Nous sélectionnons avec soin des ingrédients de qualité pour proposer des pizzas
-              généreuses, savoureuses et préparées avec attention à chaque commande.
-            </p>
+         <div class="ingredients__text">
+           <p>
+             Nous sélectionnons avec soin des ingrédients de qualité pour proposer des pizzas
+             généreuses, savoureuses et préparées avec attention à chaque commande.
+           </p>
 
-            <p>
-              Poivrons, tomates, olives, huile d’olive, herbes aromatiques, fromage et charcuterie
-              s’associent pour créer des recettes gourmandes et équilibrées, inspirées d’un vrai
-              savoir-faire.
-            </p>
+           <p>
+             Poivrons, tomates, olives, huile d’olive, herbes aromatiques, fromage et charcuterie
+             s’associent pour créer des recettes gourmandes et équilibrées, inspirées d’un vrai
+             savoir-faire.
+           </p>
 
-            <div class="ingredients__button">
-              <router-link to="/pizza-cart" class="ingredients-button"
-              >Découvrir la carte</router-link
-              >
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+           <div class="ingredients__button">
+             <router-link to="/pizza-cart" class="ingredients-button"
+             >Découvrir la carte</router-link
+             >
+           </div>
+         </div>
+       </div>
+     </div>
+   </section>
 
-    <!-- BENEFITS SECTION -->
+   <!-- BENEFITS SECTION -->
 
     <section class="benefits-section">
-      <article class="benefit-item">
-        <div class="benefit-item__icon">
-          <svg viewBox="0 0 64 64" aria-hidden="true">
-            <path
-              d="M12 10C27 8 41 11 54 18L35 54C30 49 24 46 18 44L12 10Z"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="3"
-              stroke-linejoin="round"
-            />
-            <circle cx="28" cy="24" r="2.5" fill="currentColor" />
-            <circle cx="36" cy="30" r="2.5" fill="currentColor" />
-            <circle cx="24" cy="35" r="2.5" fill="currentColor" />
-          </svg>
-        </div>
-        <h3>Recettes généreuses</h3>
-        <p>Des compositions gourmandes pensées pour le plaisir et la simplicité.</p>
-      </article>
+     <article class="benefit-item">
+       <div class="benefit-item__icon">
+         <svg viewBox="0 0 64 64" aria-hidden="true">
+           <path
+             d="M12 10C27 8 41 11 54 18L35 54C30 49 24 46 18 44L12 10Z"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="3"
+             stroke-linejoin="round"
+           />
+           <circle cx="28" cy="24" r="2.5" fill="currentColor" />
+           <circle cx="36" cy="30" r="2.5" fill="currentColor" />
+           <circle cx="24" cy="35" r="2.5" fill="currentColor" />
+         </svg>
+       </div>
+       <h3>Recettes généreuses</h3>
+       <p>Des compositions gourmandes pensées pour le plaisir et la simplicité.</p>
+     </article>
 
-      <article class="benefit-item">
-        <div class="benefit-item__icon">
-          <svg viewBox="0 0 64 64" aria-hidden="true">
-            <path
-              d="M10 42L28 20H54V48H10V42Z"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="3"
-              stroke-linejoin="round"
-            />
-            <circle cx="40" cy="30" r="3" fill="currentColor" />
-            <circle cx="28" cy="37" r="2.5" fill="currentColor" />
-            <circle cx="47" cy="40" r="2" fill="currentColor" />
-          </svg>
-        </div>
-        <h3>Produits sélectionnés</h3>
-        <p>Des ingrédients choisis avec soin pour garantir goût et qualité.</p>
-      </article>
+     <article class="benefit-item">
+       <div class="benefit-item__icon">
+         <svg viewBox="0 0 64 64" aria-hidden="true">
+           <path
+             d="M10 42L28 20H54V48H10V42Z"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="3"
+             stroke-linejoin="round"
+           />
+           <circle cx="40" cy="30" r="3" fill="currentColor" />
+           <circle cx="28" cy="37" r="2.5" fill="currentColor" />
+           <circle cx="47" cy="40" r="2" fill="currentColor" />
+         </svg>
+       </div>
+       <h3>Produits sélectionnés</h3>
+       <p>Des ingrédients choisis avec soin pour garantir goût et qualité.</p>
+     </article>
 
-      <article class="benefit-item">
-        <div class="benefit-item__icon">
-          <svg viewBox="0 0 64 64" aria-hidden="true">
-            <path
-              d="M50 14C31 14 16 26 16 42C16 50 22 54 30 54C46 54 50 39 50 14Z"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="3"
-              stroke-linejoin="round"
-            />
-            <path
-              d="M24 46C30 38 38 30 48 22"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="3"
-              stroke-linecap="round"
-            />
-          </svg>
-        </div>
-        <h3>Saveurs fraîches</h3>
-        <p>Des associations équilibrées avec une vraie attention portée aux saveurs.</p>
-      </article>
-      <article class="benefit-item">
-        <div class="benefit-item__icon">
-          <svg viewBox="0 0 64 64" aria-hidden="true">
-            <path
-              d="M34 10C36 18 46 21 46 34C46 45 40 54 30 54C21 54 16 47 16 39C16 29 23 24 28 18C29 24 32 27 36 30C37 24 35 18 34 10Z"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="3"
-              stroke-linejoin="round"
-            />
-          </svg>
-        </div>
-        <h3>Cuisson maîtrisée</h3>
-        <p>Une cuisson soignée pour une pâte savoureuse et une texture réussie.</p>
-      </article>
-    </section>
-    <!-- NEWSLETTER -->
-     <Newsletter />
+     <article class="benefit-item">
+       <div class="benefit-item__icon">
+         <svg viewBox="0 0 64 64" aria-hidden="true">
+           <path
+             d="M50 14C31 14 16 26 16 42C16 50 22 54 30 54C46 54 50 39 50 14Z"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="3"
+             stroke-linejoin="round"
+           />
+           <path
+             d="M24 46C30 38 38 30 48 22"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="3"
+             stroke-linecap="round"
+           />
+         </svg>
+       </div>
+       <h3>Saveurs fraîches</h3>
+       <p>Des associations équilibrées avec une vraie attention portée aux saveurs.</p>
+     </article>
+     <article class="benefit-item">
+       <div class="benefit-item__icon">
+         <svg viewBox="0 0 64 64" aria-hidden="true">
+           <path
+             d="M34 10C36 18 46 21 46 34C46 45 40 54 30 54C21 54 16 47 16 39C16 29 23 24 28 18C29 24 32 27 36 30C37 24 35 18 34 10Z"
+             fill="none"
+             stroke="currentColor"
+             stroke-width="3"
+             stroke-linejoin="round"
+           />
+         </svg>
+       </div>
+       <h3>Cuisson maîtrisée</h3>
+       <p>Une cuisson soignée pour une pâte savoureuse et une texture réussie.</p>
+     </article>
+   </section>
+   <!-- NEWSLETTER -->
+    <Newsletter />
   </main>
 </template>
 
@@ -221,7 +221,7 @@ onMounted(async () => {
 }
 
 .hero::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   right: 0;
@@ -233,7 +233,7 @@ onMounted(async () => {
 
 /* Petit filtre pour lisibilité */
 .hero::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   background: rgba(0, 0, 0, 0.6);
@@ -246,10 +246,6 @@ onMounted(async () => {
   color: #fff;
   justify-self: start;
   max-width: 520px;
-
-  @media (max-width: 991.98px) {
-    padding: 0 40px;
-  };
 }
 
 .hero__content h1 {
@@ -260,6 +256,9 @@ onMounted(async () => {
 .hero__content p {
   margin-bottom: 2rem;
   line-height: 1.6;
+  word-break: break-word;
+  overflow-wrap: break-word;
+
 }
 
 /* BOUTON */
@@ -311,27 +310,43 @@ onMounted(async () => {
     text-align: center;
     justify-items: center;
     row-gap: 2rem;
+    .hero::after {
+      display: none;
+    }
+    &__content {
+      width: 100%;
+      justify-self: center;
+      padding: 0 20px;
+      box-sizing: border-box;
+    }
+    &__content h1 {
+      font-size: 3rem;
+    }
+    &__content p {
+      font-size: 0.95rem;
+    }
+    .hero-pizza {
+      position: relative;
+      top: auto;
+      right: auto;
+      width: min(320px, 85vw);
+      transform: rotate(0deg) scale(1);
+      margin-top: 1rem;
+    }
   }
-  .hero::after {
-    display: none;
-  }
-  .hero__content {
-    max-width: 100%;
-    justify-self: center;
-  }
-  .hero__content h1 {
-    font-size: clamp(2rem, 10vw, 3rem);
-  }
-  .hero__content p {
-    font-size: 0.95rem;
-  }
-  .hero-pizza {
-    position: relative;
-    top: auto;
-    right: auto;
-    width: min(320px, 85vw);
-    transform: rotate(0deg) scale(1);
-    margin-top: 1rem;
+}
+
+@media (max-width: 768.98px) {
+  .hero {
+    &__content {
+      width: 100%;
+      justify-self: center;
+      padding: 0 20px;
+      box-sizing: border-box;
+    }
+    &__content h1 {
+      font-size: 2.2rem;
+    }
   }
 }
 
@@ -554,6 +569,29 @@ onMounted(async () => {
       text-align: center;
       max-width: initial;
     }
+    .ingredients-img {
+      max-width: 500px;
+    }
+    &__button {
+      justify-content: center;
+    }
+  }
+}
+
+@media (max-width: 767.98px) {
+  .ingredients {
+    &__content {
+      grid-template-columns: 1fr;
+      margin-top: -20px;
+      gap: 0;
+    }
+    &__text {
+      text-align: center;
+      max-width: initial;
+    }
+    .ingredients-img {
+      max-width: 100%;
+    }
     &__button {
       justify-content: center;
     }
@@ -575,7 +613,6 @@ onMounted(async () => {
   background: linear-gradient(180deg, #f7f3ed 0%, #f3eee7 100%);
   border: 1px solid #ece3d8;
   border-radius: 18px;
-
   position: relative;
   overflow: hidden;
 }

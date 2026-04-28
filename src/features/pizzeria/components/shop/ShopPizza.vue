@@ -50,11 +50,7 @@ const addProductToCart = async (id: number) => {
           <p class="pizza__sizes-title">Choisissez une taille</p>
 
           <div class="pizza__options">
-            <label
-              v-for="option in props.product.productOption"
-              :key="option.id"
-              class="pizzat--option"
-            >
+            <label v-for="option in props.product.productOption" :key="option.id" class="pizza-option">
               <input type="radio" name="productOption" :value="option" v-model="selectedOption" />
               <span>{{ option.name }} / {{ option.price }} €</span>
             </label>
@@ -111,7 +107,7 @@ const addProductToCart = async (id: number) => {
     align-items: center;
     justify-content: center;
   }
-  .img-product {
+  &__image .img-product {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -177,6 +173,9 @@ const addProductToCart = async (id: number) => {
     cursor: pointer;
     gap: 6px;
   }
+  &__options .pizza-option span {
+    font-size: 16px;
+  }
   &__option input[type='radio'] {
     accent-color: #222;
     cursor: pointer;
@@ -227,8 +226,21 @@ const addProductToCart = async (id: number) => {
       align-items: center;
       justify-content: center;
     }
+
+    &__image .img-product {
+      width: 160px;
+      height: 160px;
+    }
+
     &__description {
       margin: 0 auto 28px;
+    }
+    &__options .pizza-option span {
+      font-size: 14px;
+    }
+    &__button .btn-cart {
+      font-size: 10px;
+      padding: 12px 30px;
     }
   }
 }

@@ -84,29 +84,44 @@
 }
 
 
+@media (max-width: 991.98px) {
+  .newsletter {
+    padding: 60px 40px;
+    &__text h2 {
+      font-size: 35px;
+    }
+    &__form input {
+      max-width: 280px;
+      background: transparent;
+      padding: 15px 4px;
+      font-size: 13px;
+    }
+  }
+}
+
+
 @media (max-width: 767.98px) {
   .newsletter {
-    padding: 40px 20px 35px 20px;
+    padding: 30px 20px 25px 20px;
     &__container {
       display: flex;
-      gap: 30px;
+      gap: 20px;
       flex-wrap: wrap;
     }
     &__text h2 {
-      font-size: 24px;
+      font-size: 22px;
     }
     &__form {
-      flex-direction: column;
       align-items: flex-end;
     }
     &__form input {
-      max-width: 290px;
+      max-width: 240px;
       background: transparent;
       padding: 15px 4px;
       font-size: 13px;
     }
     &__form button {
-      padding: 14px 28px;
+      padding: 12px 28px;
       font-size: 11px;
     }
   }
