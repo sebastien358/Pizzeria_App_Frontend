@@ -23,11 +23,49 @@ const props = defineProps<{
   </section>
   <!-- no product -->
   <section v-else class="empty-pizza">
-    <p>Aucun produit pour le moment.</p>
+    <p class="empty-pizza__text">Aucun produit pour le moment.</p>
   </section>
 </template>
 
 <style scoped lang="scss">
+.spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 300px 0;
+  @media (max-width: 1024px) {
+    margin: 80px 0;
+  }
+  @media (max-width: 767.98px) {
+    margin: 60px 0;
+  }
+  .loader {
+    width: 35px;
+    height: 35px;
+    border: 5px solid black;
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+    @media (max-width: 767.98px) {
+      width: 30px;
+      height: 30px;
+    }
+  }
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+// PIZZA
+
 .pizza {
   background: white;
   height: 600px;
@@ -42,6 +80,7 @@ const props = defineProps<{
 
 @media (max-width: 1400px) {
   .pizza {
+    height: auto;
     &__grid {
       grid-template-columns: repeat(3, 1fr);
       gap: 0;
@@ -49,7 +88,7 @@ const props = defineProps<{
   }
 }
 
-@media (max-width: 991.98px) {
+@media (max-width: 1024px) {
   .pizza {
     height: auto;
     &__grid {
@@ -72,6 +111,27 @@ const props = defineProps<{
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 200px;
+  margin: 100px 0;
+  &__text {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .empty-pizza {
+    margin: 50px 0;
+    &__text {
+      font-size: 14px;
+    }
+  }
+}
+
+@media (max-width: 767.98px) {
+  .empty-pizza {
+    margin: 30px 0;
+    &__text {
+      font-size: 13px;
+    }
+  }
 }
 </style>

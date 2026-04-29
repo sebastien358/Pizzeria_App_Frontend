@@ -102,7 +102,7 @@
 
 @media (max-width: 767.98px) {
   .newsletter {
-    padding: 30px 20px 25px 20px;
+    padding: 40px 20px 40px 20px;
     &__container {
       display: flex;
       gap: 20px;

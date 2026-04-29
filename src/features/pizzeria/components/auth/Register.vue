@@ -231,6 +231,13 @@ const fields = [
 
 /* ===== RESPONSIVE ===== */
 
+@media (max-width: 1024px) {
+  .register {
+    height: 100%;
+    padding: 140px 20px 140px 20px;
+  }
+}
+
 @media (max-width: 767.98px) {
   .register {
     height: 100%;
