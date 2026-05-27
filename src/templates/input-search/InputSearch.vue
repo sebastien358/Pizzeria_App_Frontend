@@ -56,11 +56,8 @@ const searchTerm = (e: Event) => {
   box-sizing: border-box;
   &__container {
     width: 380px;
-
     box-sizing: border-box;
-
     display: flex;
-
     align-items: center;
     justify-content: center;
     gap: 12px;
@@ -70,14 +67,12 @@ const searchTerm = (e: Event) => {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
     margin: 0 auto;
     flex-direction: row;
-
     &.active {
       width: 400px;
     }
     @media (max-width: 768px) {
       gap: 20px;
       width: 100%;
-
       &.active {
         width: 100%;
         flex-direction: column;
@@ -110,12 +105,10 @@ const searchTerm = (e: Event) => {
       &::placeholder {
         color: #aaa;
       }
-
       &:focus {
         border-color: #e63946;
         box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.1);
       }
-
       &:focus + svg {
         color: #e63946;
       }
@@ -137,14 +130,12 @@ const searchTerm = (e: Event) => {
       }
     }
   }
-
   &__counter {
     display: flex;
     align-items: center;
     gap: 10px;
     font-size: 13px;
   }
-
   &__total {
     background: #f5f5f5;
     color: #666;
