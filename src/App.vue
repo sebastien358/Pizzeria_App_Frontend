@@ -19,9 +19,7 @@ onMounted(async () => {
     <Header class="header" />
     <main class="views">
       <router-view v-slot="{ Component, route }">
-        <transition name="fade">
-          <component :is="Component" :key="route.fullPath" />
-        </transition>
+        <component :is="Component" :key="route.fullPath" />
       </router-view>
     </main>
     <Footer v-if="isReady && !route.meta.hideFooter" class="footer" />
@@ -59,15 +57,5 @@ onMounted(async () => {
   &.none {
     display: none;
   }
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.2s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
 }
 </style>

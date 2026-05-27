@@ -162,7 +162,7 @@ onMounted(async () => {
       <!-- Statut commande -->
       <div class="command-user__status">
         <p>
-          Paiment :
+          Paiement :
           <span :class="paymentStatus(command)">
             {{ command.status }}
           </span>

@@ -97,50 +97,50 @@ async function aboutGsapAnimation() {
     ease: 'power3.out',
   })
 
-    .from(
-      about.querySelector('.about-intro h2'),
-      {
-        opacity: 0,
-        y: 35,
-        duration: 0.8,
-        ease: 'power3.out',
-      },
-      '-=0.3',
-    )
+  .from(
+    about.querySelector('.about-intro h2'),
+    {
+      opacity: 0,
+      y: 35,
+      duration: 0.8,
+      ease: 'power3.out',
+    },
+    '-=0.3',
+  )
 
-    .from(
-      about.querySelector('.about-intro p'),
-      {
-        opacity: 0,
-        y: 25,
-        duration: 0.7,
-        ease: 'power3.out',
-      },
-      '-=0.35',
-    )
+  .from(
+    about.querySelector('.about-intro p'),
+    {
+      opacity: 0,
+      y: 25,
+      duration: 0.7,
+      ease: 'power3.out',
+    },
+    '-=0.35',
+  )
 
-    .from(
-      about.querySelector('.about-signature'),
-      {
-        opacity: 0,
-        scale: 0.85,
-        duration: 0.7,
-        ease: 'back.out(1.7)',
-      },
-      '-=0.2',
-    )
+  .from(
+    about.querySelector('.about-signature'),
+    {
+      opacity: 0,
+      scale: 0.85,
+      duration: 0.7,
+      ease: 'back.out(1.7)',
+    },
+    '-=0.2',
+  )
 
-    .from(
-      about.querySelectorAll('.stat-item'),
-      {
-        opacity: 0,
-        y: 30,
-        duration: 0.6,
-        stagger: 0.12,
-        ease: 'power3.out',
-      },
-      '-=0.25',
-    )
+  .from(
+    about.querySelectorAll('.stat-item'),
+    {
+      opacity: 0,
+      y: 30,
+      duration: 0.6,
+      stagger: 0.12,
+      ease: 'power3.out',
+    },
+    '-=0.25',
+  )
 }
 
 /*=======================
@@ -262,13 +262,11 @@ async function benefitsGsapAnimation() {
 }
 
 onMounted(async () => {
-  setTimeout(async () => {
-    await productLoad()
-    await heroGsapAnimation()
-    await aboutGsapAnimation()
-    await ingredientGsapAnimation()
-    await benefitsGsapAnimation()
-  }, 300)
+  await productLoad()
+  await heroGsapAnimation()
+  await aboutGsapAnimation()
+  await ingredientGsapAnimation()
+  await benefitsGsapAnimation()
 })
 </script>
 
