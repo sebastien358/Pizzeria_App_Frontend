@@ -1,0 +1,800 @@
+<script setup lang="ts">
+import { useAuthStore } from '@/stores/authStore.ts'
+import { useRouter } from 'vue-router'
+import { onMounted, reactive } from 'vue'
+import Calc from '@/templates/calc/Calc.vue'
+import { useCartStore } from '@/stores/cartStore.ts'
+import notFound from '@/assets/images/not-found.webp'
+
+const authStore = useAuthStore()
+
+const cartStore = useCartStore()
+
+const router = useRouter()
+
+// Menu déroulant
+
+const state = reactive<{
+  activeDropdown: string | null
+  open: boolean
+}>({
+  activeDropdown: null,
+  open: false,
+})
+
+let timeout = null
+
+const openDropdown = (type: string) => {
+  if (timeout) clearTimeout(timeout)
+  state.activeDropdown = type
+}
+
+const closeDropdown = () => {
+  timeout = setTimeout(() => {
+    state.activeDropdown = null
+  }, 150)
+}
+
+// Gestion de connexion
+
+const isLoggedIn = () => {
+  return authStore.isLoggedIn
+}
+
+// Gestion des roles
+
+const isAdmin = () => {
+  return authStore.isAdmin
+}
+
+const isUser = () => {
+  return authStore.isUser
+}
+
+// Déconnexion
+
+const logout = () => {
+  authStore.logout()
+  router.push({ path: '/login' })
+}
+
+// Récupération de l'ID utlisateur, puis redirection et modification des données
+
+onMounted(async () => {
+  try {
+    await authStore.infoMe()
+  } catch (e) {
+    console.error(e)
+  }
+})
+
+// Suppression d'un produit dans le panier
+
+const removeItemToCart = async (id: number) => {
+  try {
+    await cartStore.removeItemToCart(id)
+  } catch (e) {
+    console.error(e)
+  }
+}
+
+// Redirection Command
+
+const redirectCommand = () => {
+  if (!authStore.isLoggedIn) {
+    router.push({ path: '/login' })
+    return
+  } else if (!cartStore.cart.length) {
+    return
+  } else {
+    router.push({ path: '/command-address' })
+  }
+}
+
+// Redirection Cart
+
+const redirectCart = () => {
+  router.push({ path: '/cart' })
+}
+
+const toggleMenuTablet = () => {
+  state.open = !state.open
+}
+</script>
+
+<template>
+  <header class="header scrolled">
+    <div class="header__container">
+      <!-- LOGO -->
+      <router-link to="/" class="header__logo">
+        <div class="header__icon">
+          <span class="icon-pizza">🍕</span>
+        </div>
+
+        <!-- TEXT -->
+        <div class="header__text">
+          <div class="logo-title">Pizzeria</div>
+          <div class="logo-subtitle">Commande en ligne</div>
+        </div>
+      </router-link>
+
+      <!-- NAV -->
+      <section class="header__right">
+        <nav class="header__nav">
+          <router-link to="/" class="nav__link">Accueil</router-link>
+          <router-link to="/pizza-cart" class="nav__link">La carte</router-link>
+          <router-link to="/contact" class="nav__link">Contact</router-link>
+          <router-link v-if="!isLoggedIn()" to="/login" class="nav__link">Connexion</router-link>
+          <router-link v-if="!isLoggedIn()" to="/register" class="nav__link"
+            >Inscription</router-link
+          >
+
+          <!-- Profil User -->
+          <div
+            v-if="isUser()"
+            class="dropdown"
+            @mouseenter="openDropdown('user')"
+            @mouseleave="closeDropdown()"
+            :class="{ 'no-admin': isAdmin() }"
+          >
+            <a href="#" class="nav__link">Espace client</a>
+            <div class="dropdown__menu" :class="{ 'active-pro': state.activeDropdown === 'user' }">
+              <router-link to="/command/user/list" class="dropdown--link"
+                >Mes commandes</router-link
+              >
+              <router-link
+                :to="{ name: 'account-user-edit', params: { id: authStore.userId } }"
+                class="dropdown--link"
+                >Mon compte</router-link
+              >
+              <router-link
+                v-if="isLoggedIn()"
+                @click="logout()"
+                to="/logout"
+                class="dropdown--link logout"
+                >Déconnexion</router-link
+              >
+            </div>
+          </div>
+
+          <!-- Espace Pro Admin -->
+          <div
+            v-if="isAdmin()"
+            class="dropdown"
+            @mouseenter="openDropdown('pro')"
+            @mouseleave="closeDropdown()"
+          >
+            <a href="#" class="nav__link">Espace pro</a>
+            <div class="dropdown__menu" :class="{ 'active-pro': state.activeDropdown === 'pro' }">
+              <router-link to="/command/list" class="dropdown--link"
+                >Liste des commandes</router-link
+              >
+              <router-link to="/product-form" class="dropdown--link"
+                >Ajouter un produit</router-link
+              >
+              <router-link to="/contacts/list" class="dropdown--link"
+                >Liste des contacts</router-link
+              >
+              <router-link to="/product-list" class="dropdown--link">Liste des pizzas</router-link>
+              <router-link
+                v-if="isLoggedIn()"
+                @click="logout()"
+                to="/logout"
+                class="dropdown--link logout"
+                >Déconnexion</router-link
+              >
+            </div>
+          </div>
+        </nav>
+
+        <!-- PANIER -->
+        <div class="header__cart" @mouseenter="openDropdown('menu')" @mouseleave="closeDropdown()">
+          <div class="cart">
+            <!-- SVG PROPRE -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M7 4h-2l-1 2h2l3.6 7.59-1.35 2.44C7.52 17.37 8.48 19 10 19h9v-2h-9l1.1-2h7.45c.75 0 1.41-.41 1.75-1.03L23 6H6.21l-.94-2z"
+              />
+            </svg>
+
+            <!-- BADGE -->
+            <span class="cart-badge">{{ cartStore.cart.length }}</span>
+          </div>
+
+          <!-- MENU PANIER -->
+          <div class="header__menu" :class="{ show: state.activeDropdown === 'menu' }">
+            <div v-if="!cartStore.cart.length" class="empty-cart">
+              <p>Le panier est vide</p>
+            </div>
+
+            <div v-for="cart in cartStore.cart" :key="cart.id" class="header__menu__list">
+              <div class="header__menu__content">
+                <img :src="cart.image || notFound" class="img-cart" />
+                <div class="header__menu__text">
+                  <p class="product-price">
+                    {{ cart.price }}€ <span class="product-quantity">x{{ cart.quantity }}</span>
+                  </p>
+                  <p class="product-title">{{ cart.title }}</p>
+                </div>
+              </div>
+              <div class="header__menu__delete">
+                <font-awesome-icon
+                  @click="removeItemToCart(cart.id)"
+                  icon="fa-solid fa-delete-left"
+                />
+              </div>
+            </div>
+
+            <div class="separator"></div>
+            <div class="header__menu__total">
+              <p>Total :</p>
+              <p>
+                <strong> {{ cartStore.total.toFixed(2) }} €</strong>
+              </p>
+            </div>
+            <div class="header__menu__buttons">
+              <button @click="redirectCart()" class="btn btn-cart">Voir le panier</button>
+              <button @click="redirectCommand()" class="btn btn-payment">Commander</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </header>
+
+  <!-- MENU TABLET -->
+
+  <header class="header-tablet">
+    <div class="header-tablet__container">
+      <!-- LOGO -->
+      <router-link to="/" class="header-tablet__logo">
+        <div class="header-tablet__icon">
+          <span class="icon-pizza">🍕</span>
+        </div>
+        <!-- TEXT -->
+        <div class="header-tablet__text">
+          <div class="logo-title">Pizzeria</div>
+          <div class="logo-subtitle">Commande en ligne</div>
+        </div>
+      </router-link>
+
+      <div class="header-tablet__right">
+        <div class="header-tablet__cart">
+          <div class="header-tablet__cart__number">
+            <!-- SVG PROPRE -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M7 4h-2l-1 2h2l3.6 7.59-1.35 2.44C7.52 17.37 8.48 19 10 19h9v-2h-9l1.1-2h7.45c.75 0 1.41-.41 1.75-1.03L23 6H6.21l-.94-2z"
+              />
+            </svg>
+
+            <!-- BADGE -->
+            <router-link to="/cart" class="cart-badge">{{ cartStore.cart.length }}</router-link>
+          </div>
+        </div>
+        <font-awesome-icon @click="toggleMenuTablet()" icon="fa-solid fa-bars" />
+      </div>
+
+      <Transition>
+        <div v-if="state.open" class="header-tablet__menu">
+          <router-link to="/" class="nav__link">Accueil</router-link>
+          <router-link to="/pizza-cart" class="nav__link">La carte</router-link>
+          <router-link v-if="!isAdmin()" to="/contact" class="nav__link">Contact</router-link>
+          <router-link v-if="!isLoggedIn()" to="/login" class="nav__link">Connexion</router-link>
+          <router-link v-if="!isLoggedIn()" to="/register" class="nav__link"
+            >Inscription</router-link
+          >
+
+          <div v-if="isUser()" :class="{ 'no-admin': isAdmin() }" class="header-tablet__menu__user">
+            <router-link to="/command/user/list" class="nav__link">Mes commandes</router-link>
+            <router-link
+              :to="{ name: 'account-user-edit', params: { id: authStore.userId } }"
+              class="nav__link"
+              >Mon compte</router-link
+            >
+          </div>
+
+          <div v-if="isAdmin()" class="header-tablet__menu__admin">
+            <router-link to="/product-list" class="nav__link">Liste des pizzas</router-link>
+            <router-link to="/product-form" class="nav__link">Ajouter un produit</router-link>
+            <router-link to="/command/list" class="nav__link">Liste des commandes</router-link>
+            <router-link to="/contacts/list" class="nav__link">Liste des contacts</router-link>
+          </div>
+          <router-link v-if="isLoggedIn()" @click="logout()" to="/logout" class="nav__link logout"
+            >Déconnexion</router-link
+          >
+        </div>
+      </Transition>
+    </div>
+  </header>
+
+  <Calc :open="state.open" @close="state.open = false" :transparent="true" />
+</template>
+
+<style scoped lang="scss">
+/*====================
+  HEADER TABLET
+====================*/
+
+.header-tablet {
+  z-index: 13;
+  display: block;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  position: fixed;
+  top: 0;
+  width: 100%;
+  padding: 20px 10px;
+  transition:
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+  &__container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  &__container .fa-bars {
+    cursor: pointer;
+    height: 25px;
+    width: 25px;
+  }
+  &__logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: inherit;
+  }
+  &__icon .icon-pizza {
+    height: 60px;
+    width: 60px;
+  }
+  &__logo .logo-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  &__text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+  }
+  &__text .logo-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1f1f1f;
+  }
+  &__text .logo-subtitle {
+    font-size: 13px;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  &__right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  &__menu {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+    width: 175px;
+    background: white;
+    position: absolute;
+    top: 85px;
+    right: 93px;
+    transform: translate(50%);
+    padding: 20px;
+    transition: all 200ms ease;
+    border-radius: 10px;
+    box-shadow:
+      0 4px 12px rgba(0, 0, 0, 0.08),
+      0 12px 28px rgba(0, 0, 0, 0.12);
+    .nav__link {
+      font-size: 12px;
+    }
+  }
+  &__menu__user {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+  }
+  &__menu__admin {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+  }
+  &__cart {
+    position: relative;
+  }
+  &__cart svg {
+    width: 27px;
+    height: 27px;
+    position: relative;
+    top: 3px;
+  }
+  .cart-badge {
+    position: absolute;
+    background: red;
+    height: 13px;
+    width: 13px;
+    border-radius: 50%;
+    bottom: 16px;
+    right: -5px;
+    font-size: 8px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  @media (min-width: 1024px) {
+    display: none;
+  }
+}
+
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.25s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
+
+/*====================
+  DROPDOWN
+====================*/
+
+.dropdown {
+  z-index: 2;
+  position: relative;
+  &__menu {
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    top: 35px;
+    right: 50%;
+    transform: translate(50%);
+    padding: 20px;
+    transition: all 200ms ease;
+    border-radius: 10px;
+    box-shadow:
+      0 4px 12px rgba(0, 0, 0, 0.08),
+      0 12px 28px rgba(0, 0, 0, 0.12);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 180px;
+    background: white;
+  }
+  &__menu.active-pro {
+    pointer-events: auto;
+    opacity: 1;
+  }
+  &__menu .dropdown--link {
+    font-size: 14px;
+    color: #2b2b2b;
+    padding: 6px 10px;
+    border-radius: 6px;
+    transition: all 150ms ease;
+    white-space: nowrap;
+  }
+  &__menu .dropdown--link:hover {
+    background: rgba(0, 0, 0, 0.04);
+    transform: translateX(2px);
+  }
+  &__menu .logout:hover {
+    color: #e63946;
+    background: rgba(230, 57, 70, 0.08);
+  }
+}
+
+.no-admin {
+  display: none;
+}
+
+/*====================
+  HEADER
+====================*/
+
+.header {
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  position: fixed;
+  top: 0;
+  z-index: 2;
+  width: 100%;
+  padding: 20px 100px;
+  transition:
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+  &__container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  &__logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: inherit;
+  }
+  &__icon .icon-pizza {
+    height: 60px;
+    width: 60px;
+  }
+  &__logo .logo-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  &__text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+  }
+  &__text .logo-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1f1f1f;
+  }
+  &__text .logo-subtitle {
+    font-size: 13px;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+}
+
+.header__right {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.header__nav {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  .nav__link {
+    text-decoration: none;
+    font-size: 15px;
+    transition: color 0.2s ease;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #555;
+  }
+  .nav__link:hover,
+  .nav__link.router-link-active {
+    color: #e63946;
+    padding: 3px 0;
+    border-bottom: 2px solid #e63946;
+  }
+}
+
+@media (max-width: 1600px) {
+  .header {
+    padding: 20px 20px;
+  }
+  .header__nav {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    .nav__link {
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s ease;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: #555;
+    }
+    .nav__link:hover,
+    .nav__link.router-link-active {
+      color: #e63946;
+      padding: 3px 0;
+      border-bottom: 2px solid #e63946;
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .header {
+    padding: 16px 20px;
+    display: none;
+    &__container {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    &__nav {
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+  }
+}
+
+.header__cart {
+  position: relative;
+  .cart {
+    position: relative;
+    display: inline-block;
+    color: #333;
+  }
+  .cart svg {
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+  }
+  /* BADGE */
+  .cart-badge {
+    position: absolute;
+    top: -4px;
+    right: -8px;
+    background: #e63946;
+    color: white;
+    font-size: 11px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/*====================
+  PANIER
+====================*/
+
+.header__menu {
+  position: absolute;
+  top: 42px;
+  right: 0;
+  width: 340px;
+  padding: 16px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  opacity: 0;
+  pointer-events: none;
+  &.show {
+    pointer-events: auto;
+    opacity: 1;
+  }
+}
+
+.empty-cart {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #777;
+  padding: 10px 0;
+}
+
+/* LISTE DES PRODUITS */
+.header__menu__list {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+/* CONTENU GAUCHE */
+.header__menu__content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* IMAGE */
+.img-cart {
+  width: 45px;
+  height: 45px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+/* TEXTE */
+.header__menu__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* PRIX */
+.product-price {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #2c2c2c;
+}
+
+/* QUANTITÉ */
+.product-quantity {
+  color: #888;
+  font-weight: 400;
+  margin-left: 4px;
+}
+
+/* TITRE */
+.product-title {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+/* DELETE */
+.header__menu__delete {
+  cursor: pointer;
+  color: #e63946;
+  transition: transform 0.2s ease;
+}
+
+.header__menu__delete:hover {
+  transform: scale(1.1);
+}
+
+/* SÉPARATEUR */
+.separator {
+  height: 1px;
+  background: #eee;
+}
+
+/* TOTAL */
+.header__menu__total {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.95rem;
+}
+
+/* BOUTONS */
+.header__menu__buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.btn-cart {
+  border: 1px solid #ddd;
+  background: #fff;
+  color: #2c2c2c;
+
+  padding: 8px;
+  cursor: pointer;
+  border-radius: 6px;
+
+  transition: all 200ms ease;
+
+  &:hover {
+    background: #f5f5f5;
+    border-color: #ccc;
+  }
+}
+
+.btn-payment {
+  background: #e63946;
+  color: #fff;
+  border: none;
+
+  padding: 8px;
+  cursor: pointer;
+  border-radius: 6px;
+
+  transition: all 200ms ease;
+
+  &:hover {
+    background: #d62839; /* 🔥 rouge plus profond */
+  }
+}
+</style>
