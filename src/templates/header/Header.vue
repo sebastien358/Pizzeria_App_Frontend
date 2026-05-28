@@ -7,11 +7,21 @@ import { useCartStore } from '@/stores/cartStore.ts'
 import notFound from '@/assets/images/not-found.webp'
 import { useContactAdminStore } from '@/stores/admin/contactAdminStore.ts'
 import { useCommandAdminStore } from '@/stores/admin/commandAdminStore.ts'
+import { useCommandUserStore } from '@/stores/user/commandUserStore.ts'
 
 const authStore = useAuthStore()
 
+// Store Admin
+
 const contactAdminStore = useContactAdminStore()
 const commandAdminStore = useCommandAdminStore()
+
+// Store User
+
+const commandUserStore = useCommandUserStore()
+
+// Cart Store
+
 const cartStore = useCartStore()
 
 const router = useRouter()
@@ -19,8 +29,13 @@ const router = useRouter()
 onMounted(async () => {
   try {
     await authStore.infoMe()
-    await contactAdminStore.axiosCountUnread()
-    await commandAdminStore.countUnreadCommand()
+
+    if (authStore.isAdmin) {
+      await contactAdminStore.axiosCountUnread()
+      await commandAdminStore.countUnreadCommand()
+    }
+
+    await commandUserStore.countCommandUserPending()
   } catch (e) {
     console.error(e)
   }
@@ -145,9 +160,12 @@ const toggleMenuTablet = () => {
           >
             <a href="#" class="nav__link">Espace client</a>
             <div class="dropdown__menu" :class="{ 'active-pro': state.activeDropdown === 'user' }">
-              <router-link to="/command/user/list" class="dropdown--link"
-                >Mes commandes</router-link
-              >
+              <router-link to="/command/user/list" class="dropdown--link">
+                Mes commandes
+                <span v-if="commandUserStore.countCommandPending > 0" class="badge">
+                  {{ commandUserStore.countCommandPending }}
+                </span>
+              </router-link>
               <router-link
                 :to="{ name: 'account-user-edit', params: { id: authStore.userId } }"
                 class="dropdown--link"
@@ -185,9 +203,7 @@ const toggleMenuTablet = () => {
                 </span>
               </router-link>
               <router-link to="/product-list" class="dropdown--link">Liste des pizzas</router-link>
-              <router-link to="/product-form" class="dropdown--link"
-                >Ajuter une pizza
-              </router-link>
+              <router-link to="/product-form" class="dropdown--link">Ajuter une pizza </router-link>
               <router-link
                 v-if="isLoggedIn()"
                 @click="logout()"

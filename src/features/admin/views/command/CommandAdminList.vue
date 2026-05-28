@@ -541,13 +541,13 @@ onMounted(async () => {
 
   .command-admin__preparation__status {
     margin-top: 0;
-    justify-content: space-between;
+    flex-direction: column;
     select {
       width: 100%;
     }
     .select-status {
       font-size: 10px;
-      width: 180px;
+      width: 100%;
     }
     .btn-is-read {
       font-size: 9px;

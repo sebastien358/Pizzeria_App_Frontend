@@ -14,7 +14,8 @@ export const useCommandUserStore = defineStore('commandUser', {
     total: 0,
     pages: 0,
     limit: 0,
-    currentPage: 1
+    currentPage: 1,
+    countCommandPending: 0,
   }),
   actions: {
     getItemsPerPage() {
@@ -44,6 +45,15 @@ export const useCommandUserStore = defineStore('commandUser', {
         console.error(e)
       } finally {
         this.isLoading = false
+      }
+    },
+    async countCommandUserPending() {
+      try {
+        const response = await axiosGetCommandUserList(1, 1)
+        this.countCommandPending = response.countCommandPending
+      } catch(e) {
+        console.error(e)
+        throw e
       }
     },
     async addCommandAddress(dataClient) {
