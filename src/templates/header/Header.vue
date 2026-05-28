@@ -314,7 +314,12 @@ const toggleMenuTablet = () => {
           >
 
           <div v-if="isUser()" :class="{ 'no-admin': isAdmin() }" class="header-tablet__menu__user">
-            <router-link to="/command/user/list" class="nav__link">Mes commandes</router-link>
+            <router-link to="/command/user/list" class="nav__link">
+              Mes commandes
+              <span v-if="commandUserStore.countCommandPending > 0" class="badge">
+                {{ commandUserStore.countCommandPending }}
+              </span>
+            </router-link>
             <router-link
               :to="{ name: 'account-user-edit', params: { id: authStore.userId } }"
               class="nav__link"
@@ -325,8 +330,18 @@ const toggleMenuTablet = () => {
           <div v-if="isAdmin()" class="header-tablet__menu__admin">
             <router-link to="/product-list" class="nav__link">Liste des pizzas</router-link>
             <router-link to="/product-form" class="nav__link">Ajouter un produit</router-link>
-            <router-link to="/command/list" class="nav__link">Liste des commandes</router-link>
-            <router-link to="/contacts/list" class="nav__link">Liste des contacts</router-link>
+            <router-link to="/command/list" class="nav__link">
+              Liste des commandes
+              <span v-if="commandAdminStore.countCommandUnread > 0" class="badge">
+                {{ commandAdminStore.countCommandUnread }}
+              </span>
+            </router-link>
+            <router-link to="/contacts/list" class="nav__link">
+              Liste des contacts
+              <span v-if="contactAdminStore.countContactsUnread > 0" class="badge">
+                {{ contactAdminStore.countContactsUnread }}
+              </span>
+            </router-link>
           </div>
           <router-link v-if="isLoggedIn()" @click="logout()" to="/logout" class="nav__link logout"
             >Déconnexion</router-link
@@ -409,11 +424,12 @@ const toggleMenuTablet = () => {
     display: flex;
     flex-direction: column;
     gap: 11px;
-    width: 175px;
+    width: 100%;
+    max-width: 165px;
     background: white;
     position: absolute;
     top: 85px;
-    right: 93px;
+    right: 86px;
     transform: translate(50%);
     padding: 20px;
     transition: all 200ms ease;
@@ -423,6 +439,14 @@ const toggleMenuTablet = () => {
       0 12px 28px rgba(0, 0, 0, 0.12);
     .nav__link {
       font-size: 12px;
+    }
+    .nav__link .badge {
+      background-color: red;
+      color: white;
+      border-radius: 50%;
+      padding: 2px 5px;
+      font-size: 9px;
+      margin-left: 3px;
     }
   }
   &__menu__user {

@@ -48,6 +48,8 @@ export const useCommandAdminStore = defineStore('commandAdmin', {
       try {
         const response = await axiosAdminCommandList(1, 1)
         this.countCommandUnread = response.countCommandsUnread
+
+        console.log(this.countCommandUnread)
       } catch (e) {
         console.error(e)
         throw e
