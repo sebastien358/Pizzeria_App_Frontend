@@ -97,50 +97,50 @@ async function aboutGsapAnimation() {
     ease: 'power3.out',
   })
 
-  .from(
-    about.querySelector('.about-intro h2'),
-    {
-      opacity: 0,
-      y: 35,
-      duration: 0.8,
-      ease: 'power3.out',
-    },
-    '-=0.3',
-  )
+    .from(
+      about.querySelector('.about-intro h2'),
+      {
+        opacity: 0,
+        y: 35,
+        duration: 0.8,
+        ease: 'power3.out',
+      },
+      '-=0.3',
+    )
 
-  .from(
-    about.querySelector('.about-intro p'),
-    {
-      opacity: 0,
-      y: 25,
-      duration: 0.7,
-      ease: 'power3.out',
-    },
-    '-=0.35',
-  )
+    .from(
+      about.querySelector('.about-intro p'),
+      {
+        opacity: 0,
+        y: 25,
+        duration: 0.7,
+        ease: 'power3.out',
+      },
+      '-=0.35',
+    )
 
-  .from(
-    about.querySelector('.about-signature'),
-    {
-      opacity: 0,
-      scale: 0.85,
-      duration: 0.7,
-      ease: 'back.out(1.7)',
-    },
-    '-=0.2',
-  )
+    .from(
+      about.querySelector('.about-signature'),
+      {
+        opacity: 0,
+        scale: 0.85,
+        duration: 0.7,
+        ease: 'back.out(1.7)',
+      },
+      '-=0.2',
+    )
 
-  .from(
-    about.querySelectorAll('.stat-item'),
-    {
-      opacity: 0,
-      y: 30,
-      duration: 0.6,
-      stagger: 0.12,
-      ease: 'power3.out',
-    },
-    '-=0.25',
-  )
+    .from(
+      about.querySelectorAll('.stat-item'),
+      {
+        opacity: 0,
+        y: 30,
+        duration: 0.6,
+        stagger: 0.12,
+        ease: 'power3.out',
+      },
+      '-=0.25',
+    )
 }
 
 /*=======================
@@ -472,8 +472,7 @@ onMounted(async () => {
 
 .scroll-top {
   z-index: 100;
-  //opacity: 0;
-  display: none;
+  opacity: 0;
   position: fixed;
   right: 24px;
   bottom: 24px;
@@ -511,7 +510,7 @@ onMounted(async () => {
     bottom: 20px;
   }
   &.is-visible {
-    display: block;
+    opacity: 1;
     pointer-events: auto;
   }
 }
@@ -995,9 +994,8 @@ INGRÉDIENTS
   &__content {
     margin-top: -20px;
     display: grid;
-    grid-template-columns: 0.95fr 1.05fr;
+    grid-template-columns: 1.07fr 1fr;
     align-items: center;
-    gap: 30px;
     margin-bottom: 30px;
   }
   &__visual {
@@ -1007,10 +1005,12 @@ INGRÉDIENTS
   }
   .ingredients-img {
     display: block;
-    width: auto;
-    max-width: 500px;
-    height: auto;
+    width: 100%;
+    max-width: 1000px;
+    height: 320px;
     filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.08));
+    position: relative;
+    left: 35px;
   }
   &__text {
     max-width: 420px;
@@ -1043,6 +1043,17 @@ INGRÉDIENTS
     &__heading h2 {
       font-size: 3rem;
     }
+    &__content {
+      margin-top: -20px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    &__text p {
+      margin: 0 0 14px;
+      line-height: 1.6;
+    }
   }
 }
 
@@ -1051,18 +1062,22 @@ INGRÉDIENTS
     &__heading h2 {
       font-size: 2.8rem;
     }
+
     &__content {
       grid-template-columns: 1fr;
       margin-top: -20px;
-      gap: 0;
     }
+    //&__text p {
+    //  margin: 0 0 10px;
+    //  line-height: 1.2;
+    //}
     &__text {
       margin-top: -10px;
       text-align: center;
       max-width: initial;
     }
     .ingredients-img {
-      max-width: 450px;
+      width: 450px;
     }
     &__button {
       justify-content: center;
@@ -1088,7 +1103,10 @@ INGRÉDIENTS
       max-width: initial;
     }
     .ingredients-img {
-      max-width: 90%;
+      width: 90%;
+      height: auto;
+      position: relative;
+      left: 0;
     }
 
     &__text p {

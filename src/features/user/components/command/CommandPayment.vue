@@ -297,8 +297,7 @@ const closeAlert = () => {
 }
 
 .container-form {
-  width: 100%;
-  max-width: 500px;
+  width: 600px;
   background: #fff;
   border-radius: 14px;
   padding: 28px 24px;
@@ -342,7 +341,6 @@ const closeAlert = () => {
 .payment__hint {
   font-size: 0.8rem;
   color: #6b7280;
-
   text-align: center;
   margin-bottom: 16px;
 }
@@ -410,9 +408,7 @@ const closeAlert = () => {
   }
 
   .container-form {
-    width: 100%;
-    min-width: 550px;
-    max-width: 550px;
+    width: 550px;
   }
 }
 
@@ -422,8 +418,7 @@ const closeAlert = () => {
     align-items: center;
   }
   .container-form {
-    max-width: 100%;
-    min-width: 100%;
+    width: 100%;
     padding: 24px 18px;
     border-radius: 12px;
   }
@@ -452,6 +447,11 @@ const closeAlert = () => {
   .payment {
     padding: 30px 16px 30px 16px;
     align-items: center;
+  }
+
+  .container-form {
+    width: 100%;
+    max-width: 100%;
   }
 
   .payment__title {
