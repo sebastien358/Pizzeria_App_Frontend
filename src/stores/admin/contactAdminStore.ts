@@ -1,27 +1,29 @@
 import { defineStore } from 'pinia'
-import { axiosAdminContactList, axiosAdminContactSearch, axiosAdminRemoveContact } from '@/shared/services/admin/contactAdmin.service.ts'
+import { axiosAdminActiveIsRead, axiosAdminContactList, axiosAdminContactSearch, axiosAdminRemoveContact } from '@/shared/services/admin/contactAdmin.service.ts'
 
 interface ContactState {
-  contacts: object,
-  isLoading: boolean,
-  term: string,
-  offset: number,
+  contacts: object
+  isLoading: boolean
+  term: string
+  offset: number
   limit: number
   pages: number
   currentPage: number
   total: number
+  countContactsUnread: number
 }
 
 export const useContactAdminStore = defineStore('contactAdmin', {
   state: (): ContactState => ({
     contacts: [],
     isLoading: true,
-    term: "",
+    term: '',
     offset: 0,
     limit: 0,
     pages: 0,
     currentPage: 1,
-    total: 0
+    total: 0,
+    countContactsUnread: 0,
   }),
   actions: {
     getItemsPerPage() {
@@ -45,6 +47,7 @@ export const useContactAdminStore = defineStore('contactAdmin', {
         this.contacts = data.contacts
         this.pages = data.pages
         this.total = data.total
+        this.countContactsUnread = data.countContactsUnread
       } catch (e) {
         this.contacts = []
         console.error(e)
@@ -53,14 +56,23 @@ export const useContactAdminStore = defineStore('contactAdmin', {
         this.isLoading = false
       }
     },
+    async axiosCountUnread() {
+      try {
+        const data = await axiosAdminContactList(this.currentPage, this.limit)
+        this.countContactsUnread = data.countContactsUnread
+      } catch(e) {
+        console.error(e)
+        throw e
+      }
+    },
     async contactSearch(term: string) {
       const trimmed = term.trim()
       try {
         if (!trimmed) {
           this.isLoading = true
-          this.term = ""
+          this.term = ''
           this.offset = 0
-          this.limit =  0
+          this.limit = 0
           this.pages = 0
           this.currentPage = 1
           await this.contactAdminList()
@@ -74,7 +86,7 @@ export const useContactAdminStore = defineStore('contactAdmin', {
         const data = await axiosAdminContactSearch(this.term)
         this.contacts = data
         return data
-      } catch(e) {
+      } catch (e) {
         this.contacts = []
         console.error(e)
         throw e
@@ -87,6 +99,14 @@ export const useContactAdminStore = defineStore('contactAdmin', {
         const response = await axiosAdminRemoveContact(id)
         this.contacts = this.contacts.filter((contact) => contact.id !== id)
         return response
+      } catch (e) {
+        console.error(e)
+        throw e
+      }
+    },
+    async activeIsRead(id: number) {
+      try {
+        return await axiosAdminActiveIsRead(id)
       } catch (e) {
         console.error(e)
         throw e

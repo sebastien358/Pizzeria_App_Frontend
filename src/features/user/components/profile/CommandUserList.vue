@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import Pagination from '@/templates/pagination/Pagination.vue'
 import { useCommandUserStore } from '@/stores/user/commandUserStore.ts'
 import notFound from '@/assets/images/not-found.webp'
 import DeleteConfirmModal from '@/templates/confirm-modal/DeleteConfirmModal.vue'
+import InputSearch from '@/templates/input-search/InputSearch.vue'
+const placeholder = ref<string>('Rechercher une commande')
 
 const commandUserStore = useCommandUserStore()
 
@@ -144,10 +146,12 @@ onMounted(async () => {
       <div v-for="item in command.commandItems" :key="item.id" class="command-user__item">
         <div class="command-user__image">
           <img
-            :src="item.product.pictures?.filename || notFound"
+            v-if="item.product.pictures?.length"
+            :src="item.product.pictures[0].filename || notFound"
             class="product-image"
             alt="Produit"
           />
+          <img v-else :src="notFound" class="product-image" alt="Produit manquant" />
         </div>
 
         <div class="item-info">

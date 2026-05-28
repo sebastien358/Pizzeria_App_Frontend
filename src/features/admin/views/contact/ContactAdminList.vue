@@ -78,6 +78,16 @@ watch(
   { immediate: true },
 )
 
+const activeIsRead = async (id: number) => {
+  try {
+    await store.activeIsRead(id)
+    await loadContacts()
+  } catch (e) {
+    console.log(e)
+    throw e
+  }
+}
+
 onMounted(async () => {
   await loadContacts()
 })
@@ -99,7 +109,12 @@ onMounted(async () => {
   <section v-else-if="store.contacts.length > 0" class="contact">
     <!-- Input Search -->
     <div class="contact__search">
-      <InputSearch :term="store.term" @update:term="store.term = $event" :total="store.total" :placeholder="placeholder" />
+      <InputSearch
+        :term="store.term"
+        @update:term="store.term = $event"
+        :total="store.total"
+        :placeholder="placeholder"
+      />
     </div>
 
     <div class="contact__list">
@@ -119,6 +134,9 @@ onMounted(async () => {
             >
               Répondre
             </a>
+            <button class="contact__isread" type="button" @click="activeIsRead(contact.id)">
+              {{ contact.isRead ? 'Vu' : 'Marquer comme lu' }}
+            </button>
             <button class="contact__delete" type="button" @click="openModal(contact.id)">
               Supprimer
             </button>
@@ -181,6 +199,8 @@ onMounted(async () => {
 // Contact
 
 .contact {
+  position: relative;
+
   padding: 30px 20px;
   display: flex;
   justify-content: center;
@@ -272,6 +292,18 @@ onMounted(async () => {
   }
   &__delete {
     background: #e63946;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 0.5rem 0.7rem;
+    font-size: 0.65rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+  }
+  &__isread {
+    background: blue;
     color: #fff;
     border: none;
     border-radius: 6px;

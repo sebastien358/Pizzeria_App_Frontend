@@ -38,6 +38,20 @@ export async function axiosAdminContactSearch(term: string) {
   }
 }
 
+export async function axiosAdminActiveIsRead(id: number) {
+  try {
+    const response = await axios.patch(`${BASE_URL}/api/admin/contact/is-read/${id}`)
+    if (response.status >= 200 && response.status < 300) {
+      return response.data
+    }
+
+    throw new Error(`Erreur lors de la mise à jour du contact  : ${response.status}`)
+  } catch (e) {
+    console.error(e)
+    throw e
+  }
+}
+
 export async function axiosAdminRemoveContact(id: number) {
   try {
     const response = await axios.delete(`${BASE_URL}/api/admin/contact/remove/${id}`)

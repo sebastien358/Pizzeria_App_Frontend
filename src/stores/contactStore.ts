@@ -3,13 +3,13 @@ import { axiosAddContact } from '@/shared/services/contact.service.ts'
 
 export const useContactStore = defineStore('contact', {
   state: () => ({
-    contacts: []
+    contacts: [],
   }),
   actions: {
     async addContact(data: Object) {
       try {
         return await axiosAddContact(data)
-      } catch(e) {
+      } catch (e) {
         console.error(e)
         throw e
       }

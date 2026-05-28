@@ -9,6 +9,7 @@ export const useCommandUserStore = defineStore('commandUser', {
     pendingCommand: null,
     commandId: 0,
     command: [],
+    term: '',
     isLoading: true,
     total: 0,
     pages: 0,
@@ -36,8 +37,6 @@ export const useCommandUserStore = defineStore('commandUser', {
 
         this.command = data.commands
         this.pages = data.pages
-
-        return data
       } catch (e) {
         this.command = []
         this.total = 0

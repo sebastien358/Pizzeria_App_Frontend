@@ -5,6 +5,9 @@ import { onMounted, reactive } from 'vue'
 import Calc from '@/templates/calc/Calc.vue'
 import { useCartStore } from '@/stores/cartStore.ts'
 import notFound from '@/assets/images/not-found.webp'
+import { useContactAdminStore } from '@/stores/admin/contactAdminStore.ts'
+
+const contactAdminStore = useContactAdminStore()
 
 const authStore = useAuthStore()
 
@@ -60,14 +63,6 @@ const logout = () => {
 
 // Récupération de l'ID utlisateur, puis redirection et modification des données
 
-onMounted(async () => {
-  try {
-    await authStore.infoMe()
-  } catch (e) {
-    console.error(e)
-  }
-})
-
 // Suppression d'un produit dans le panier
 
 const removeItemToCart = async (id: number) => {
@@ -100,6 +95,15 @@ const redirectCart = () => {
 const toggleMenuTablet = () => {
   state.open = !state.open
 }
+
+onMounted(async () => {
+  try {
+    await authStore.infoMe()
+    await contactAdminStore.axiosCountUnread()
+  } catch (e) {
+    console.error(e)
+  }
+})
 </script>
 
 <template>
@@ -172,9 +176,12 @@ const toggleMenuTablet = () => {
               <router-link to="/product-form" class="dropdown--link"
                 >Ajouter un produit</router-link
               >
-              <router-link to="/contacts/list" class="dropdown--link"
-                >Liste des contacts</router-link
-              >
+              <router-link to="/contacts/list" class="dropdown--link">
+                Liste des contacts
+                <span v-if="contactAdminStore.countContactsUnread > 0" class="badge">
+                  {{ contactAdminStore.countContactsUnread }}
+                </span>
+              </router-link>
               <router-link to="/product-list" class="dropdown--link">Liste des pizzas</router-link>
               <router-link
                 v-if="isLoggedIn()"
@@ -484,6 +491,14 @@ const toggleMenuTablet = () => {
     border-radius: 6px;
     transition: all 150ms ease;
     white-space: nowrap;
+  }
+  &__menu .dropdown--link .badge {
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 11px;
+    margin-left: 6px;
   }
   &__menu .dropdown--link:hover {
     background: rgba(0, 0, 0, 0.04);

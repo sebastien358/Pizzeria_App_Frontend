@@ -4,6 +4,7 @@ import { useCommandAdminStore } from '@/stores/admin/commandAdminStore.ts'
 import Pagination from '@/templates/pagination/Pagination.vue'
 import DeleteConfirmModal from '@/templates/confirm-modal/DeleteConfirmModal.vue'
 import InputSearch from '@/templates/input-search/InputSearch.vue'
+import notFound from '@/assets/images/not-found.webp'
 
 // Placeholder
 const placeholder = ref<string>('Rechercher une commande...')
@@ -173,14 +174,14 @@ onMounted(async () => {
       <div v-for="item in command.commandItems" :key="item.id" class="command-admin__item">
         <div class="item-image">
           <img
-            v-if="item.product.pictures.length"
+            v-if="item.product.pictures?.length"
             :src="item.product.pictures[0].filename"
             class="img-product"
             alt="Produit"
           />
           <img
             v-else
-            src="@/assets/images/not-found.webp"
+            :src="notFound"
             class="img-product"
             alt="Produit manquant"
           />

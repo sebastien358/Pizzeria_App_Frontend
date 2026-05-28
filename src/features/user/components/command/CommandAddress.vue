@@ -288,7 +288,7 @@ onMounted(async () => {
               >
                 <option value="" disabled>Sélectionner un mode</option>
                 <option value="À emporter">🛍 À emporter</option>
-                <option value="Livraison">🚚 Livraison à domicile</option>
+                <option value="Livraison">🚚 Livraison à domicile +5 euros</option>
               </select>
             </div>
             <span v-if="field.errorMessage.value" class="error-field">
@@ -496,10 +496,10 @@ onMounted(async () => {
     &__button {
       margin-top: 15px;
     }
-
-    .btn-command {
-      font-size: 10px;
-    }
+  }
+  .btn-command {
+    font-size: 10px;
+    padding: 17px 25px;
   }
 }
 
@@ -510,7 +510,7 @@ onMounted(async () => {
     &__header {
       margin-bottom: 1.8rem;
       &__title {
-        font-size: 20px;
+        font-size: 19px;
         margin: 0.5rem 0 0 0;
       }
     }
@@ -519,10 +519,12 @@ onMounted(async () => {
       padding: 1rem;
     }
 
-    &__input,
-    &__select {
-      padding: 10px;
-      font-size: 13px;
+    .form-group {
+      &__input,
+      &__select {
+        padding: 11px;
+        font-size: 13px;
+      }
     }
 
     .form-column {
@@ -532,13 +534,18 @@ onMounted(async () => {
     .form-group {
       gap: 0.2rem;
       label {
-        font-size: 0.6rem;
+        font-size: 0.55rem;
         font-weight: 600;
         color: #555;
         text-transform: uppercase;
         letter-spacing: 0.05em;
       }
     }
+  }
+
+  .btn-command {
+    font-size: 9px;
+    padding: 17px 25px;
   }
 }
 </style>
