@@ -27,7 +27,7 @@ export const useProductStore = defineStore('product', {
   },
   actions: {
     itemsPerPage() {
-      if (window.innerWidth >= 1600) {
+      if (window.innerWidth >= 1400) {
         return 12
       } else if (window.innerWidth >= 1024) {
         return 9

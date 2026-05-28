@@ -143,7 +143,7 @@ const toggleMenuTablet = () => {
       <section class="header__right">
         <nav class="header__nav">
           <router-link to="/" class="nav__link">Accueil</router-link>
-          <router-link to="/pizza-cart" class="nav__link">La carte</router-link>
+          <router-link to="/pizzas" class="nav__link">La carte</router-link>
           <router-link to="/contact" class="nav__link">Contact</router-link>
           <router-link v-if="!isLoggedIn()" to="/login" class="nav__link">Connexion</router-link>
           <router-link v-if="!isLoggedIn()" to="/register" class="nav__link"
@@ -306,7 +306,7 @@ const toggleMenuTablet = () => {
       <Transition>
         <div v-if="state.open" class="header-tablet__menu">
           <router-link to="/" class="nav__link">Accueil</router-link>
-          <router-link to="/pizza-cart" class="nav__link">La carte</router-link>
+          <router-link to="/pizzas" class="nav__link">La carte</router-link>
           <router-link v-if="!isAdmin()" to="/contact" class="nav__link">Contact</router-link>
           <router-link v-if="!isLoggedIn()" to="/login" class="nav__link">Connexion</router-link>
           <router-link v-if="!isLoggedIn()" to="/register" class="nav__link"

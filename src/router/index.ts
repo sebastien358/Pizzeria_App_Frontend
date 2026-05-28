@@ -13,7 +13,7 @@ import Finish from '@/features/user/components/command/CommandFinish.vue'
 const CommandUserList = () =>  import('@/features/user/components/profile/CommandUserList.vue')
 const CartProduct = () => import('@/features/pizzeria/components/cart/CartProduct.vue')
 const AccountUserEdit = () => import('@/features/user/components/profile/AccountUserEdit.vue')
-const PizzaCard = () => import('@/features/pizzeria/components/shop/PizzaCart.vue')
+const PizzaCard = () => import('@/features/pizzeria/components/shop/Pizzas.vue')
 const Contact = () => import('@/features/pizzeria/components/contact/Contact.vue')
 
 const routes = [
@@ -21,7 +21,7 @@ const routes = [
   { path: '/login', name: 'login', component: Login },
   { path: '/register', name: 'register', component: Register },
   { path: '/cart', component: CartProduct },
-  { path: '/pizza-cart', component: PizzaCard },
+  { path: '/pizzas', component: PizzaCard },
   { path: '/contact', component: Contact },
   { path: '/request-password', component: RequestPassword },
   { path: '/reset-password/:token', component: ResetPassword },

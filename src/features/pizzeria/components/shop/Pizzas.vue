@@ -213,7 +213,8 @@ onMounted(async () => {
 
 .pizza {
   padding: 40px 20px;
-  max-width: 1300px;
+  width: 100%;
+  max-width: 1400px;
   margin: 0 auto 0 auto;
   @media (max-width: 1600px) {
     max-width: 1100px;

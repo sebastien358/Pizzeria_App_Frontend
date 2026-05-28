@@ -279,7 +279,7 @@ onMounted(async () => {
         <div class="hero__text">
           <h1>Des pizzas artisanales, livrées chez vous 🍕</h1>
           <p>Commandez en quelques clics et savourez une vraie pizza italienne.</p>
-          <router-link to="/pizza-cart" class="btn-hero">Commander maintenant</router-link>
+          <router-link to="/pizzas" class="btn-hero">Commander maintenant</router-link>
         </div>
       </div>
       <img src="../../assets/images/hero-pizza.png" alt="Pizza" class="hero-pizza" />
@@ -363,7 +363,7 @@ onMounted(async () => {
             </p>
 
             <div class="ingredients__button">
-              <router-link to="/pizza-cart" class="ingredients-button"
+              <router-link to="/pizzas" class="ingredients-button"
                 >Découvrir la carte</router-link
               >
             </div>

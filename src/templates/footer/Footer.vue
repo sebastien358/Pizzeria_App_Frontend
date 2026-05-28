@@ -49,7 +49,7 @@ function openModal() {
 
       <nav class="footer-main__nav">
         <router-link to="/">Accueil</router-link>
-        <router-link to="/pizza-cart">La carte</router-link>
+        <router-link to="/pizzas">La carte</router-link>
         <router-link to="/contact">Contact</router-link>
         <router-link to="/login">Connexion</router-link>
       </nav>
