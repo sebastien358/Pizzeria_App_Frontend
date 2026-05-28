@@ -141,6 +141,16 @@ watch(
   { immediate: true },
 )
 
+async function activeIsRead(id: number) {
+  try {
+    await commandAdminStore.activeIsRead(id)
+    await loadCommands()
+  } catch (e) {
+    console.error(e)
+    throw e
+  }
+}
+
 onMounted(async () => {
   await loadCommands()
 })
@@ -179,12 +189,7 @@ onMounted(async () => {
             class="img-product"
             alt="Produit"
           />
-          <img
-            v-else
-            :src="notFound"
-            class="img-product"
-            alt="Produit manquant"
-          />
+          <img v-else :src="notFound" class="img-product" alt="Produit manquant" />
         </div>
 
         <div class="item-info">
@@ -229,6 +234,15 @@ onMounted(async () => {
           <option value="Expédié">Expédié</option>
           <option value="Livré">Livré</option>
         </select>
+
+        <button
+          type="button"
+          class="btn btn-is-read"
+          :class="{ 'active-is-read': command.isRead }"
+          @click="activeIsRead(command.id)"
+        >
+          {{ command.isRead ? 'Vu ' : 'Marquer comme lu' }}
+        </button>
       </div>
       <!-- Bouton supprimer commande -->
       <button
@@ -405,14 +419,19 @@ onMounted(async () => {
   }
 
   &__preparation__status {
-    margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 7px;
+
+    margin-top: 8px;
 
     select {
       width: 100%;
       padding: 8px;
       border-radius: 8px;
       border: 1px solid #ddd;
-      font-size: 13px;
+      font-size: 12px;
       cursor: pointer;
       background: #fff;
     }
@@ -422,12 +441,11 @@ onMounted(async () => {
       padding: 8px 12px;
       border-radius: 8px;
       border: 1px solid #ddd;
-      font-size: 13px;
       font-weight: 500;
       background: #fff;
       cursor: pointer;
       transition: all 0.2s ease;
-
+      font-size: 11px;
       &:hover {
         border-color: #bbb;
       }
@@ -436,6 +454,21 @@ onMounted(async () => {
         outline: none;
         border-color: #16a34a;
         box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.15);
+      }
+    }
+
+    .btn-is-read {
+      cursor: pointer;
+      background: blue;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 11px;
+      border: 0;
+    }
+    .btn-is-read {
+      &.active-is-read {
+        background: green;
       }
     }
   }
@@ -508,11 +541,16 @@ onMounted(async () => {
 
   .command-admin__preparation__status {
     margin-top: 0;
+    justify-content: space-between;
     select {
       width: 100%;
     }
     .select-status {
       font-size: 10px;
+      width: 180px;
+    }
+    .btn-is-read {
+      font-size: 9px;
     }
   }
 

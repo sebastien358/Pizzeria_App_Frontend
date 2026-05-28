@@ -6,14 +6,25 @@ import Calc from '@/templates/calc/Calc.vue'
 import { useCartStore } from '@/stores/cartStore.ts'
 import notFound from '@/assets/images/not-found.webp'
 import { useContactAdminStore } from '@/stores/admin/contactAdminStore.ts'
-
-const contactAdminStore = useContactAdminStore()
+import { useCommandAdminStore } from '@/stores/admin/commandAdminStore.ts'
 
 const authStore = useAuthStore()
 
+const contactAdminStore = useContactAdminStore()
+const commandAdminStore = useCommandAdminStore()
 const cartStore = useCartStore()
 
 const router = useRouter()
+
+onMounted(async () => {
+  try {
+    await authStore.infoMe()
+    await contactAdminStore.axiosCountUnread()
+    await commandAdminStore.countUnreadCommand()
+  } catch (e) {
+    console.error(e)
+  }
+})
 
 // Menu déroulant
 
@@ -95,15 +106,6 @@ const redirectCart = () => {
 const toggleMenuTablet = () => {
   state.open = !state.open
 }
-
-onMounted(async () => {
-  try {
-    await authStore.infoMe()
-    await contactAdminStore.axiosCountUnread()
-  } catch (e) {
-    console.error(e)
-  }
-})
 </script>
 
 <template>
@@ -170,12 +172,12 @@ onMounted(async () => {
           >
             <a href="#" class="nav__link">Espace pro</a>
             <div class="dropdown__menu" :class="{ 'active-pro': state.activeDropdown === 'pro' }">
-              <router-link to="/command/list" class="dropdown--link"
-                >Liste des commandes</router-link
-              >
-              <router-link to="/product-form" class="dropdown--link"
-                >Ajouter un produit</router-link
-              >
+              <router-link to="/command/list" class="dropdown--link">
+                Liste des commandes
+                <span v-if="commandAdminStore.countCommandUnread > 0" class="badge">
+                  {{ commandAdminStore.countCommandUnread }}
+                </span>
+              </router-link>
               <router-link to="/contacts/list" class="dropdown--link">
                 Liste des contacts
                 <span v-if="contactAdminStore.countContactsUnread > 0" class="badge">
@@ -183,6 +185,9 @@ onMounted(async () => {
                 </span>
               </router-link>
               <router-link to="/product-list" class="dropdown--link">Liste des pizzas</router-link>
+              <router-link to="/product-form" class="dropdown--link"
+                >Ajuter une pizza
+              </router-link>
               <router-link
                 v-if="isLoggedIn()"
                 @click="logout()"

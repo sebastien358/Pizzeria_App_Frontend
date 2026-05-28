@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia'
-import { axiosAdminCommandList, axiosAdminPreparationStatus, axiosAdminRemoveCommand, axiosAdminSearchCommand } from '@/shared/services/admin/commandAdmin.service.ts'
+import {
+  axiosAdminActiveIsReadCommand,
+  axiosAdminCommandList, axiosAdminPreparationStatus, axiosAdminRemoveCommand, axiosAdminSearchCommand } from '@/shared/services/admin/commandAdmin.service.ts'
 
 export const useCommandAdminStore = defineStore('commandAdmin', {
   state: () => ({
@@ -10,6 +12,7 @@ export const useCommandAdminStore = defineStore('commandAdmin', {
     pages: 0,
     limit: 0,
     currentPage: 1,
+    countCommandUnread: 0,
   }),
   actions: {
     getItemsPerPage() {
@@ -41,6 +44,15 @@ export const useCommandAdminStore = defineStore('commandAdmin', {
         this.isLoading = false
       }
     },
+    async countUnreadCommand() {
+      try {
+        const response = await axiosAdminCommandList(1, 1)
+        this.countCommandUnread = response.countCommandsUnread
+      } catch (e) {
+        console.error(e)
+        throw e
+      }
+    },
     async preparationStatus(id: number, preparationStatus: string) {
       try {
         const command = this.commands.find((c) => c.id === id)
@@ -48,6 +60,7 @@ export const useCommandAdminStore = defineStore('commandAdmin', {
         await axiosAdminPreparationStatus(id, preparationStatus)
       } catch (e) {
         console.error(e)
+        throw e
       }
     },
     async searchCommand(term: string) {
@@ -56,7 +69,7 @@ export const useCommandAdminStore = defineStore('commandAdmin', {
         if (!trimmed) {
           this.isLoading = true
           this.limit = 0
-          this.term = ""
+          this.term = ''
           await this.commandAdminList()
         }
 
@@ -69,12 +82,20 @@ export const useCommandAdminStore = defineStore('commandAdmin', {
         this.commands = response
 
         return response
-      } catch(e) {
+      } catch (e) {
         this.commands = []
         console.error(e)
         throw e
       } finally {
         this.isLoading = false
+      }
+    },
+    async activeIsRead(id: number) {
+      try {
+        return await axiosAdminActiveIsReadCommand(id)
+      } catch (e) {
+        console.error(e)
+        throw e
       }
     },
     async removeCommand(id: number) {
@@ -86,6 +107,6 @@ export const useCommandAdminStore = defineStore('commandAdmin', {
         console.error(e)
         throw e
       }
-    }
-  }
+    },
+  },
 })

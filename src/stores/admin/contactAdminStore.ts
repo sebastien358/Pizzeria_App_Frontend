@@ -47,7 +47,6 @@ export const useContactAdminStore = defineStore('contactAdmin', {
         this.contacts = data.contacts
         this.pages = data.pages
         this.total = data.total
-        this.countContactsUnread = data.countContactsUnread
       } catch (e) {
         this.contacts = []
         console.error(e)
@@ -58,7 +57,7 @@ export const useContactAdminStore = defineStore('contactAdmin', {
     },
     async axiosCountUnread() {
       try {
-        const data = await axiosAdminContactList(this.currentPage, this.limit)
+        const data = await axiosAdminContactList(1, 1)
         this.countContactsUnread = data.countContactsUnread
       } catch(e) {
         console.error(e)

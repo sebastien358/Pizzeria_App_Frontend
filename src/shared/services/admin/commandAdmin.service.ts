@@ -17,6 +17,19 @@ export async function axiosAdminCommandList(currentPage: number, limit: number) 
   }
 }
 
+export async function axiosAdminActiveIsReadCommand(id: number) {
+  try {
+    const response = await axios.patch(`${BASE_URL}/api/admin/command/is-read/${id}`)
+    if (response.status >= 200 && response.status < 300) {
+      return response.data ?? true
+    }
+    throw new Error(`Erreur lors de la mise à jour de la commande : ${response.status}`)
+  } catch (e) {
+    console.error(e)
+    throw e
+  }
+}
+
 export async function axiosAdminPreparationStatus(id: number, preparationStatus: string) {
   try {
     const response = await axios.get(
