@@ -11,6 +11,8 @@ import {
   axiosGetCurrentUserId,
   axiosMeInfo,
 } from '@/shared/services/user/user.service.ts'
+import { useCommandUserStore } from '@/stores/user/commandUserStore.ts'
+import { useCommandAdminStore } from '@/stores/admin/commandAdminStore.ts'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -36,6 +38,16 @@ export const useAuthStore = defineStore('auth', {
         this.token = response.token
         this.isLoggedIn = true
         await this.infoMe()
+
+        if (this.isUser) {
+          const commandUserStore = useCommandUserStore()
+          await commandUserStore.countCommandUserPending()
+        }
+
+        if (this.isAdmin) {
+          const commandAdminStore = useCommandAdminStore()
+          await commandAdminStore.countUnreadCommand()
+        }
       } catch (e) {
         this.token = ''
         this.isLoggedIn = false
