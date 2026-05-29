@@ -31,32 +31,3 @@ export async function axiosSearchProducts(search: string): Promise<ProductInterf
     throw e
   }
 }
-
-export async function axiosFilteredPriceProducts(minPrice: number, maxPrice: number): Promise<ProductInterface[] | ProductInterface> {
-  try {
-    const response = await axios.get(`${BASE_URL}/api/product/filtered/price`, {
-      params: {
-        minPrice,
-        maxPrice
-      }
-    })
-    return response.data
-  } catch (e) {
-    console.log(e)
-    throw e
-  }
-}
-
-export async function axiosFilteredCategoryProducts(category: string): Promise<ProductInterface[] | ProductInterface> {
-  try {
-    const response = await axios.get(`${BASE_URL}/api/product/filtered/category`, {
-      params: {
-        category
-      }
-    })
-    return response.data
-  } catch (e) {
-    console.log(e)
-    throw e
-  }
-}

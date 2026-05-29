@@ -35,7 +35,9 @@ onMounted(async () => {
       await commandAdminStore.countUnreadCommand()
     }
 
-    await commandUserStore.countCommandUserPending()
+    if (authStore.isUser) {
+      await commandUserStore.countCommandUserPending()
+    }
   } catch (e) {
     console.error(e)
   }

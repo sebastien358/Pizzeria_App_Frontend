@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { useAuthStore } from '@/stores/authStore.ts'
-import { useRouter } from 'vue-router'
+import router from '@/router'
 
 const BASE_URL = import.meta.env.VITE_APP_API_URL as string
 
@@ -88,22 +88,18 @@ export async function axiosResetPassword(dataResetPassword, token) {
 
 // REQUEST
 axios.interceptors.request.use((config) => {
-    const authStore = useAuthStore()
-    const token = authStore.token
-
-    if (token) {
-      config.headers = {
-        ...config.headers,
-        Authorization: `Bearer ${token}`,
-      }
+  const authStore = useAuthStore()
+  const token = authStore.token
+  if (token) {
+    config.headers = {
+      ...config.headers,
+      Authorization: `Bearer ${token}`
     }
-
-    return config
-  },
-  (error) => Promise.reject(error),
+  }
+  return config
+},
+  (error) => Promise.reject(error)
 )
-
-const router = useRouter()
 
 // RESPONSE
 axios.interceptors.response.use(

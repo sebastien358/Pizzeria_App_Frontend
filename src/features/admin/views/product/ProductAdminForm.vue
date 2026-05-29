@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from 'vue'
 import { useProductAdminStore } from '@/stores/admin/productAdminStore.ts'
-import { useForm, useField, useFieldArray, Field, ErrorMessage } from 'vee-validate'
+import { useField, useForm, useFieldArray, Field, ErrorMessage } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
 import { useRoute } from 'vue-router'
@@ -62,11 +62,9 @@ onMounted(async () => {
     })
 
     setValues({
-      id: product.id,
       title: product.title,
       description: product.description,
       productOption: product.productOption.map((option) => ({
-        id: option.id,
         name: option.name,
         price: option.price,
       })),
@@ -101,8 +99,8 @@ const schema = z.object({
     ),
   productOption: z.array(
     z.object({
-      name: z.string().min(1, { message: 'Veuillez renseigner une taille pour la pizza' }),
-      price: z.coerce.number().min(1, { message: 'Veuillez renseigner un prix' }),
+      name: z.string().min(1, { message: 'Veuillez choisir une taille pour la pizza' }),
+      price: z.coerce.number().min(1, { message: 'Veuillez sélectionner un prix' }),
     }),
   ),
 })
@@ -225,7 +223,24 @@ const field = computed(() => [
 <template>
   <main class="product">
     <section class="product__container">
-      <h3>Ajouter un produit</h3>
+      <h3>{{ route.params.id ? 'Modifier le produit' : 'Ajouter un produit' }}</h3>
+      <!-- Image du product -->
+      <div class="upload-row" v-if="stateProduct.pictures.length && route.params.id">
+        <div
+          v-for="picture in stateProduct.pictures"
+          :key="picture.id"
+          class="upload-thumb-wrapper"
+        >
+          <img v-if="picture.filename" :src="picture.filename" class="img-thumb" />
+          <button @click="deleteImage(stateProduct.id, picture.id)" class="btn-thumb-delete">
+            ×
+          </button>
+        </div>
+        <div class="upload-info">
+          <p>Image actuelle</p>
+          <span>{{ route.params.id ? "Changer l'image ci-dessous" : '' }}</span>
+        </div>
+      </div>
       <!-- Form Add Product -->
       <form @submit.prevent="onSubmit" class="product__form">
         <!-- Champs normaux -->
@@ -260,11 +275,11 @@ const field = computed(() => [
           <div v-for="(f, index) in fields" :key="f.key" class="product__option">
             <div class="product__option__fields">
               <div class="field">
-                <Field :name="`productOption[${index}].name`" type="text" />
+                <Field :name="`productOption[${index}].name`" />
                 <ErrorMessage :name="`productOption[${index}].name`" class="error-field" />
               </div>
               <div class="field">
-                <Field :name="`productOption[${index}].price`" type="number" />
+                <Field :name="`productOption[${index}].price`" />
                 <ErrorMessage :name="`productOption[${index}].price`" class="error-field" />
               </div>
             </div>
@@ -276,7 +291,7 @@ const field = computed(() => [
             v-if="successMessage"
             :message="successMessage"
             type="success"
-            redirectTo=""
+            :redirectTo="route.params.id ? '' : '/product-list'"
             @close="handleResetForm()"
             class="product__alert__message"
           />
@@ -294,21 +309,10 @@ const field = computed(() => [
         <div class="product__button">
           <button :disabled="isSubmitting" class="btn btn-submit">
             <span v-if="isSubmitting">Chargement...</span>
-            <span v-else>Ajout produit</span>
+            <span v-else>Soumettre</span>
           </button>
         </div>
       </form>
-    </section>
-
-    <section class="product-image" v-if="stateProduct.pictures.length && route.params.id">
-      <div v-for="picture in stateProduct.pictures" :key="picture.id">
-        <img v-if="picture.filename" :src="picture.filename" class="img-product" />
-        <div class="product-image__button">
-          <button @click="deleteImage(stateProduct.id, picture.id)" class="btn btn-delete">
-            Supprimer
-          </button>
-        </div>
-      </div>
     </section>
   </main>
 </template>
@@ -476,49 +480,65 @@ const field = computed(() => [
   }
 }
 
-// Product image
-
-.product-image {
+.upload-row {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 10px;
-  .img-product {
-    height: auto;
-    width: 130px;
-    border-radius: 3px;
-  }
-  &__button {
-    margin-top: 5px;
-    display: flex;
-    justify-content: center;
-  }
-  &__button .btn-delete {
-    background: red;
-    border: 0;
-    color: white;
-    font-size: 10px;
-    padding: 10px;
-    border-radius: 3px;
-    cursor: pointer;
+  gap: 12px;
+  margin-top: 12px;
+  padding: 10px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  @media (max-width: 767.98px) {
+    gap: 9px;
   }
 }
 
-@media (max-width: 767.98px) {
-  .product-image {
-    .img-product {
-      height: auto;
-      width: 130px;
-    }
-    &__button {
-      margin-top: 3px;
-      display: flex;
-      justify-content: center;
-    }
-    &__button .btn-delete {
-      font-size: 9px;
-      padding: 9px;
-    }
+.upload-thumb-wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.img-thumb {
+  width: 60px;
+  height: 60px;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 1px solid #ddd;
+  display: block;
+  @media (max-width: 767.98px) {
+    width: 47px;
+    height: 47px;
+  }
+}
+
+.btn-thumb-delete {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #e63946;
+  color: white;
+  font-size: 12px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.upload-info {
+  flex: 1;
+  p {
+    margin: 0;
+    font-size: 13px;
+    color: #333;
+  }
+  span {
+    font-size: 11px;
+    color: #999;
   }
 }
 </style>

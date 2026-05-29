@@ -80,9 +80,8 @@ export const useProductAdminStore = defineStore('productAdmin', {
         const response: ProductInterface = await axiosAddProductAdmin(formData)
 
         const productStore = useProductStore()
-        productStore.product.push(response)
-        this.product.push(response)
 
+        this.product.push(response)
         await productStore.getProduct()
 
         return response

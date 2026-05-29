@@ -14,12 +14,12 @@ import {
 import { useCommandUserStore } from '@/stores/user/commandUserStore.ts'
 import { useCommandAdminStore } from '@/stores/admin/commandAdminStore.ts'
 
-export const useAuthStore = defineStore('auth', {
+export const useAuthStore = defineStore("auth", {
   state: () => ({
-    token: '',
+    token: "",
     isLoggedIn: false,
-    roles: '',
-    user: '',
+    roles: [] as string[],
+    user: [] as string[],
     userId: 0,
   }),
   getters: {
@@ -31,7 +31,7 @@ export const useAuthStore = defineStore('auth', {
       try {
         const response = await axiosLogin(dataLogin)
         if (!response || !response.token) {
-          this.token = ''
+          this.token = ""
           this.isLoggedIn = false
           return
         }
@@ -49,7 +49,7 @@ export const useAuthStore = defineStore('auth', {
           await commandAdminStore.countUnreadCommand()
         }
       } catch (e) {
-        this.token = ''
+        this.token = ""
         this.isLoggedIn = false
         console.error(e)
       }
@@ -58,16 +58,17 @@ export const useAuthStore = defineStore('auth', {
       try {
         const response = await axiosMeInfo()
         if (!response || !response.roles) {
-          this.roles = ''
-          this.user = ''
+          this.roles = []
+          this.user = []
           this.userId = 0
+          return
         }
         this.roles = response.roles
         this.user = response
         this.userId = this.user.id
       } catch (e) {
-        this.roles = ''
-        this.user = ''
+        this.roles = []
+        this.user = []
         this.userId = 0
         console.error(e)
       }
@@ -120,10 +121,10 @@ export const useAuthStore = defineStore('auth', {
       }
     },
     logout() {
-      this.token = ''
+      this.token = ""
       this.isLoggedIn = false
-      this.roles = ''
-      this.user = ''
+      this.roles = []
+      this.user = []
     },
   },
 
