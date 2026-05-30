@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
-import { axiosAdminActiveIsRead, axiosAdminContactList, axiosAdminContactSearch, axiosAdminRemoveContact } from '@/shared/services/admin/contactAdmin.service.ts'
+import { axiosAdminActiveIsRead,
+  axiosAdminContactCurrent, axiosAdminContactList, axiosAdminContactSearch, axiosAdminRemoveContact } from '@/shared/services/admin/contactAdmin.service.ts'
 
 interface ContactState {
   contacts: object
@@ -55,6 +56,17 @@ export const useContactAdminStore = defineStore('contactAdmin', {
         this.isLoading = false
       }
     },
+    async currentContact(id: number) {
+      try {
+        this.isLoading = true
+        return await axiosAdminContactCurrent(id)
+      } catch(e) {
+        console.error(e)
+        throw e
+      } finally {
+        this.isLoading = false
+      }
+    },
     async axiosCountUnread() {
       try {
         const data = await axiosAdminContactList(1, 1)
@@ -95,9 +107,7 @@ export const useContactAdminStore = defineStore('contactAdmin', {
     },
     async removeAdminContact(id: number) {
       try {
-        const response = await axiosAdminRemoveContact(id)
-        this.contacts = this.contacts.filter((contact) => contact.id !== id)
-        return response
+        return await axiosAdminRemoveContact(id)
       } catch (e) {
         console.error(e)
         throw e

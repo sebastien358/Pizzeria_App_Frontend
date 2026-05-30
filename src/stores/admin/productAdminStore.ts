@@ -147,7 +147,6 @@ export const useProductAdminStore = defineStore('productAdmin', {
         dataProduct.images?.map((image) => formData.append('images[]', image))
 
         const data = await axiosEditProductAdmin(formData, id)
-        await this.getAdminProducts()
 
         return data
       } catch (e) {

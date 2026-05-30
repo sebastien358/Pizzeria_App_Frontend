@@ -39,15 +39,13 @@ export const useAuthStore = defineStore("auth", {
         this.isLoggedIn = true
         await this.infoMe()
 
-        if (this.isUser) {
-          const commandUserStore = useCommandUserStore()
-          await commandUserStore.countCommandUserPending()
-        }
-
         if (this.isAdmin) {
           const commandAdminStore = useCommandAdminStore()
           await commandAdminStore.countUnreadCommand()
         }
+
+        const commandUserStore = useCommandUserStore()
+        await commandUserStore.countCommandUserPending()
       } catch (e) {
         this.token = ""
         this.isLoggedIn = false

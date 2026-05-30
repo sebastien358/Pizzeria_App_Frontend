@@ -14,8 +14,22 @@ export async function axiosAdminContactList(currentPage: number, limit: number) 
       return response.data
     }
 
-    throw new Error(`Erreur de la récupération de la liste des contacts ${response.status}`)
+    throw new Error(`Erreur de la récupération de la liste des contacts : ${response.status}`)
   } catch (e) {
+    console.error(e)
+    throw e
+  }
+}
+
+export async function axiosAdminContactCurrent(id: number) {
+  try {
+    const response = await axios.get(`${BASE_URL}/api/admin/contact/current/${id}`)
+    if (response.status >= 200 && response.status < 300) {
+      return response.data
+    }
+
+    throw new Error(`Erreur de la récupération du détails d'un contact :  ${response.status}`)
+  } catch(e) {
     console.error(e)
     throw e
   }

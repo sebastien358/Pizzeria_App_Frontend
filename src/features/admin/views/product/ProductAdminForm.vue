@@ -18,7 +18,7 @@ type RouteParamsId = {
 }
 
 const stateRouteParamsId = reactive<RouteParamsId>({
-  id: 0
+  id: 0,
 })
 
 if (route.params.id) {
@@ -59,12 +59,8 @@ const initialValues = {
   productOption: [],
 }
 
-onMounted(async () => {
+const loadProductForm = async () => {
   try {
-    push({ name: 'Petite', price: '' })
-    push({ name: 'Moyenne', price: '' })
-    push({ name: 'Grande', price: '' })
-
     if (!stateRouteParamsId.id) return
 
     const product = await productAdminStore.currentProduct(stateRouteParamsId.id)
@@ -83,6 +79,14 @@ onMounted(async () => {
   } catch (e) {
     console.error(e)
   }
+}
+
+onMounted(async () => {
+  push({ name: 'Petite', price: '' })
+  push({ name: 'Moyenne', price: '' })
+  push({ name: 'Grande', price: '' })
+
+  await loadProductForm()
 })
 
 // Création Form
@@ -151,11 +155,7 @@ const onSubmit = handleSubmit(async (dataProduct, { resetForm }) => {
         return
       }
 
-      const product = await productAdminStore.currentProduct(stateRouteParamsId.id)
-      if (product) {
-        Object.assign(stateProduct, product)
-      }
-
+      await loadProductForm()
       setSuccessMessage(MESSAGES.SUCCESS_EDIT_PRODUCT, null)
     } else {
       const response = await productAdminStore.addAdminProduct(dataProduct)

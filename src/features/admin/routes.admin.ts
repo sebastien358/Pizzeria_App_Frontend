@@ -47,7 +47,7 @@ export const ADMIN_ROUTES: RouteRecordRaw[] = [
     },
   },
   {
-    path: '/contact/:id?',
+    path: '/contact/:id',
     component: ContactDetails,
     name: 'contact-details',
     meta: {

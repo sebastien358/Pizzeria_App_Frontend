@@ -2,12 +2,12 @@
 import { useAuthStore } from '@/stores/authStore.ts'
 import { useRouter } from 'vue-router'
 import { onMounted, reactive } from 'vue'
-import Calc from '@/templates/calc/Calc.vue'
 import { useCartStore } from '@/stores/cartStore.ts'
-import notFound from '@/assets/images/not-found.webp'
 import { useContactAdminStore } from '@/stores/admin/contactAdminStore.ts'
 import { useCommandAdminStore } from '@/stores/admin/commandAdminStore.ts'
 import { useCommandUserStore } from '@/stores/user/commandUserStore.ts'
+import notFound from '@/assets/images/not-found.webp'
+import Calc from '@/templates/calc/Calc.vue'
 
 const authStore = useAuthStore()
 
@@ -35,9 +35,7 @@ onMounted(async () => {
       await commandAdminStore.countUnreadCommand()
     }
 
-    if (authStore.isUser) {
-      await commandUserStore.countCommandUserPending()
-    }
+    await commandUserStore.countCommandUserPending()
   } catch (e) {
     console.error(e)
   }
@@ -683,6 +681,10 @@ const toggleMenuTablet = () => {
   }
 }
 
+/*====================
+  PANIER
+====================*/
+
 .header__cart {
   position: relative;
   .cart {
@@ -690,6 +692,7 @@ const toggleMenuTablet = () => {
     display: inline-block;
     color: #333;
   }
+
   .cart svg {
     width: 28px;
     height: 28px;
@@ -712,10 +715,6 @@ const toggleMenuTablet = () => {
   }
 }
 
-/*====================
-  PANIER
-====================*/
-
 .header__menu {
   position: absolute;
   top: 42px;
@@ -731,8 +730,8 @@ const toggleMenuTablet = () => {
   opacity: 0;
   pointer-events: none;
   &.show {
+  opacity: 1;
     pointer-events: auto;
-    opacity: 1;
   }
 }
 
@@ -856,7 +855,7 @@ const toggleMenuTablet = () => {
   transition: all 200ms ease;
 
   &:hover {
-    background: #d62839; /* 🔥 rouge plus profond */
+    background: #d62839;
   }
 }
 </style>

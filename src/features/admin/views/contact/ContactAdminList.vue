@@ -2,7 +2,6 @@
 import { useContactAdminStore } from '@/stores/admin/contactAdminStore.ts'
 import { computed, onMounted, ref, watch } from 'vue'
 import Pagination from '@/templates/pagination/Pagination.vue'
-import DeleteConfirmModal from '@/templates/confirm-modal/DeleteConfirmModal.vue'
 import InputSearch from '@/templates/input-search/InputSearch.vue'
 
 // Placeholder
@@ -38,9 +37,7 @@ const nextPage = async () => {
 
 const contacts = computed(() => store.contacts)
 
-watch(
-  () => store.term,
-  (term: string | null) => {
+watch(() => store.term, (term: string | null) => {
     store.contactSearch(term)
   },
   { immediate: true },
@@ -52,13 +49,6 @@ onMounted(async () => {
 </script>
 
 <template>
-  <DeleteConfirmModal
-    :id="contactId"
-    :open="open"
-    @close="closeModal()"
-    text="contact-admin"
-    @delete="deleteContact"
-  />
   <!-- Loading -->
   <section v-if="store.isLoading" class="spinner">
     <span class="loader"></span>
@@ -94,7 +84,7 @@ onMounted(async () => {
           </div>
         </div>
         <div class="contact__message">
-          {{ contact.message }}
+          {{ contact.message.slice(0, 20) }}...
         </div>
       </div>
     </div>

@@ -1,51 +1,127 @@
 <script setup lang="ts">
+import { useContactAdminStore } from '@/stores/admin/contactAdminStore.ts'
+import { onMounted, reactive, ref } from 'vue'
+import { useRoute } from 'vue-router'
+import router from '@/router'
+
+const contactAdminStore = useContactAdminStore()
+
+const route = useRoute()
+
+// Paramètre ID : URL
+
+const paramsId = ref<number | null>(null)
+
+if (route.params.id) {
+  paramsId.value = Number(route.params.id)
+}
+
+// State Contact
+
+type Contact = {
+  id: number
+  firstname: string
+  lastname: string
+  email: string
+  message: string
+  isRead: boolean
+}
+
+const stateContact = reactive<Contact>({
+  id: 0,
+  firstname: '',
+  lastname: '',
+  email: '',
+  message: '',
+  isRead: false,
+})
+
+const loadCurrentContact = async () => {
+  try {
+    const data = await contactAdminStore.currentContact(paramsId.value)
+    if (!data) return
+
+    Object.assign(stateContact, data)
+  } catch (e) {
+    console.error(e)
+    throw e
+  }
+}
+
+const activeIsRead = async (id: number) => {
+  try {
+    const response = await contactAdminStore.activeIsRead(id)
+    stateContact.isRead = response.isRead
+
+    await loadCurrentContact()
+  } catch (e) {
+    console.error(e)
+    throw e
+  }
+}
+
+const deleteContact = async (id: number) => {
+  try {
+    const response = await contactAdminStore.removeAdminContact(id)
+    if (response) {
+      await router.push({ path: '/contacts/list' })
+      return
+    }
+  } catch (e) {
+    console.error(e)
+    throw e
+  }
+}
+
+onMounted(async () => {
+  await loadCurrentContact()
+})
 </script>
 
 <template>
   <!-- Loading -->
-  <section class="spinner">
+  <section class="spinner" v-if="contactAdminStore.isLoading">
     <span class="loader"></span>
   </section>
   <!-- Contact -->
-  <section class="contact">
-    <div class="contact__list">
-      <div class="contact__item">
-        <div class="contact__header">
-          <div class="contact__infos">
-            <span class="contact__name">
-
-            </span>
-            <span class="contact__email">
-
-            </span>
-          </div>
-          <div class="contact__buttons">
-            <a
-              :href="`https://mail.google.com/mail/?view=cm&fs=1&to=${null}`"
-              target="_blank"
-              class="contact__response"
-            >
-              Répondre
-            </a>
-            <button class="contact__isread" type="button">
-
-            </button>
-            <button class="contact__delete" type="button">
-              Supprimer
-            </button>
-          </div>
+  <section class="contact" v-else-if="stateContact.id">
+    <div class="contact__item">
+      <div class="contact__header">
+        <div class="contact__infos">
+          <span class="contact__name"
+            >{{ stateContact.firstname }} {{ stateContact.lastname }}</span
+          >
+          <span class="contact__email">{{ stateContact.email }}</span>
         </div>
-        <div class="contact__message">
-
-
-
+        <div class="contact__buttons">
+          <a
+            :href="`https://mail.google.com/mail/?view=cm&fs=1&to=${stateContact.email}`"
+            target="_blank"
+            class="contact__response"
+          >
+            Répondre
+          </a>
+          <button
+            @click="activeIsRead(stateContact.id)"
+            class="contact__isread"
+            type="button"
+            :class="{ active: stateContact.isRead }"
+          >
+            {{ stateContact.isRead ? 'Vu' : 'Marquer comme vu' }}
+          </button>
+          <button class="contact__delete" type="button" @click="deleteContact(stateContact.id)">
+            Supprimer
+          </button>
         </div>
+      </div>
+      <div class="contact__message">
+        {{ stateContact.message }}
       </div>
     </div>
   </section>
 
   <!-- Aucun contact -->
-  <section class="no-contact">
+  <section v-else class="no-contact">
     <p>Aucun message pour le moment.</p>
   </section>
 </template>
@@ -57,7 +133,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: calc(100dvh - 80px);
+  padding-top: 150px;
   .loader {
     width: 35px;
     height: 35px;
@@ -87,20 +163,15 @@
 
 .contact {
   position: relative;
-
-  padding: 30px 20px;
+  padding: 70px 20px;
   display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  &__list {
-    width: 100%;
-    max-width: 1000px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
+
   &__item {
+    width: 100%;
+    max-width: 800px;
     background: white;
     border-radius: 12px;
     padding: 1rem 1.2rem;
@@ -152,7 +223,8 @@
     border-radius: 8px;
     overflow-wrap: anywhere;
     font-size: 14px;
-    max-height: 120px;
+    min-height: 120px;
+    max-height: 250px;
     overflow-y: auto;
   }
 
@@ -194,6 +266,9 @@
     cursor: pointer;
     white-space: nowrap;
     transition: all 0.2s ease;
+    &.active {
+      background: black;
+    }
   }
   &__delete:hover {
     background: #c92f3c;
@@ -203,7 +278,10 @@
 
 @media (max-width: 1600px) {
   .contact {
-    padding: 40px 20px;
+    padding: 60px 20px;
+    &__item {
+      max-width: 700px;
+    }
   }
 }
 
@@ -246,6 +324,12 @@
       margin-top: 5px;
       padding: 0.4rem 0.7rem;
     }
+    &__isread {
+      width: 100%;
+      text-align: center;
+      margin-top: 5px;
+      padding: 0.4rem 0.7rem;
+    }
     &__name {
       font-size: 14px;
     }
@@ -256,7 +340,7 @@
       max-height: 100px;
       font-size: 13px;
       line-height: 1.5;
-      padding: 15px;
+      padding: 12px;
     }
   }
 }
