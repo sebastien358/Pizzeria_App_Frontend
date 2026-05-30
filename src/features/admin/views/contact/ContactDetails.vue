@@ -1,115 +1,51 @@
 <script setup lang="ts">
-import { useContactAdminStore } from '@/stores/admin/contactAdminStore.ts'
-import { computed, onMounted, ref, watch } from 'vue'
-import Pagination from '@/templates/pagination/Pagination.vue'
-import DeleteConfirmModal from '@/templates/confirm-modal/DeleteConfirmModal.vue'
-import InputSearch from '@/templates/input-search/InputSearch.vue'
-
-// Placeholder
-const placeholder = ref<string>('Rechercher un contact...')
-
-const store = useContactAdminStore()
-
-const loadContacts = async () => {
-  try {
-    await store.contactAdminList()
-  } catch (e) {
-    console.error(e)
-  }
-}
-
-const previousPage = async () => {
-  try {
-    if (store.currentPage > 1) store.currentPage--
-    await store.contactAdminList()
-  } catch (e) {
-    console.error(e)
-  }
-}
-
-const nextPage = async () => {
-  store.currentPage++
-  try {
-    await store.contactAdminList()
-  } catch (e) {
-    console.error(e)
-  }
-}
-
-const contacts = computed(() => store.contacts)
-
-watch(
-  () => store.term,
-  (term: string | null) => {
-    store.contactSearch(term)
-  },
-  { immediate: true },
-)
-
-onMounted(async () => {
-  await loadContacts()
-})
 </script>
 
 <template>
-  <DeleteConfirmModal
-    :id="contactId"
-    :open="open"
-    @close="closeModal()"
-    text="contact-admin"
-    @delete="deleteContact"
-  />
   <!-- Loading -->
-  <section v-if="store.isLoading" class="spinner">
+  <section class="spinner">
     <span class="loader"></span>
   </section>
   <!-- Contact -->
-  <section v-else-if="store.contacts.length > 0" class="contact">
-    <!-- Input Search -->
-    <div class="contact__search">
-      <InputSearch
-        :term="store.term"
-        @update:term="store.term = $event"
-        :total="store.total"
-        :placeholder="placeholder"
-      />
-    </div>
-
+  <section class="contact">
     <div class="contact__list">
-      <div class="contact__item" v-for="contact in contacts" :key="contact.id">
+      <div class="contact__item">
         <div class="contact__header">
           <div class="contact__infos">
-            <span class="contact__name"> {{ contact.firstname }} {{ contact.lastname }} </span>
+            <span class="contact__name">
+
+            </span>
             <span class="contact__email">
-              {{ contact.email }}
+
             </span>
           </div>
           <div class="contact__buttons">
-            <router-link
-              class="contact__details"
-              :to="{ name: 'contact-details', params: { id: contact.id } }"
+            <a
+              :href="`https://mail.google.com/mail/?view=cm&fs=1&to=${null}`"
+              target="_blank"
+              class="contact__response"
             >
-              Détails
-            </router-link>
+              Répondre
+            </a>
+            <button class="contact__isread" type="button">
+
+            </button>
+            <button class="contact__delete" type="button">
+              Supprimer
+            </button>
           </div>
         </div>
         <div class="contact__message">
-          {{ contact.message }}
+
+
+
         </div>
       </div>
     </div>
-    <!-- Pagination -->
-    <pagination
-      v-if="store.pages > 1"
-      :currentPage="store.currentPage"
-      :pages="store.pages"
-      @previous-page="previousPage"
-      @next-page="nextPage"
-    />
   </section>
 
   <!-- Aucun contact -->
-  <section v-else class="no-contact">
+  <section class="no-contact">
     <p>Aucun message pour le moment.</p>
   </section>
 </template>
@@ -157,12 +93,6 @@ onMounted(async () => {
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  &__search {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 30px;
-  }
   &__list {
     width: 100%;
     max-width: 1000px;
@@ -226,29 +156,48 @@ onMounted(async () => {
     overflow-y: auto;
   }
 
-  &__details {
-    background: #e63946;
-    color: white;
+  &__response {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #2e7d32; // vert
+    color: #fff;
     border: none;
-    padding: 9px 14px;
     border-radius: 6px;
+    padding: 0.5rem 0.7rem;
+    font-size: 0.65rem;
+    font-weight: 600;
     cursor: pointer;
-    font-size: 11px;
-    transition: background 0.2s;
-    &:hover {
-      background: #c1121f;
-    }
+    white-space: nowrap;
+    transition: all 0.2s ease;
   }
-}
-
-.contact :deep(.pagination) {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 20px;
-  width: 100%;
-  @media (max-width: 767.98px) {
-    margin-top: 15px;
+  &__delete {
+    background: #e63946;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 0.5rem 0.7rem;
+    font-size: 0.65rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+  }
+  &__isread {
+    background: blue;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 0.5rem 0.7rem;
+    font-size: 0.65rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+  }
+  &__delete:hover {
+    background: #c92f3c;
+    transform: translateY(-1px);
   }
 }
 
