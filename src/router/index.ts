@@ -1,15 +1,16 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Pizzeria from '@/features/pizzeria/Pizzeria.vue'
-import Register from '@/features/pizzeria/components/auth/Register.vue'
-import Login from '@/features/pizzeria/components/auth/Login.vue'
 import { useAuthStore } from '@/stores/authStore.ts'
-import Admin from '@/features/admin/Admin.vue'
 import { ADMIN_ROUTES } from '@/features/admin/routes.admin.ts'
-import RequestPassword from '@/features/pizzeria/components/auth/reset-password/RequestPassword.vue'
-import ResetPassword from '@/features/pizzeria/components/auth/reset-password/ResetPassword.vue'
-import CommandAddress from '@/features/user/components/command/CommandAddress.vue'
-import Payment from '@/features/user/components/command/CommandPayment.vue'
-import Finish from '@/features/user/components/command/CommandFinish.vue'
+
+const Admin = () => import('@/features/admin/Admin.vue')
+const Login = () =>  import('@/features/pizzeria/components/auth/Login.vue')
+const Pizzeria = () =>  import('@/features/pizzeria/Pizzeria.vue')
+const Register = () => import('@/features/pizzeria/components/auth/Register.vue')
+const RequestPassword = () => import('@/features/pizzeria/components/auth/reset-password/RequestPassword.vue')
+const ResetPassword = () => import('@/features/pizzeria/components/auth/reset-password/ResetPassword.vue')
+const CommandAddress = () => import('@/features/user/components/command/CommandAddress.vue')
+const Payment = () => import('@/features/user/components/command/CommandPayment.vue')
+const Finish = () =>  import('@/features/user/components/command/CommandFinish.vue')
 const CommandUserList = () =>  import('@/features/user/components/profile/CommandUserList.vue')
 const CartProduct = () => import('@/features/pizzeria/components/cart/CartProduct.vue')
 const AccountUserEdit = () => import('@/features/user/components/profile/AccountUserEdit.vue')

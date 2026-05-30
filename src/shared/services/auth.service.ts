@@ -114,7 +114,7 @@ axios.interceptors.response.use(
 
     if (error.response?.status === 401 && hasAuthHeader) {
       authStore.logout()
-      router.push({ path: '/pizzeria' })
+      router.push({ path: '/' })
     }
 
     return Promise.reject(error)

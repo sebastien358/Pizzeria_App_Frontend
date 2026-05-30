@@ -1,7 +1,7 @@
 import type { RouteRecordRaw } from 'vue-router'
-import ProductAdminForm from '@/features/admin/views/product/ProductAdminForm.vue'
-import ProductAdminList from '@/features/admin/views/product/ProductAdminList.vue'
-import ContactAdminList from '@/features/admin/views/contact/ContactAdminList.vue'
+const ProductAdminForm = () => import('@/features/admin/views/product/ProductAdminForm.vue')
+const ProductAdminList = () => import('@/features/admin/views/product/ProductAdminList.vue')
+const ContactAdminList = () => import('@/features/admin/views/contact/ContactAdminList.vue')
 const CommandAdminList = () => import('@/features/admin/views/command/CommandAdminList.vue')
 
 export const ADMIN_ROUTES: RouteRecordRaw[] = [

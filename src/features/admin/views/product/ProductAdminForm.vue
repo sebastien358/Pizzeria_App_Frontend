@@ -9,9 +9,23 @@ import AlertMessage from '@/templates/alertMessage/AlertMessage.vue'
 
 const productAdminStore = useProductAdminStore()
 
-// Récupération des catégories
+// Récupération du paramètre ID dans l'URL
 
 const route = useRoute()
+
+type RouteParamsId = {
+  id: number
+}
+
+const stateRouteParamsId = reactive<RouteParamsId>({
+  id: 0
+})
+
+if (route.params.id) {
+  stateRouteParamsId.id = Number(route.params.id)
+}
+
+// State Product
 
 type Pictures = {
   id: number
@@ -51,15 +65,12 @@ onMounted(async () => {
     push({ name: 'Moyenne', price: '' })
     push({ name: 'Grande', price: '' })
 
-    const id = Number(route.params.id)
-    if (!id) return
+    if (!stateRouteParamsId.id) return
 
-    const product = await productAdminStore.currentProduct(id)
+    const product = await productAdminStore.currentProduct(stateRouteParamsId.id)
     if (!product) return
 
-    Object.assign(stateProduct, {
-      ...product,
-    })
+    Object.assign(stateProduct, product)
 
     setValues({
       title: product.title,
@@ -133,12 +144,18 @@ const MESSAGES = {
 
 const onSubmit = handleSubmit(async (dataProduct, { resetForm }) => {
   try {
-    if (route.params.id) {
-      const response = await productAdminStore.editProduct(dataProduct, route.params.id)
+    if (stateRouteParamsId.id) {
+      const response = await productAdminStore.editProduct(dataProduct, stateRouteParamsId.id)
       if (!response) {
         setErrorMessage(MESSAGES.INVALID_CREDENTIALS)
         return
       }
+
+      const product = await productAdminStore.currentProduct(stateRouteParamsId.id)
+      if (product) {
+        Object.assign(stateProduct, product)
+      }
+
       setSuccessMessage(MESSAGES.SUCCESS_EDIT_PRODUCT, null)
     } else {
       const response = await productAdminStore.addAdminProduct(dataProduct)

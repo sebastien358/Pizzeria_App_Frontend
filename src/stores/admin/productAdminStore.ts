@@ -146,14 +146,10 @@ export const useProductAdminStore = defineStore('productAdmin', {
 
         dataProduct.images?.map((image) => formData.append('images[]', image))
 
-        const product = await axiosEditProductAdmin(formData, id)
-        // Met à jour le produit dans le store
-        const index = this.product.findIndex((p) => p.id === id)
-        if (index !== -1) {
-          this.product[index] = { ...this.product[index], ...product }
-        }
-        await this.getAdminProducts() // Optionnel, si tu veux rafraîchir tout
-        return product
+        const data = await axiosEditProductAdmin(formData, id)
+        await this.getAdminProducts()
+
+        return data
       } catch (e) {
         console.error(e)
         throw e
@@ -171,10 +167,8 @@ export const useProductAdminStore = defineStore('productAdmin', {
     },
     async deleteProductImage(productId: number, imageId: number) {
       try {
-        const response = await axiosDeleteProductImage(productId, imageId)
+        await axiosDeleteProductImage(productId, imageId)
         await this.getAdminProducts()
-
-        return response
       } catch (e) {
         console.error(e)
         throw e
