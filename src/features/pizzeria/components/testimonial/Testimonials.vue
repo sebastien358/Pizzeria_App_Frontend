@@ -1,9 +1,53 @@
 <script setup lang="ts">
-import { nextTick, onMounted } from 'vue'
+import { computed, nextTick, onMounted, reactive } from 'vue'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import TestimonialModal from '@/templates/modal-testimonial/TestimonialModal.vue'
+import { useTestimonialStore } from '@/stores/testimonialStore.ts'
 
 gsap.registerPlugin(ScrollTrigger)
+
+const testimonialStore = useTestimonialStore()
+
+const testimonialLoad = async () => {
+  try {
+    await testimonialStore.testimonials
+  } catch (e) {
+    console.error(e)
+  }
+}
+
+const testimonials = computed(() => testimonialStore.testimonials)
+
+const dateTimeDisplay = (date: Date) => {
+  if (!date) return
+
+  const d = new Date(date)
+
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+  }
+
+  return new Intl.DateTimeFormat('fr-FR', options).format(d)
+}
+
+type ActiveModal = {
+  isActive: boolean
+}
+
+const state = reactive<ActiveModal>({
+  isActive: false,
+})
+
+const openModalTestimonial = () => {
+  state.isActive = true
+}
+
+const closeModalTestimonial = () => {
+  state.isActive = false
+}
 
 const testimonialsGsapAnimation = async () => {
   await nextTick()
@@ -63,7 +107,7 @@ const testimonialsGsapAnimation = async () => {
   )
 
   tl.from(
-    '.testimonials__card',
+    '.testimonials__grid',
     {
       opacity: 0,
       y: 40,
@@ -100,6 +144,7 @@ const testimonialsGsapAnimation = async () => {
 }
 
 onMounted(async () => {
+  await testimonialLoad()
   await testimonialsGsapAnimation()
 })
 </script>
@@ -132,30 +177,43 @@ onMounted(async () => {
       <button class="testimonials__filter">★★★★★ 5 étoiles</button>
     </div>
 
-    <div class="testimonials__grid">
+    <div class="testimonials__grid" v-for="t in testimonials" :key="t.id">
       <div class="testimonials__card">
-        <div class="testimonials__card-stars">★★★★★</div>
-        <p class="testimonials__card-text">« message »</p>
+        <div class="testimonials__card-stars" v-for="n in t.rating" :key="n">★</div>
+        <p class="testimonials__card-text">« {{ t.message }} »</p>
         <div class="testimonials__card-author">
-          <div class="testimonials__card-avatar">Sébastien P.</div>
+          <div class="testimonials__card-avatar">
+            <img
+              v-if="t.pictures[0]?.filename"
+              :src="t.pictures[0]?.filename"
+              class="img"
+              height="60"
+            />
+            <span>{{ t.firstname.slice(0, 1) }} {{ t.lastname.slice(0, 1) }}</span>
+          </div>
+
           <div>
-            <p class="testimonials__card-name">Sébastien</p>
-            <p class="testimonials__card-date">Date</p>
+            <p class="testimonials__card-name">{{ t.firstname }} {{ t.lastname.slice(0, 1) }}.</p>
+            <p class="testimonials__card-date">{{ dateTimeDisplay(t.createdAt) }}</p>
           </div>
         </div>
       </div>
     </div>
 
     <div class="testimonials__modal">
-      <button class="btn btn-testimonial">Ajouter un témoignage</button>
+      <button @click="openModalTestimonial()" class="btn btn-testimonial">
+        Ajouter un témoignage
+      </button>
     </div>
   </section>
+
+  <TestimonialModal :isActive="state.isActive" @close-modal-testimonial="closeModalTestimonial" />
 </template>
 
 <style scoped lang="scss">
 .testimonials {
   padding: 60px 20px;
-  max-width: 1000px;
+  max-width: 1200px;
   margin: 0 auto;
 
   height: calc(100dvh - 80px);
@@ -172,17 +230,18 @@ onMounted(async () => {
     text-transform: uppercase;
     color: #e63946;
     margin-bottom: 10px;
+    font-size: 13px;
   }
 
   &__title {
-    font-size: 32px;
+    font-size: 40px;
     font-weight: 600;
     color: #1a1a1a;
     margin: 0 0 8px;
   }
 
   &__subtitle {
-    font-size: 14px;
+    font-size: 16px;
     color: #777;
     margin: 0;
   }
@@ -207,7 +266,7 @@ onMounted(async () => {
   }
 
   &__summary-number {
-    font-size: 24px;
+    font-size: 25px;
     font-weight: 600;
     color: #1a1a1a;
 
@@ -217,7 +276,7 @@ onMounted(async () => {
   }
 
   &__summary-label {
-    font-size: 11px;
+    font-size: 13px;
     color: #999;
   }
 
@@ -255,6 +314,7 @@ onMounted(async () => {
   &__grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
+    align-items: stretch;
     gap: 16px;
   }
 
@@ -275,17 +335,18 @@ onMounted(async () => {
 
   &__card-stars {
     color: #e63946;
-    font-size: 13px;
+    font-size: 26px;
     letter-spacing: 2px;
     margin-bottom: 10px;
+    display: inline-block;
   }
 
   &__card-text {
-    font-size: 13px;
+    font-size: 18px;
     color: #555;
     line-height: 1.6;
     font-style: italic;
-    margin: 0 0 16px;
+    margin: 10px 0 25px 0;
   }
 
   &__card-author {
@@ -295,8 +356,8 @@ onMounted(async () => {
   }
 
   &__card-avatar {
-    width: 34px;
-    height: 34px;
+    width: 52px;
+    height: 52px;
     border-radius: 50%;
     background: #fce8e9;
     display: flex;
@@ -306,19 +367,28 @@ onMounted(async () => {
     font-weight: 600;
     color: #e63946;
     flex-shrink: 0;
+    position: relative;
+    .img {
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+    }
+    span {
+      position: absolute;
+    }
   }
 
   &__card-name {
-    font-size: 13px;
+    font-size: 15px;
     font-weight: 500;
     color: #1a1a1a;
     margin: 0;
   }
 
   &__card-date {
-    font-size: 11px;
+    font-size: 13px;
     color: #aaa;
-    margin: 2px 0 0;
+    margin: 4px 0 0;
   }
 
   &__modal {

@@ -6,9 +6,14 @@ import Newsletter from '@/templates/newsletter/Newsletter.vue'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useScrollToTop } from '@/shared/scroll-top/.scrollTop.ts'
+import { useTestimonialStore } from '@/stores/testimonialStore.ts'
 const { showScrollTop, scrollToTop } = useScrollToTop()
 
 gsap.registerPlugin(ScrollTrigger)
+
+/*=======================
+  STORE PRODUCT
+=======================*/
 
 const productStore = useProductStore()
 const products = computed(() => productStore.products)
@@ -19,6 +24,36 @@ async function productLoad() {
   } catch (e) {
     console.error(e)
   }
+}
+
+/*=======================
+  STORE TESTIMONIALS
+=======================*/
+
+const testimonialStore = useTestimonialStore()
+
+const testimonials = computed(() => testimonialStore.testimonials.slice(0, 3))
+
+async function testimonialLoad() {
+  try {
+    await testimonialStore.testimonialList()
+  } catch (e) {
+    console.error(e)
+  }
+}
+
+const dateTimeDisplay = (date: Date) => {
+  if (!date) return
+
+  const d = new Date(date)
+
+  const options = {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+  }
+
+  return new Intl.DateTimeFormat('fr-FR', options).format(d)
 }
 
 /*=======================
@@ -276,8 +311,8 @@ const reviewsGsapAnimation = async () => {
     scrollTrigger: {
       trigger: reviews,
       start: 'top 80%',
-      once: true
-    }
+      once: true,
+    },
   })
 
   tl.from('.reviews__label', {
@@ -351,6 +386,7 @@ const reviewsGsapAnimation = async () => {
 
 onMounted(async () => {
   await productLoad()
+  await testimonialLoad()
   await reviewsGsapAnimation()
   await heroGsapAnimation()
   await aboutGsapAnimation()
@@ -559,46 +595,15 @@ onMounted(async () => {
         </div>
       </div>
 
-      <div class="reviews__grid">
+      <div class="reviews__grid" v-for="t in testimonials" :key="t.id">
         <div class="reviews__card">
-          <div class="reviews__card-stars">★★★★★</div>
-          <p class="reviews__card-text">
-            « La meilleure pizza que j'ai commandée en ligne. La pâte est incroyable, livrée bien
-            chaude. »
-          </p>
+          <div class="reviews__card-stars" v-for="(n, index) in t.rating" :key="index">★</div>
+          <p class="reviews__card-text">« {{ t.message }} »</p>
           <div class="reviews__card-author">
-            <div class="reviews__card-avatar">ML</div>
+            <div class="reviews__card-avatar">{{ t.firstname.slice(0, 1) }}</div>
             <div>
-              <p class="reviews__card-name">Marie L.</p>
-              <p class="reviews__card-date">Il y a 3 jours</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="reviews__card">
-          <div class="reviews__card-stars">★★★★★</div>
-          <p class="reviews__card-text">
-            « Commande facile, livraison rapide et pizzas vraiment artisanales. Je recommande ! »
-          </p>
-          <div class="reviews__card-author">
-            <div class="reviews__card-avatar">TM</div>
-            <div>
-              <p class="reviews__card-name">Thomas M.</p>
-              <p class="reviews__card-date">Il y a 1 semaine</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="reviews__card">
-          <div class="reviews__card-stars">★★★★☆</div>
-          <p class="reviews__card-text">
-            « Très bonne pizza Savoyarde. La prochaine fois j'essaie la Burrata. »
-          </p>
-          <div class="reviews__card-author">
-            <div class="reviews__card-avatar">SC</div>
-            <div>
-              <p class="reviews__card-name">Sophie C.</p>
-              <p class="reviews__card-date">Il y a 2 semaines</p>
+              <p class="reviews__card-name">{{ t.firstname }} {{ t.lastname.slice(0, 1) }}.</p>
+              <p class="reviews__card-date">{{ dateTimeDisplay((t.createdAt)) }}</p>
             </div>
           </div>
         </div>
@@ -1424,13 +1429,14 @@ BENEFITS
   text-align: center;
 
   &__header {
+    width: 100%;
     max-width: 600px;
     margin: 0 auto 50px;
   }
 
   &__label {
     display: inline-block;
-    font-size: 11px;
+    font-size: 13px;
     letter-spacing: 3px;
     text-transform: uppercase;
     color: #e63946;
@@ -1488,6 +1494,7 @@ BENEFITS
   &__grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
+    align-items: stretch;
     gap: 20px;
     max-width: 1000px;
     margin: 0 auto;
@@ -1497,6 +1504,7 @@ BENEFITS
     background: #fff;
     border: 1px solid #eee;
     border-radius: 12px;
+    //padding: 24px;
     padding: 24px;
     text-align: left;
     transition:
@@ -1511,13 +1519,16 @@ BENEFITS
 
   &__card-stars {
     color: #e63946;
-    font-size: 14px;
+    //font-size: 14px;
+    font-size: 26px;
     letter-spacing: 2px;
     margin-bottom: 12px;
+    display: inline-block;
   }
 
   &__card-text {
-    font-size: 14px;
+    //font-size: 14px;
+    font-size: 17px;
     color: #555;
     line-height: 1.7;
     font-style: italic;
@@ -1531,21 +1542,24 @@ BENEFITS
   }
 
   &__card-avatar {
-    width: 38px;
-    height: 38px;
+    //width: 38px;
+    //height: 38px;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
     background: #fce8e9;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 12px;
+    //font-size: 12px;
+    font-size: 13px;
     font-weight: 600;
     color: #e63946;
     flex-shrink: 0;
   }
 
   &__card-name {
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 600;
     color: #1a1a1a;
     margin: 0;
@@ -1554,7 +1568,7 @@ BENEFITS
   &__card-date {
     font-size: 12px;
     color: #aaa;
-    margin: 2px 0 0;
+    margin: 3px 0 0;
   }
 
   &__link {

@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore.ts'
 import { ADMIN_ROUTES } from '@/features/admin/routes.admin.ts'
-import { computed } from 'vue'
 
 const Admin = () => import('@/features/admin/Admin.vue')
 const Login = () =>  import('@/features/pizzeria/components/auth/Login.vue')

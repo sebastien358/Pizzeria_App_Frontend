@@ -24,7 +24,9 @@ import {
   faBars,
   faTrash,
   faPen,
-  faDeleteLeft, faLock,
+  faDeleteLeft,
+  faLock,
+  faXmark,
 } from '@fortawesome/free-solid-svg-icons'
 import { faFacebook } from '@fortawesome/free-brands-svg-icons'
 import { faBasketShopping } from '@fortawesome/free-solid-svg-icons/faBasketShopping'
@@ -44,7 +46,8 @@ library.add(
   faPen,
   faDeleteLeft,
   faBars,
-  faLock
+  faLock,
+  faXmark
 )
 
 const app = createApp(App)
