@@ -363,9 +363,7 @@ onMounted(async () => {
             </p>
 
             <div class="ingredients__button">
-              <router-link to="/pizzas" class="ingredients-button"
-                >Découvrir la carte</router-link
-              >
+              <router-link to="/pizzas" class="ingredients-button">Découvrir la carte</router-link>
             </div>
           </div>
         </div>
@@ -454,6 +452,70 @@ onMounted(async () => {
         </article>
       </section>
     </section>
+
+    <!-- REVIEWS -->
+
+    <section class="reviews">
+      <div class="reviews__header">
+        <span class="reviews__label">Témoignages</span>
+        <h2 class="reviews__title">Ce que disent nos clients</h2>
+        <p class="reviews__subtitle">Plus de 150 commandes, des clients satisfaits.</p>
+
+        <div class="reviews__summary">
+          <span class="reviews__score">4.8</span>
+          <div class="reviews__summary-detail">
+            <div class="reviews__stars">★★★★★</div>
+            <span class="reviews__count">Basé sur 142 avis</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="reviews__grid">
+        <div class="reviews__card">
+          <div class="reviews__card-stars">★★★★★</div>
+          <p class="reviews__card-text">
+            « La meilleure pizza que j'ai commandée en ligne. La pâte est incroyable, livrée bien
+            chaude. »
+          </p>
+          <div class="reviews__card-author">
+            <div class="reviews__card-avatar">ML</div>
+            <div>
+              <p class="reviews__card-name">Marie L.</p>
+              <p class="reviews__card-date">Il y a 3 jours</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="reviews__card">
+          <div class="reviews__card-stars">★★★★★</div>
+          <p class="reviews__card-text">
+            « Commande facile, livraison rapide et pizzas vraiment artisanales. Je recommande ! »
+          </p>
+          <div class="reviews__card-author">
+            <div class="reviews__card-avatar">TM</div>
+            <div>
+              <p class="reviews__card-name">Thomas M.</p>
+              <p class="reviews__card-date">Il y a 1 semaine</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="reviews__card">
+          <div class="reviews__card-stars">★★★★☆</div>
+          <p class="reviews__card-text">
+            « Très bonne pizza Savoyarde. La prochaine fois j'essaie la Burrata. »
+          </p>
+          <div class="reviews__card-author">
+            <div class="reviews__card-avatar">SC</div>
+            <div>
+              <p class="reviews__card-name">Sophie C.</p>
+              <p class="reviews__card-date">Il y a 2 semaines</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- NEWSLETTER -->
 
     <Newsletter />
@@ -1258,6 +1320,178 @@ BENEFITS
   .benefits__item p {
     font-size: 0.88rem;
     line-height: 1.65;
+  }
+}
+
+// REVIEWS
+
+.reviews {
+  padding: 80px 20px;
+  background: #fafaf8;
+  text-align: center;
+
+  &__header {
+    max-width: 600px;
+    margin: 0 auto 50px;
+  }
+
+  &__label {
+    display: inline-block;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #e63946;
+    margin-bottom: 12px;
+  }
+
+  &__title {
+    font-size: 36px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0 0 12px;
+    line-height: 1.2;
+  }
+
+  &__subtitle {
+    font-size: 15px;
+    color: #777;
+    margin: 0 0 30px;
+  }
+
+  &__summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 50px;
+    padding: 10px 24px;
+  }
+
+  &__score {
+    font-size: 32px;
+    font-weight: 700;
+    color: #1a1a1a;
+    line-height: 1;
+  }
+
+  &__summary-detail {
+    text-align: left;
+  }
+
+  &__stars {
+    color: #e63946;
+    font-size: 16px;
+    letter-spacing: 2px;
+  }
+
+  &__count {
+    font-size: 12px;
+    color: #999;
+    display: block;
+    margin-top: 2px;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  &__card {
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 24px;
+    text-align: left;
+    transition:
+      transform 0.2s,
+      box-shadow 0.2s;
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+    }
+  }
+
+  &__card-stars {
+    color: #e63946;
+    font-size: 14px;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+  }
+
+  &__card-text {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.7;
+    font-style: italic;
+    margin: 0 0 18px;
+  }
+
+  &__card-author {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__card-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #fce8e9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: #e63946;
+    flex-shrink: 0;
+  }
+
+  &__card-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0;
+  }
+
+  &__card-date {
+    font-size: 12px;
+    color: #aaa;
+    margin: 2px 0 0;
+  }
+}
+
+@media (max-width: 1024px) {
+  .reviews {
+    &__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+}
+
+@media (max-width: 767.98px) {
+  .reviews {
+    padding: 50px 15px;
+
+    &__title {
+      font-size: 26px;
+    }
+
+    &__grid {
+      grid-template-columns: 1fr;
+    }
+
+    &__summary {
+      padding: 8px 18px;
+    }
+
+    &__score {
+      font-size: 26px;
+    }
   }
 }
 </style>
