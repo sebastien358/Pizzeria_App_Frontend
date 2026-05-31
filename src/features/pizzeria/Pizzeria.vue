@@ -261,8 +261,97 @@ async function benefitsGsapAnimation() {
   }
 }
 
+// Gsap animation reviews
+
+const reviewsGsap = ref<HTMLElement | null>(null)
+
+const reviewsGsapAnimation = async () => {
+  const reviews = reviewsGsap.value
+
+  if (!reviews) return
+
+  await nextTick()
+
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: reviews,
+      start: 'top 80%',
+      once: true
+    }
+  })
+
+  tl.from('.reviews__label', {
+    opacity: 0,
+    y: 30,
+    duration: 0.6,
+    ease: 'power3.out',
+  })
+
+  tl.from(
+    '.reviews__title',
+    {
+      opacity: 0,
+      y: 0,
+      x: -60,
+      duration: 0.6,
+      ease: 'power3.out',
+    },
+    '-=0.25',
+  )
+
+  tl.from(
+    '.reviews__subtitle',
+    {
+      opacity: 0,
+      y: 0,
+      x: 60,
+      duration: 0.6,
+      ease: 'power3.out',
+    },
+    '-=0.25',
+  )
+
+  tl.from(
+    '.reviews__summary',
+    {
+      opacity: 0,
+      y: 30,
+      x: 0,
+      duration: 0.6,
+      ease: 'power3.out',
+    },
+    '-=0.35',
+  )
+
+  tl.from(
+    '.reviews__card',
+    {
+      opacity: 0,
+      y: 40,
+      x: 0,
+      stagger: 0.2,
+      duration: 0.6,
+      ease: 'power3.out',
+    },
+    '-=0.35',
+  )
+
+  tl.from(
+    '.reviews__link',
+    {
+      opacity: 0,
+      y: 12,
+      x: 0,
+      duration: 0.6,
+      ease: 'power3.out',
+    },
+    '-=0.25',
+  )
+}
+
 onMounted(async () => {
   await productLoad()
+  await reviewsGsapAnimation()
   await heroGsapAnimation()
   await aboutGsapAnimation()
   await ingredientGsapAnimation()
@@ -455,7 +544,7 @@ onMounted(async () => {
 
     <!-- REVIEWS -->
 
-    <section class="reviews">
+    <section class="reviews" ref="reviewsGsap">
       <div class="reviews__header">
         <span class="reviews__label">Témoignages</span>
         <h2 class="reviews__title">Ce que disent nos clients</h2>
@@ -513,6 +602,10 @@ onMounted(async () => {
             </div>
           </div>
         </div>
+      </div>
+
+      <div class="reviews__link">
+        <router-link to="/testimonials">Liste des commentaires</router-link>
       </div>
     </section>
 
@@ -1462,6 +1555,21 @@ BENEFITS
     font-size: 12px;
     color: #aaa;
     margin: 2px 0 0;
+  }
+
+  &__link {
+    margin-top: 60px;
+    a {
+      font-size: 13px;
+      color: #e63946;
+      text-decoration: none;
+      border-bottom: 1px solid #e63946;
+      padding-bottom: 2px;
+      transition: opacity 0.2s;
+      &:hover {
+        opacity: 0.7;
+      }
+    }
   }
 }
 

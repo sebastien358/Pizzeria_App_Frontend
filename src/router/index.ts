@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore.ts'
 import { ADMIN_ROUTES } from '@/features/admin/routes.admin.ts'
+import { computed } from 'vue'
 
 const Admin = () => import('@/features/admin/Admin.vue')
 const Login = () =>  import('@/features/pizzeria/components/auth/Login.vue')
@@ -16,6 +17,7 @@ const CartProduct = () => import('@/features/pizzeria/components/cart/CartProduc
 const AccountUserEdit = () => import('@/features/user/components/profile/AccountUserEdit.vue')
 const PizzaCard = () => import('@/features/pizzeria/components/shop/Pizzas.vue')
 const Contact = () => import('@/features/pizzeria/components/contact/Contact.vue')
+const Testimonials = () => import('@/features/pizzeria/components/testimonial/Testimonials.vue')
 
 const routes = [
   { path: '/', component: Pizzeria },
@@ -24,6 +26,7 @@ const routes = [
   { path: '/cart', component: CartProduct },
   { path: '/pizzas', component: PizzaCard },
   { path: '/contact', component: Contact },
+  { path: '/testimonials', component: Testimonials },
   { path: '/request-password', component: RequestPassword },
   { path: '/reset-password/:token', component: ResetPassword },
   {
