@@ -37,6 +37,10 @@ a.router-link-active {
   font-weight: 500;
 }
 
+html {
+  //overflow: hidden;
+}
+
 body {
   font-family: var(--font-family);
   height: 100%;

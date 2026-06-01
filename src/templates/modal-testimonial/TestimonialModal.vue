@@ -4,6 +4,7 @@ import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
 import { computed, ref } from 'vue'
 import { useTestimonialStore } from '@/stores/testimonialStore.ts'
+import AlertMessage from '@/templates/alertMessage/AlertMessage.vue'
 
 const testimonialStore = useTestimonialStore()
 
@@ -38,8 +39,8 @@ const schema = z.object({
     .max(5, { message: 'La note maximum est 5' }),
   message: z
     .string({ message: 'Veuillez ajouter votre témmoignage' })
-    .min(30, { message: 'Le message doit contenir au moins 30 caractères' })
-    .max(100, { message: 'Le message ne peut pas dépasser 100 caractères' }),
+    .min(50, { message: 'Le message doit contenir au moins 30 caractères' })
+    .max(250, { message: 'Le message ne peut pas dépasser 100 caractères' }),
   images: z
     .array(z.instanceof(File))
     .optional()
@@ -82,13 +83,47 @@ const changeFiles = (e: Event) => {
   filename.value = fileArray[0]?.name
 }
 
-const onSubmit = handleSubmit(async (dataTestimonial) => {
+const onSubmit = handleSubmit(async (dataTestimonial, { resetForm }) => {
   try {
-    await testimonialStore.addTestimonial(dataTestimonial)
+    const response = await testimonialStore.addTestimonial(dataTestimonial)
+    if (!response) {
+      setErrorMessage('Une erreur est survenue.')
+      return
+    }
+
+    setSuccessMessage('Votre avis a bien été envoyé, merci !', resetForm)
   } catch (e) {
     console.error(e)
+    setErrorMessage('Une erreur est survenue.')
+    throw e
   }
 })
+
+const successMessage = ref<HTMLElement | null>(null)
+const errorMessage = ref<HTMLElement | null>(null)
+
+let reset = () => {}
+
+const setSuccessMessage = (msg: string, resetForm: () => void) => {
+  errorMessage.value = null
+  successMessage.value = msg
+  reset = resetForm
+}
+
+const setErrorMessage = (msg: string) => {
+  successMessage.value = null
+  errorMessage.value = msg
+}
+
+const closeAlert = () => {
+  successMessage.value = null
+  errorMessage.value = null
+}
+
+const handleResetForm = () => {
+  closeAlert()
+  reset()
+}
 
 const fields = computed(() => [
   {
@@ -170,6 +205,23 @@ const fields = computed(() => [
               >
             </div>
           </div>
+
+          <AlertMessage
+            v-if="successMessage"
+            :message="successMessage"
+            type="success"
+            redirect-to=""
+            @close="closeAlert()"
+          />
+
+          <AlertMessage
+            v-if="errorMessage"
+            :message="errorMessage"
+            type="error"
+            redirect-to=""
+            @close="handleResetForm()"
+          />
+
           <div class="modal-testimonial__button">
             <button type="submit" class="btn btn-testimonial" :disabled="isSubmitting">
               Soumettre
@@ -188,9 +240,12 @@ const fields = computed(() => [
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 10;
+  width: 100%;
+  height: 100%;
+  z-index: 20;
   padding: 20px;
-  inset: 0;
+  left: 0;
+  top: 0;
   &__container {
     width: 100%;
     max-width: 460px;

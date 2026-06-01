@@ -108,7 +108,7 @@ const addProductToCart = async (id: number) => {
   &__image {
     width: 190px;
     height: 190px;
-    margin-bottom: 28px;
+    margin-bottom: 32px;
     border-radius: 50%;
     overflow: hidden;
     background: #f5f5f5;
@@ -132,7 +132,7 @@ const addProductToCart = async (id: number) => {
     color: #202020;
     line-height: 1.1;
     margin-bottom: 14px;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
   }
 
   &__description {
@@ -154,7 +154,7 @@ const addProductToCart = async (id: number) => {
   &__options {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 9px;
     align-items: center;
   }
 
@@ -184,7 +184,7 @@ const addProductToCart = async (id: number) => {
   background: #fff;
   color: #1f1f1f;
   padding: 12px 18px;
-  font-size: 0.85rem;
+  font-size: 0.80rem;
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -333,6 +333,7 @@ const addProductToCart = async (id: number) => {
       margin-bottom: 14px;
     }
 
+
     &__sizes {
       margin-top: 10px;
     }
@@ -344,7 +345,7 @@ const addProductToCart = async (id: number) => {
     }
 
     &__options {
-      gap: 4px;
+      gap: 7px;
     }
 
     &-option {

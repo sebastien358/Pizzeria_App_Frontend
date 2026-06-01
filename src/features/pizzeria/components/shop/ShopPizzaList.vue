@@ -15,10 +15,10 @@ const props = defineProps<{
 
 const visibleProducts = computed(() => {
   if (window.innerWidth > 1600) {
-    props.products.slice(0, 4)
-    return
+    return props.products.slice(0, 4)
+  } else {
+    return props.products.slice(0, 3)
   }
-  return props.products.slice(0, 3)
 })
 
 const pizzaGridGsap = ref<HTMLElement | null>(null)

@@ -6,25 +6,30 @@ export const useTestimonialStore = defineStore('testimonialStore', {
     testimonials: [],
     isLoading: true,
     countTestimonials: 0,
+    pages: 0,
+    currentPage: 1,
+    limit: 6,
+    totalTestimonial: 0,
+    averageRating: 0
   }),
-  getters: {
-    averageRating(state) {
-      if (!state.testimonials.length) return 0
-        const total = state.testimonials.reduce((acc, testimonial) => {
-          return acc + testimonial.rating
-      }, 0)
-
-      return (total / state.testimonials.length).toFixed(1)
-    },
-  },
   actions: {
+    getItemsPerPage() {
+      if (window.innerWidth >= 1600) return 6
+      if (window.innerWidth >= 767) return 6
+      return 4
+    },
     async testimonialList() {
       try {
         this.isLoading = true
 
-        const response = await axiosTestimonialList()
+        this.limit = this.getItemsPerPage()
+
+        const response = await axiosTestimonialList(this.currentPage, this.limit)
         this.testimonials = response.testimonials
         this.countTestimonials = response.countTestimonials
+        this.averageRating = response.averageRating
+
+        this.pages = response.pages
       } catch (e) {
         this.testimonials = []
         console.error(e)

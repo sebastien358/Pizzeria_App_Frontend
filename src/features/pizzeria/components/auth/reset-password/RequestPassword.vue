@@ -74,10 +74,12 @@ function handleResetForm() {
 
 const requestGsap = ref<HTMLElement | null>(null)
 
-function requestGsapAnimation() {
+async function requestGsapAnimation() {
   const request = requestGsap.value
 
   if (!request) return
+
+  await nextTick()
 
   gsap.fromTo(
     request,
@@ -92,8 +94,8 @@ function requestGsapAnimation() {
 }
 
 onMounted(async () => {
-  await nextTick()
-  requestGsapAnimation()
+  window.scrollTo({ top: 0 })
+  await requestGsapAnimation()
 })
 </script>
 

@@ -96,10 +96,12 @@ const fields = [
 
 const registerGsap = ref<HTMLElement | null>(null)
 
-function registerGsapAnimation() {
+async function registerGsapAnimation() {
   const register = registerGsap.value
 
   if (!register) return
+
+  await nextTick()
 
   gsap.fromTo(
     register,
@@ -114,8 +116,9 @@ function registerGsapAnimation() {
 }
 
 onMounted(async () => {
-  await nextTick()
-  registerGsapAnimation()
+  window.scrollTo({ top: 0 })
+
+  await registerGsapAnimation()
 })
 </script>
 

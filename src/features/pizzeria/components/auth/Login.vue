@@ -100,10 +100,12 @@ const fields = [
 
 const loginGsap = ref<HTMLElement | null>(null)
 
-function loginGsapAnimation() {
+async function loginGsapAnimation() {
   const login = loginGsap.value
 
   if (!login) return
+
+  await nextTick()
 
   gsap.fromTo(
     login,
@@ -118,8 +120,9 @@ function loginGsapAnimation() {
 }
 
 onMounted(async () => {
-  await nextTick()
-  loginGsapAnimation()
+  window.scrollTo({ top: 0 })
+
+  await loginGsapAnimation()
 })
 </script>
 

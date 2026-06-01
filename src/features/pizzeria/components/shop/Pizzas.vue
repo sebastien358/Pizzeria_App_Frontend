@@ -93,6 +93,8 @@ watch(
 )
 
 onMounted(async () => {
+  window.scrollTo({ top: 0 })
+
   await loadPizzas()
   await pizzaGsapAnimation()
 })

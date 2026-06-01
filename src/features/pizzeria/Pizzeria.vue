@@ -381,6 +381,11 @@ const reviewsGsapAnimation = async () => {
     '-=0.25',
   )
 }
+document.querySelectorAll('.reviews *').forEach((el) => {
+  if (el.offsetWidth > document.documentElement.offsetWidth) {
+    console.log(el.className, el.offsetWidth)
+  }
+})
 
 onMounted(async () => {
   await productLoad()
@@ -603,7 +608,7 @@ onMounted(async () => {
         <div v-for="t in testimonials.slice(0, 3)" :key="t.id">
           <div class="reviews__card">
             <div class="reviews__card-stars" v-for="(n, index) in t.rating" :key="index">★</div>
-            <p class="reviews__card-text">{{ t.message }}</p>
+            <p class="reviews__card-text">"{{ t.message }}"</p>
             <div class="reviews__card-author">
               <div class="reviews__card-avatar">{{ t.firstname.slice(0, 1) }}</div>
               <div>
@@ -636,8 +641,6 @@ onMounted(async () => {
 </template>
 
 <style scoped lang="scss">
-.reviews__empty {
-}
 
 // Spinner
 
@@ -681,6 +684,7 @@ onMounted(async () => {
 .scroll-top {
   z-index: 100;
   opacity: 0;
+  //inset: 0;
   position: fixed;
   right: 24px;
   bottom: 24px;
@@ -911,6 +915,9 @@ onMounted(async () => {
     padding: 40px 16px 32px;
     row-gap: 1.2rem;
     align-content: center;
+
+    //overflow: hidden;
+    //width: 100vw;
   }
 
   .hero__text h1 {
@@ -1165,7 +1172,7 @@ INGRÉDIENTS
   }
   &__subtitle {
     display: inline-block;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
     font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 4px;
@@ -1174,7 +1181,7 @@ INGRÉDIENTS
   }
   &__heading h2 {
     margin: 0;
-    font-size: 3.4rem;
+    font-size: 2.9rem;
     line-height: 1;
     text-transform: uppercase;
     color: #2c2c2c;
@@ -1471,16 +1478,17 @@ BENEFITS
   padding: 80px 20px;
   background: #fafaf8;
   text-align: center;
-
+  overflow: hidden;
   &__header {
     width: 100%;
     max-width: 600px;
-    margin: 0 auto 50px;
+    margin: 0 auto 30px auto;
   }
 
   &__label {
     display: inline-block;
     font-size: 14px;
+    font-weight: 700;
     letter-spacing: 3px;
     text-transform: uppercase;
     color: #e63946;
@@ -1488,17 +1496,17 @@ BENEFITS
   }
 
   &__title {
-    font-size: 40px;
+    font-size: 42px;
     font-weight: 700;
     color: #1a1a1a;
-    margin: 0 0 12px;
+    margin: 0 0 12px 0;
     line-height: 1.2;
   }
 
   &__subtitle {
     font-size: 16px;
     color: #777;
-    margin: 0 0 30px;
+    margin: 0 0 30px 0;
   }
 
   &__summary {
@@ -1523,7 +1531,7 @@ BENEFITS
   }
 
   &__stars {
-    color: #e63946;
+    color: red;
     font-size: 17px;
     letter-spacing: 2px;
   }
@@ -1540,13 +1548,17 @@ BENEFITS
     grid-template-columns: repeat(3, 1fr);
     justify-content: center;
     align-items: stretch;
-    gap: 20px;
-    max-width: 1100px;
+    gap: 15px;
+    width: 100%;
+    max-width: 1300px;
     margin: 0 auto;
     text-align: left;
   }
 
   &__card {
+
+
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     height: 100%;
     background: #fff;
     border: 1px solid #eee;
@@ -1564,10 +1576,9 @@ BENEFITS
   }
 
   &__card-stars {
-    color: #e63946;
-    font-size: 26px;
-    letter-spacing: 2px;
-    margin-bottom: 12px;
+    color: red;
+    font-size: 21px;
+    letter-spacing: 4px;
     display: inline-block;
   }
 
@@ -1576,7 +1587,7 @@ BENEFITS
     color: #555;
     line-height: 1.7;
     font-style: italic;
-    margin: 0 0 18px;
+    margin: 20px 0 23px 0;
     word-break: break-word;
     overflow-wrap: break-word;
   }
@@ -1588,16 +1599,13 @@ BENEFITS
   }
 
   &__card-avatar {
-    //width: 38px;
-    //height: 38px;
-    width: 48px;
-    height: 48px;
+    width: 51px;
+    height: 51px;
     border-radius: 50%;
     background: #fce8e9;
     display: flex;
     align-items: center;
     justify-content: center;
-    //font-size: 12px;
     font-size: 13px;
     font-weight: 600;
     color: #e63946;
@@ -1627,9 +1635,9 @@ BENEFITS
   }
 
   &__link {
-    margin-top: 60px;
+      margin-top: 60px;
     a {
-      font-size: 13px;
+      font-size: 14px;
       color: #e63946;
       text-decoration: none;
       border-bottom: 1px solid #e63946;
@@ -1642,10 +1650,64 @@ BENEFITS
   }
 }
 
+@media (max-width: 1600px) {
+  .reviews {
+    &__header {
+      margin: 0 auto 40px auto;
+    }
+    &__grid {
+      grid-template-columns: repeat(3, 1fr);
+      max-width: 1300px;
+      gap: 15px;
+    }
+
+    &__label {
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+    &__title {
+      font-size: 38px;
+    }
+
+    &__card-avatar {
+      width: 48px;
+      height: 48px;
+    }
+
+    &__card-stars {
+      font-size: 22px;
+      letter-spacing: 2px;
+    }
+    &__card-text {
+      font-size: 17px;
+    }
+    &__link {
+      margin-top: 60px;
+      a {
+        font-size: 14px;
+      }
+    }
+  }
+}
+
 @media (max-width: 1024px) {
   .reviews {
     &__grid {
       grid-template-columns: repeat(2, 1fr);
+    }
+    &__title {
+      font-size: 30px;
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .reviews {
+    &__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    &__title {
+      font-size: 30px;
     }
   }
 }
@@ -1654,20 +1716,72 @@ BENEFITS
   .reviews {
     padding: 50px 15px;
 
+    &__header {
+      margin: 0 auto 0 auto;
+    }
+
     &__title {
-      font-size: 26px;
+      font-size: 21px;
+    }
+    &__subtitle {
+      font-size: 14px;
+
+    }
+
+    &__stars {
+      font-size: 14px;
     }
 
     &__grid {
       grid-template-columns: 1fr;
+      gap: 15px;
     }
 
     &__summary {
       padding: 8px 18px;
+      max-width: 100%;
+      flex-wrap: wrap;
+      justify-content: center;
     }
 
     &__score {
-      font-size: 26px;
+      font-size: 22px;
+    }
+    &__card-avatar {
+      width: 44px;
+      height: 44px;
+    }
+
+    &__card {
+      padding: 15px;
+    }
+
+    &__card-stars {
+      font-size: 18px;
+      letter-spacing: 2px;
+    }
+    &__card-text {
+      font-size: 14px;
+      margin: 12px 0 15px 0;
+    }
+    &__card-name {
+      font-size: 11px;
+    }
+
+    &__card-date {
+      font-size: 11px;
+    }
+
+    &__empty {
+      margin-top: 30px;
+      font-size: 13px;
+    }
+
+    &__link {
+      margin-top: 55px;
+      a {
+        font-size: 13px;
+      }
     }
   }
 }

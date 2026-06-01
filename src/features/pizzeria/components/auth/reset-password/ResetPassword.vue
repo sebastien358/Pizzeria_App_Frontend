@@ -101,10 +101,12 @@ const fields = [
 
 const resetGsap = ref<HTMLElement | null>(null)
 
-function resetGsapAnimation() {
+async function resetGsapAnimation() {
   const reset = resetGsap.value
 
   if (!reset) return
+
+  await nextTick()
 
   gsap.fromTo(
     reset,
@@ -119,8 +121,9 @@ function resetGsapAnimation() {
 }
 
 onMounted(async () => {
-  await nextTick()
-  resetGsapAnimation()
+  window.scrollTo({ top: 0 })
+
+  await resetGsapAnimation()
 })
 </script>
 

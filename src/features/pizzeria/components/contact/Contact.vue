@@ -123,6 +123,8 @@ async function contactGsapAnimation() {
 }
 
 onMounted(async () => {
+  window.scrollTo({ top: 0 })
+
   await contactGsapAnimation()
 })
 </script>

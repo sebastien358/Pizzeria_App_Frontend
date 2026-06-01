@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, reactive } from 'vue'
+import { computed, nextTick, onMounted, reactive, ref } from 'vue'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import TestimonialModal from '@/templates/modal-testimonial/TestimonialModal.vue'
 import { useTestimonialStore } from '@/stores/testimonialStore.ts'
+import Pagination from '@/templates/pagination/Pagination.vue'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -11,7 +12,7 @@ const testimonialStore = useTestimonialStore()
 
 const testimonialLoad = async () => {
   try {
-    await testimonialStore.testimonials
+    await testimonialStore.testimonialList()
   } catch (e) {
     console.error(e)
   }
@@ -47,6 +48,28 @@ const openModalTestimonial = () => {
 
 const closeModalTestimonial = () => {
   state.isActive = false
+}
+
+// Pagination
+
+const previousPage = async () => {
+  try {
+    if (testimonialStore.currentPage > 1) {
+      testimonialStore.currentPage--
+      await testimonialStore.testimonialList()
+    }
+  } catch (e) {
+    console.error(e)
+  }
+}
+
+const newtPage = async () => {
+  try {
+    testimonialStore.currentPage++
+    await testimonialStore.testimonialList()
+  } catch (e) {
+    console.error(e)
+  }
 }
 
 const testimonialsGsapAnimation = async () => {
@@ -107,7 +130,7 @@ const testimonialsGsapAnimation = async () => {
   )
 
   tl.from(
-    '.testimonials__grid',
+    '.testimonials__list',
     {
       opacity: 0,
       y: 40,
@@ -141,69 +164,106 @@ const testimonialsGsapAnimation = async () => {
     },
     '-=0.25',
   )
+
+  tl.from(
+    '.testimonials__pagination',
+    {
+      opacity: 0,
+      y: 20,
+      duration: 1.2,
+      ease: 'power3.out',
+    },
+    '-=0.15',
+  )
 }
 
+const isLoadingVisible = ref<boolean>(true)
+
 onMounted(async () => {
+  window.scrollTo({ top: 0 })
   await testimonialLoad()
-  await testimonialsGsapAnimation()
+
+  setTimeout(async () => {
+    isLoadingVisible.value = false
+    await testimonialsGsapAnimation()
+  }, 600)
 })
 </script>
 
 <template>
   <section class="testimonials">
-    <div class="testimonials__header">
-      <span class="testimonials__label">Avis clients</span>
-      <h1 class="testimonials__title">Tous les témoignages</h1>
-      <p class="testimonials__subtitle">Découvrez ce que nos clients pensent de nos pizzas.</p>
+    <div class="spinner" v-if="isLoadingVisible">
+      <div class="loader"></div>
     </div>
 
-    <div class="testimonials__summary">
-      <div class="testimonials__summary-item">
-        <span class="testimonials__summary-number">4.8</span>
-        <span class="testimonials__summary-label">Note moyenne</span>
+    <div v-else-if="testimonials.length > 0">
+      <div class="testimonials__header">
+        <span class="testimonials__label">Avis clients</span>
+        <h1 class="testimonials__title">Tous les témoignages</h1>
+        <p class="testimonials__subtitle">Découvrez ce que nos clients pensent de nos pizzas.</p>
       </div>
-      <div class="testimonials__summary-item">
-        <span class="testimonials__summary-number testimonials__summary-number--red">142</span>
-        <span class="testimonials__summary-label">Avis clients</span>
+
+      <div class="testimonials__summary">
+        <div class="testimonials__summary-item">
+          <span class="testimonials__summary-number">{{ testimonialStore.averageRating }}</span>
+          <span class="testimonials__summary-label">Note moyenne</span>
+        </div>
+        <div class="testimonials__summary-item">
+          <span class="testimonials__summary-number testimonials__summary-number--red">
+            {{ testimonialStore.countTestimonials }}</span
+          >
+          <span class="testimonials__summary-label">Avis clients</span>
+        </div>
+        <div class="testimonials__summary-item">
+          <span class="testimonials__summary-number">94%</span>
+          <span class="testimonials__summary-label">Recommandent</span>
+        </div>
       </div>
-      <div class="testimonials__summary-item">
-        <span class="testimonials__summary-number">94%</span>
-        <span class="testimonials__summary-label">Recommandent</span>
+
+      <div class="testimonials__modal">
+        <button @click="openModalTestimonial()" class="btn btn-testimonial">
+          Ajouter un témoignage
+        </button>
       </div>
-    </div>
 
-    <div class="testimonials__filters">
-      <button class="testimonials__filter active">Tous</button>
-      <button class="testimonials__filter">★★★★★ 5 étoiles</button>
-    </div>
+      <div class="testimonials__grid">
+        <div v-for="t in testimonials" :key="t.id" class="testimonials__list">
+          <div class="testimonials__card">
+            <div class="testimonials__card-stars" v-for="n in t.rating" :key="n">★</div>
+            <p class="testimonials__card-text">« {{ t.message }} »</p>
+            <div class="testimonials__card-author">
+              <div class="testimonials__card-avatar">
+                <img
+                  v-if="t.pictures[0]?.filename"
+                  :src="t.pictures[0]?.filename"
+                  class="img"
+                  height="60"
+                />
+                <span>{{ t.firstname.slice(0, 1) }} {{ t.lastname.slice(0, 1) }}</span>
+              </div>
 
-    <div class="testimonials__grid" v-for="t in testimonials" :key="t.id">
-      <div class="testimonials__card">
-        <div class="testimonials__card-stars" v-for="n in t.rating" :key="n">★</div>
-        <p class="testimonials__card-text">« {{ t.message }} »</p>
-        <div class="testimonials__card-author">
-          <div class="testimonials__card-avatar">
-            <img
-              v-if="t.pictures[0]?.filename"
-              :src="t.pictures[0]?.filename"
-              class="img"
-              height="60"
-            />
-            <span>{{ t.firstname.slice(0, 1) }} {{ t.lastname.slice(0, 1) }}</span>
-          </div>
-
-          <div>
-            <p class="testimonials__card-name">{{ t.firstname }} {{ t.lastname.slice(0, 1) }}.</p>
-            <p class="testimonials__card-date">{{ dateTimeDisplay(t.createdAt) }}</p>
+              <div>
+                <p class="testimonials__card-name">
+                  {{ t.firstname }} {{ t.lastname.slice(0, 1) }}.
+                </p>
+                <p class="testimonials__card-date">{{ dateTimeDisplay(t.createdAt) }}</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
+      <div v-if="testimonialStore.pages > 1" class="testimonials__pagination">
+        <Pagination
+          :current-page="testimonialStore.currentPage"
+          :pages="testimonialStore.pages"
+          @previous-page="previousPage()"
+          @next-page="newtPage()"
+        />
+      </div>
     </div>
 
-    <div class="testimonials__modal">
-      <button @click="openModalTestimonial()" class="btn btn-testimonial">
-        Ajouter un témoignage
-      </button>
+    <div class="testimonials__empty" v-else>
+      <p>Aucun témoignage pour le moment.</p>
     </div>
   </section>
 
@@ -211,9 +271,45 @@ onMounted(async () => {
 </template>
 
 <style scoped lang="scss">
+// Spinner
+
+.spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  //padding: 30px 0 70px 0;
+  height: calc(100dvh - 80px);
+  @media (max-width: 767.98px) {
+    padding: 10px 0 40px 0;
+  }
+  .loader {
+    width: 32px;
+    height: 32px;
+    border: 5px solid black;
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+    @media (max-width: 767.98px) {
+      width: 28px;
+      height: 28px;
+    }
+  }
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 .testimonials {
   padding: 60px 20px;
-  max-width: 1200px;
+  max-width: 1300px;
   margin: 0 auto;
 
   height: calc(100dvh - 80px);
@@ -225,7 +321,6 @@ onMounted(async () => {
 
   &__label {
     display: inline-block;
-    font-size: 11px;
     letter-spacing: 3px;
     text-transform: uppercase;
     color: #e63946;
@@ -237,7 +332,7 @@ onMounted(async () => {
     font-size: 40px;
     font-weight: 600;
     color: #1a1a1a;
-    margin: 0 0 8px;
+    margin: 0 0 8px 0;
   }
 
   &__subtitle {
@@ -269,7 +364,6 @@ onMounted(async () => {
     font-size: 25px;
     font-weight: 600;
     color: #1a1a1a;
-
     &--red {
       color: #e63946;
     }
@@ -280,37 +374,6 @@ onMounted(async () => {
     color: #999;
   }
 
-  &__filters {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    margin-bottom: 36px;
-    flex-wrap: wrap;
-  }
-
-  &__filter {
-    padding: 6px 16px;
-    border-radius: 50px;
-    border: 1px solid #ddd;
-    background: #fff;
-    font-size: 13px;
-    color: #555;
-    cursor: pointer;
-    transition: all 0.15s;
-
-    &:hover {
-      border-color: #e63946;
-      color: #e63946;
-    }
-
-    &.active {
-      background: #e63946;
-      color: white;
-      border-color: #e63946;
-    }
-  }
-
   &__grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -319,6 +382,7 @@ onMounted(async () => {
   }
 
   &__card {
+    height: 100%;
     background: #fff;
     border: 1px solid #eee;
     border-radius: 12px;
@@ -347,6 +411,7 @@ onMounted(async () => {
     line-height: 1.6;
     font-style: italic;
     margin: 10px 0 25px 0;
+    word-break: break-word;
   }
 
   &__card-author {
@@ -395,35 +460,48 @@ onMounted(async () => {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 20px;
-  }
-
-  &__modal {
-    display: flex;
-    justify-content: center;
+    margin-bottom: 60px;
     margin-top: 40px;
-
     .btn-testimonial {
       background: #e63946;
       color: white;
       border: none;
       padding: 12px 28px;
       border-radius: 50px;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 600;
       cursor: pointer;
       text-decoration: none;
       transition: background 0.2s;
-
       &:hover {
         background: #c1121f;
       }
     }
   }
+  &__empty {
+    color: #555;
+    font-size: 14px;
+    padding: 20px;
+    background: #f8f5f0;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 250px;
+    margin: 0 auto 60px auto;
+  }
+  &__pagination {
+    margin-top: 25px;
+  }
+}
+
+@media (max-width: 1600px) {
+  .testimonials {
+    height: 100%;
+  }
 }
 
 @media (max-width: 1024px) {
   .testimonials {
+    height: 100%;
     &__grid {
       grid-template-columns: repeat(2, 1fr);
     }
@@ -432,14 +510,31 @@ onMounted(async () => {
 
 @media (max-width: 767.98px) {
   .testimonials {
-    padding: 40px 15px;
-
+    padding: 30px 15px;
     &__title {
       font-size: 24px;
     }
 
+    &__summary-number {
+      font-size: 23px;
+    }
+
+    &__summary-label {
+      font-size: 12px;
+    }
+
+    &__modal {
+      margin-bottom: 40px;
+      margin-top: 30px;
+    }
+
+    &__modal .btn-testimonial {
+      font-size: 11px;
+    }
+
     &__grid {
       grid-template-columns: 1fr;
+      gap: 12px;
     }
 
     &__summary {
@@ -447,13 +542,29 @@ onMounted(async () => {
       padding: 14px 20px;
     }
 
-    &__filters {
-      gap: 6px;
+    &__card-stars {
+      font-size: 19px;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
     }
 
-    &__filter {
-      font-size: 12px;
-      padding: 5px 12px;
+    &__card-text {
+      font-size: 15px;
+      margin: 5px 0 15px 0;
+    }
+
+    &__empty {
+      color: #555;
+      font-size: 14px;
+      padding: 20px;
+      background: #f8f5f0;
+      border-radius: 8px;
+      width: 100%;
+      max-width: 250px;
+      margin: 0 auto 60px auto;
+    }
+    &__pagination {
+      margin-top: 15px;
     }
   }
 }
