@@ -17,7 +17,7 @@ async function newsletterGsapAnimation() {
     scrollTrigger: {
       trigger: newsletter,
       start: 'top 85%',
-      once: false
+      once: false,
     },
   })
 
@@ -75,7 +75,9 @@ onMounted(async () => {
     max-width: 1200px;
     margin: 0 auto;
     display: flex;
-    align-items: center;
+    //flex-direction: column;
+    align-items: flex-end;
+
     column-gap: 40px;
     row-gap: 3.5rem;
     flex-wrap: wrap;
@@ -132,18 +134,27 @@ onMounted(async () => {
 
 @media (max-width: 1600px) {
   .newsletter {
-    padding: 60px 30px;
+    padding: 60px 60px;
+
     &__container {
+      max-width: 1000px;
       row-gap: 20px;
     }
     &__text h2 {
-      font-size: 44px;
+      font-size: 40px;
     }
     &__form input {
       width: 280px;
       background: transparent;
       padding: 15px 4px;
       font-size: 13px;
+    }
+    &__form button {
+
+      padding: 12px 30px;
+      font-size: 12px;
+
+
     }
   }
 }
@@ -153,6 +164,9 @@ onMounted(async () => {
     padding: 60px 30px;
     &__text h2 {
       font-size: 35px;
+    }
+    &__form {
+      //margin-top: 150px;
     }
     &__form input {
       width: 280px;

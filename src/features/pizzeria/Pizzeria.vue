@@ -47,13 +47,11 @@ const dateTimeDisplay = (date: Date) => {
 
   const d = new Date(date)
 
-  const options = {
+  return new Intl.DateTimeFormat('fr-FR', {
     year: 'numeric',
     month: 'numeric',
     day: 'numeric',
-  }
-
-  return new Intl.DateTimeFormat('fr-FR', options).format(d)
+  }).format(d)
 }
 
 /*=======================
@@ -587,26 +585,38 @@ onMounted(async () => {
         <p class="reviews__subtitle">Plus de 150 commandes, des clients satisfaits.</p>
 
         <div class="reviews__summary">
-          <span class="reviews__score">4.8</span>
+          <span class="reviews__score">{{ testimonialStore.averageRating }}</span>
           <div class="reviews__summary-detail">
             <div class="reviews__stars">★★★★★</div>
-            <span class="reviews__count">Basé sur 142 avis</span>
+            <span class="reviews__count"
+              >Basé sur {{ testimonialStore.countTestimonials }} avis</span
+            >
           </div>
         </div>
       </div>
 
-      <div class="reviews__grid" v-for="t in testimonials" :key="t.id">
-        <div class="reviews__card">
-          <div class="reviews__card-stars" v-for="(n, index) in t.rating" :key="index">★</div>
-          <p class="reviews__card-text">« {{ t.message }} »</p>
-          <div class="reviews__card-author">
-            <div class="reviews__card-avatar">{{ t.firstname.slice(0, 1) }}</div>
-            <div>
-              <p class="reviews__card-name">{{ t.firstname }} {{ t.lastname.slice(0, 1) }}.</p>
-              <p class="reviews__card-date">{{ dateTimeDisplay((t.createdAt)) }}</p>
+      <div class="spinner" v-if="testimonialStore.isLoading">
+        <div class="loader"></div>
+      </div>
+
+      <div class="reviews__grid" v-else-if="testimonials.length > 0">
+        <div v-for="t in testimonials.slice(0, 3)" :key="t.id">
+          <div class="reviews__card">
+            <div class="reviews__card-stars" v-for="(n, index) in t.rating" :key="index">★</div>
+            <p class="reviews__card-text">{{ t.message }}</p>
+            <div class="reviews__card-author">
+              <div class="reviews__card-avatar">{{ t.firstname.slice(0, 1) }}</div>
+              <div>
+                <p class="reviews__card-name">{{ t.firstname }} {{ t.lastname.slice(0, 1) }}.</p>
+                <p class="reviews__card-date">{{ dateTimeDisplay(t.createdAt) }}</p>
+              </div>
             </div>
           </div>
         </div>
+      </div>
+
+      <div class="reviews__empty" v-else>
+        <p>Aucun témoignage pour le moment.</p>
       </div>
 
       <div class="reviews__link">
@@ -626,6 +636,44 @@ onMounted(async () => {
 </template>
 
 <style scoped lang="scss">
+.reviews__empty {
+}
+
+// Spinner
+
+.spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 0 20px 0;
+  @media (max-width: 767.98px) {
+    padding: 10px 0 0 0;
+  }
+  .loader {
+    width: 32px;
+    height: 32px;
+    border: 5px solid black;
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+    @media (max-width: 767.98px) {
+      width: 29px;
+      height: 29px;
+    }
+  }
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 /*==========================
   SCROLL TO TOP
 ==========================*/
@@ -1201,7 +1249,7 @@ INGRÉDIENTS
 @media (max-width: 1600px) {
   .ingredients {
     &__heading h2 {
-      font-size: 3rem;
+      font-size: 2.5rem;
     }
     &__content {
       margin-top: -20px;
@@ -1220,17 +1268,13 @@ INGRÉDIENTS
 @media (max-width: 991.98px) {
   .ingredients {
     &__heading h2 {
-      font-size: 2.8rem;
+      font-size: 2.5rem;
     }
 
     &__content {
       grid-template-columns: 1fr;
       margin-top: -20px;
     }
-    //&__text p {
-    //  margin: 0 0 10px;
-    //  line-height: 1.2;
-    //}
     &__text {
       margin-top: -10px;
       text-align: center;
@@ -1436,7 +1480,7 @@ BENEFITS
 
   &__label {
     display: inline-block;
-    font-size: 13px;
+    font-size: 14px;
     letter-spacing: 3px;
     text-transform: uppercase;
     color: #e63946;
@@ -1444,7 +1488,7 @@ BENEFITS
   }
 
   &__title {
-    font-size: 36px;
+    font-size: 40px;
     font-weight: 700;
     color: #1a1a1a;
     margin: 0 0 12px;
@@ -1452,7 +1496,7 @@ BENEFITS
   }
 
   &__subtitle {
-    font-size: 15px;
+    font-size: 16px;
     color: #777;
     margin: 0 0 30px;
   }
@@ -1480,7 +1524,7 @@ BENEFITS
 
   &__stars {
     color: #e63946;
-    font-size: 16px;
+    font-size: 17px;
     letter-spacing: 2px;
   }
 
@@ -1494,17 +1538,19 @@ BENEFITS
   &__grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
+    justify-content: center;
     align-items: stretch;
     gap: 20px;
-    max-width: 1000px;
+    max-width: 1100px;
     margin: 0 auto;
+    text-align: left;
   }
 
   &__card {
+    height: 100%;
     background: #fff;
     border: 1px solid #eee;
     border-radius: 12px;
-    //padding: 24px;
     padding: 24px;
     text-align: left;
     transition:
@@ -1519,7 +1565,6 @@ BENEFITS
 
   &__card-stars {
     color: #e63946;
-    //font-size: 14px;
     font-size: 26px;
     letter-spacing: 2px;
     margin-bottom: 12px;
@@ -1527,12 +1572,13 @@ BENEFITS
   }
 
   &__card-text {
-    //font-size: 14px;
     font-size: 17px;
     color: #555;
     line-height: 1.7;
     font-style: italic;
     margin: 0 0 18px;
+    word-break: break-word;
+    overflow-wrap: break-word;
   }
 
   &__card-author {
@@ -1569,6 +1615,15 @@ BENEFITS
     font-size: 12px;
     color: #aaa;
     margin: 3px 0 0;
+  }
+
+  &__empty {
+    color: #555;
+    font-size: 14px;
+    padding: 20px;
+    background: #f8f5f0;
+    border-radius: 8px;
+    display: inline-block;
   }
 
   &__link {

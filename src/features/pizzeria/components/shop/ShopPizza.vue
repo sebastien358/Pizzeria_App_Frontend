@@ -12,7 +12,9 @@ const props = defineProps<{
 // Affichage du prix en fçnction de la taille de la pizza
 
 const selectedOption = ref(
-  props.product.productOption.find((option) => option.name.toLowerCase().includes('grande') || props.product.productOption[0])
+  props.product.productOption.find(
+    (option) => option.name.toLowerCase().includes('grande') || props.product.productOption[0],
+  ),
 )
 
 const addProductToCart = async (id: number) => {
@@ -210,12 +212,25 @@ const addProductToCart = async (id: number) => {
     }
 
     &__content h3 {
-      font-size: 1.3rem;
+      font-size: 1rem;
+    }
+
+    &__description {
+      margin-bottom: 10px;
     }
 
     &__image {
-      width: 170px;
-      height: 170px;
+      width: 150px;
+      height: 150px;
+    }
+    &__button {
+      margin-top: 20px;
+    }
+
+    .btn-cart {
+      height: 42px;
+      padding: 12px 18px;
+      font-size: 0.55rem;
     }
   }
 }
@@ -253,7 +268,7 @@ const addProductToCart = async (id: number) => {
   .btn-cart {
     height: 40px;
     padding: 0 20px;
-    font-size: 0.72rem;
+    font-size: 0.55rem;
   }
 }
 
@@ -290,7 +305,7 @@ const addProductToCart = async (id: number) => {
   .btn-cart {
     height: 40px;
     padding: 0 20px;
-    font-size: 0.72rem;
+    font-size: 0.55rem;
   }
 }
 
@@ -308,7 +323,7 @@ const addProductToCart = async (id: number) => {
     }
 
     &__content h3 {
-      font-size: 1.1rem;
+      font-size: 0.9rem;
       line-height: 1.2;
     }
 
@@ -344,7 +359,7 @@ const addProductToCart = async (id: number) => {
   .btn-cart {
     height: 38px;
     padding: 0 18px;
-    font-size: 0.68rem;
+    font-size: 0.50rem;
     gap: 6px;
 
     svg {

@@ -4,7 +4,7 @@ import type { ProductInterface } from '@/shared/interfaces'
 import gsap from 'gsap'
 
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { nextTick, onMounted, ref } from 'vue'
+import { computed, nextTick, onMounted, ref } from 'vue'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -12,6 +12,14 @@ const props = defineProps<{
   products: ProductInterface[]
   isLoading: boolean
 }>()
+
+const visibleProducts = computed(() => {
+  if (window.innerWidth > 1600) {
+    props.products.slice(0, 4)
+    return
+  }
+  return props.products.slice(0, 3)
+})
 
 const pizzaGridGsap = ref<HTMLElement | null>(null)
 const hasAnimated = ref(false)
@@ -52,8 +60,8 @@ onMounted(async () => {
         ease: 'power3.out',
         scrollTrigger: {
           trigger: cards,
-          start: 'top 80%'
-        }
+          start: 'top 80%',
+        },
       },
     )
   }, 350)
@@ -69,7 +77,7 @@ onMounted(async () => {
   <section v-else-if="products.length > 0">
     <div class="pizza">
       <div class="pizza__grid" ref="pizzaGridGsap">
-        <ShopPizza v-for="product in products.slice(0, 4)" :key="product.id" :product="product" />
+        <ShopPizza v-for="product in visibleProducts" :key="product.id" :product="product" />
       </div>
     </div>
   </section>
@@ -129,19 +137,21 @@ onMounted(async () => {
 .pizza {
   background: white;
   &__grid {
+    width: 100%;
     max-width: 1800px;
     margin: 0 auto;
     padding: 0 8%;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
+    justify-content: center;
     align-items: stretch;
   }
 }
 
-@media (max-width: 1400px) {
+@media (max-width: 1600px) {
   .pizza__grid {
     grid-template-columns: repeat(3, 1fr);
-    padding: 0 5%;
+    padding: 0 9%;
   }
 }
 
